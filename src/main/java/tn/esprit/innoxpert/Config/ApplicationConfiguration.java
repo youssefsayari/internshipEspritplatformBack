@@ -29,7 +29,7 @@ public class ApplicationConfiguration {
 
     @Bean
     PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance(); // Removes password hashing
+        return NoOpPasswordEncoder.getInstance();
     }
 
     @Bean

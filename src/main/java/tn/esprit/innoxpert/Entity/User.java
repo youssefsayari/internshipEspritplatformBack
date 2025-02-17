@@ -19,6 +19,8 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
      Long idUser;
+    String firstName;
+    String lastName;
 
      String identifiant;
      String password;
