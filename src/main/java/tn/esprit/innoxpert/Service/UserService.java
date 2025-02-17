@@ -13,7 +13,7 @@ import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Entity.UserInfo;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.UserRepository;
-import tn.esprit.innoxpert.util.JwtUtil;
+import tn.esprit.innoxpert.Util.JwtUtil;
 
 import java.util.Base64;
 import java.util.Collections;
