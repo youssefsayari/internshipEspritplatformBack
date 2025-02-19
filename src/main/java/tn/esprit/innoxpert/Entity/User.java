@@ -19,13 +19,13 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
      Long idUser;
-    String firstName;
-    String lastName;
-
+     String firstName;
+     String lastName;
      String identifiant;
      String password;
      String email;
      Long telephone;
+     String classe;
 
     @Enumerated(EnumType.STRING)
     TypeUser typeUser;

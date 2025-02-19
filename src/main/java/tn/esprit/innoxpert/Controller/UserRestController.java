@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.DTO.JwtRequest;
+import tn.esprit.innoxpert.DTO.UserRole;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Service.UserServiceInterface;
 import tn.esprit.innoxpert.Util.JwtUtil;
@@ -125,6 +126,19 @@ public class UserRestController {
             String identifiant = userservice.extractIdentifiantFromJwt(token);
             User user = userservice.getUserByIdentifiant(identifiant);
             return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token: " + e.getMessage());
+        }
+    }
+    @PostMapping("/decode-token-Role")
+    public ResponseEntity<?> decodeTokenRole(@RequestBody String token) {
+        try {
+            String identifiant = userservice.extractIdentifiantFromJwt(token);
+            User user = userservice.getUserByIdentifiant(identifiant);
+            String role = String.valueOf(user.getTypeUser());  // Assure-toi que cette méthode est disponible dans ton modèle User
+            String classe = user.getClasse();
+            UserRole userRole = new UserRole(role, classe);
+            return ResponseEntity.ok(userRole);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token: " + e.getMessage());
         }
