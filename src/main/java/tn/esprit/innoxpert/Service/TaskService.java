@@ -60,7 +60,14 @@ public class TaskService implements TaskServiceInterface {
         newTask.setStudent(student);
         return taskRepository.save(newTask);    }
 
+    @Override
+    public Task ChangeTaskStatus(Long idTask, TypeStatus typeStatus) {
+        Task task = taskRepository.findById(idTask)
+                .orElseThrow(() -> new NotFoundException("Task with ID: " + idTask + " not found"));
 
+        task.setStatus(typeStatus);
+        return taskRepository.save(task);
+    }
 
 
 }
