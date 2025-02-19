@@ -2,14 +2,18 @@ package tn.esprit.innoxpert.Service;
 
 
 import tn.esprit.innoxpert.Entity.Comment;
+import tn.esprit.innoxpert.Entity.Rating;
 
 import java.util.List;
 
 public interface CommentServiceInterface {
-    public List<Comment> getAllComments();
-    public Comment getCommentById(Long CommentId);
-    public Comment addComment(Comment c);
-    public void removeCommentById(Long CommentId);
-    public Comment updateComment (Comment c );
-    public Comment addAndaffectCommentToPost(Long idPost,Comment newComment);
+    List<Comment> getAllComments();
+    List<Comment> getAllCommentsByPostId(Long postId);
+    Comment getCommentById(Long commentId);
+    void removeCommentById(Long commentId);
+    Comment updateComment(Comment c);
+    Comment addCommentAndAffectToPost(Long idPost, Comment newComment);
+    Comment addCommentToComment(Long parentCommentId, Comment newComment);
+
 }
+

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -19,8 +20,22 @@ public class Post {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT") // Permet de stocker du texte long
     private String content;
+
+
+
+    @Column(nullable = false, updatable = false)
+    LocalDateTime createdAt = LocalDateTime.now(); // Ajout de la date de création
+
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false) // Foreign Key vers Company
+    Company company;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings;
 
 }

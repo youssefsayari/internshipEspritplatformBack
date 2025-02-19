@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -13,14 +16,44 @@ import lombok.experimental.FieldDefaults;
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Long id;
+    Long id;
 
-    private String name;
+    @Column(nullable = false)
+    String name;
 
-    private String address;
+    String abbreviation;
 
-    private String email;
+    String address;
 
-    private String phone;
+    @Enumerated(EnumType.STRING)
+    TypeSector sector;
+
+    @Column(unique = true, nullable = false)
+    String email;
+
+    String phone;
+
+    LocalDate foundingYear ;
+
+    LocalDate LabelDate ;
+
+    String website ;
+
+    String founders ;
+
+    @Column(nullable = false)
+    String secretKey; // Clé secrète pour la génération du mot de passe
+
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Post> posts;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id", referencedColumnName = "idUser") // Clé étrangère pour l'utilisateur
+    User owner;
+
+
+
+
 
 }
