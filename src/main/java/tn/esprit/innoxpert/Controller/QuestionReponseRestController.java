@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.innoxpert.Entity.Meeting;
 import tn.esprit.innoxpert.Entity.QuestionReponse;
 import tn.esprit.innoxpert.Service.QuestionReponseServiceInterface;
 import org.springframework.validation.BindingResult;
@@ -32,16 +33,12 @@ public class QuestionReponseRestController {
 
 
     @PutMapping("/updateQuestion")
-    public ResponseEntity<?> updateQuestion(@Valid @RequestBody QuestionReponse questionReponse, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            List<String> errors = bindingResult.getFieldErrors()
-                    .stream()
-                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                    .collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(errors);
-        }
-        return ResponseEntity.ok(questionService.updateQuestion(questionReponse));
+
+    public QuestionReponse updateQuestion(@RequestBody QuestionReponse questionReponse)
+    {
+        return questionService.updateQuestion(questionReponse);
     }
+
 
     @DeleteMapping("/deleteQuestion/{idQuestionReponse}")
     public void deleteQuestion(@PathVariable("idQuestionReponse") Long idQuestionReponse) {

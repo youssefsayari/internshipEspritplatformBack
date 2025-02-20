@@ -3,6 +3,7 @@ package tn.esprit.innoxpert.Service;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.esprit.innoxpert.Entity.Meeting;
 import tn.esprit.innoxpert.Entity.QuestionReponse;
 import tn.esprit.innoxpert.Entity.Quiz;
 import tn.esprit.innoxpert.Entity.Societe;
@@ -33,11 +34,12 @@ public class QuizService implements QuizServiceInterface {
         return quizRepository.save(quiz);
     }
 
+
     public Quiz updateQuiz(Quiz quiz) {
-        if (quiz.getIdQuiz() == null || !quizRepository.existsById(quiz.getIdQuiz())) {
-            throw new RuntimeException("Quiz not found");
+        if ( !quizRepository.existsById(quiz.getIdQuiz())) {
+            throw new NotFoundException("Quiz with ID: " + quiz.getIdQuiz() + " was not found. Cannot update.");
         }
-        return quizRepository.save(quiz); // Mise à jour automatique
+        return quizRepository.save(quiz);
     }
     public void deleteQuiz(Long id) {
         quizRepository.deleteById(id);

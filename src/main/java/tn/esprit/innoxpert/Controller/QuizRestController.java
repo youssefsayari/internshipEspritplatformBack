@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.innoxpert.Entity.Meeting;
 import tn.esprit.innoxpert.Entity.Quiz;
 import tn.esprit.innoxpert.Service.QuizServiceInterface;
 import org.springframework.validation.BindingResult;
@@ -33,15 +34,10 @@ public class QuizRestController {
 
 
     @PutMapping("/updateQuiz")
-    public ResponseEntity<?> updateQuiz(@Valid @RequestBody Quiz quiz, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            List<String> errors = bindingResult.getFieldErrors()
-                    .stream()
-                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                    .collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(errors);
-        }
-        return ResponseEntity.ok(quizService.updateQuiz(quiz));
+
+    public Quiz updateQuiz(@RequestBody Quiz quiz)
+    {
+        return quizService.updateQuiz(quiz);
     }
 
     @DeleteMapping("/deleteQuiz/{idQuiz}")
