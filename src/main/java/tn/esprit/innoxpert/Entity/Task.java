@@ -1,5 +1,6 @@
 package tn.esprit.innoxpert.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -26,6 +27,7 @@ public class Task {
     TypeStatus status;
 
     @ManyToOne
+    @JsonIgnore
     @NotNull(message = "Un étudiant doit être assigné à cette tâche")
     User student;
 }
