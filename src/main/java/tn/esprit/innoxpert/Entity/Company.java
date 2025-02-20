@@ -5,7 +5,9 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -53,6 +55,8 @@ public class Company {
     User owner;
 
 
+    @ManyToMany(mappedBy = "followedCompanies")
+    private List<User> followers; // Liste des utilisateurs qui suivent cette entreprise
 
 
 

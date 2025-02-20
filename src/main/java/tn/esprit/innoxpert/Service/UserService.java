@@ -9,8 +9,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import tn.esprit.innoxpert.Entity.Company;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
+import tn.esprit.innoxpert.Repository.CompanyRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
 import tn.esprit.innoxpert.Util.JwtUtil;
 
@@ -25,6 +27,9 @@ import java.util.Map;
 public class UserService implements UserServiceInterface {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -112,5 +117,43 @@ public class UserService implements UserServiceInterface {
             throw new RuntimeException("Invalid or malformed JWT: " + e.getMessage());
         }
     }
+
+
+
+
+    /*----------------start l5edmet sayari--------------------*/
+
+    @Override
+    public void followCompany(Long userId, Long companyId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Company company = companyRepository.findById(companyId).orElseThrow(() -> new RuntimeException("Company not found"));
+
+        if (!user.getFollowedCompanies().contains(company)) {
+            user.getFollowedCompanies().add(company);
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    public void unfollowCompany(Long userId, Long companyId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+        if (user.getFollowedCompanies().contains(company)) {
+            user.getFollowedCompanies().remove(company);
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    public List<Company> getFollowedCompanies(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return user.getFollowedCompanies();
+    }
+
+    /*----------------end l5edmet sayari--------------------*/
+
 
 }

@@ -13,4 +13,10 @@ public interface PostServiceInterface {
     Post updatePost(Post p);
 
 
-}
+
+
+  List<Post> getHomeFeed(Long userId);
+
+
+
+    }

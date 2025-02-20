@@ -6,8 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
@@ -35,6 +34,21 @@ public class User implements UserDetails {
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy="student")
     List<Task> tasks;
+
+    /*----------------start l5edmet sayari--------------------*/
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_followed_companies",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "company_id")
+    )
+    private List<Company> followedCompanies = new ArrayList<>();
+
+
+
+
+    /*----------------end l5edmet sayari--------------------*/
 
 
     @Override

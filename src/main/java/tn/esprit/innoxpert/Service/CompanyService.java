@@ -79,4 +79,18 @@ public class CompanyService implements CompanyServiceInterface {
     }
 
 
+
+
+
+
+
+
+
+    @Override
+    public List<User> getCompanyFollowers(Long companyId) {
+        Company company = companyRepository.findById(companyId).orElseThrow(() -> new RuntimeException("Company not found"));
+        return company.getFollowers();
+    }
+
+
 }

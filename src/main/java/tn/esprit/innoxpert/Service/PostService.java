@@ -6,12 +6,13 @@ import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.Entity.Company;
 import tn.esprit.innoxpert.Entity.Post;
 import tn.esprit.innoxpert.Entity.Rating;
+import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Repository.CompanyRepository;
 import tn.esprit.innoxpert.Repository.PostRepository;
 import tn.esprit.innoxpert.Repository.RatingRepository;
+import tn.esprit.innoxpert.Repository.UserRepository;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -23,6 +24,9 @@ public class PostService implements PostServiceInterface {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<Post> getAllPosts() {
@@ -56,6 +60,29 @@ public class PostService implements PostServiceInterface {
     public Post updatePost(Post p) {
         return postRepository.save(p);
     }
+
+
+    @Override
+    public List<Post> getHomeFeed(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Company> followedCompanies = user.getFollowedCompanies();
+        Set<Company> followedCompaniesSet = new HashSet<>(followedCompanies); // Convert List to Set
+
+        List<Post> homeFeed = new ArrayList<>();
+
+        // Si l'utilisateur suit des entreprises, récupérer leurs posts en priorité
+        if (!followedCompanies.isEmpty()) {
+            homeFeed.addAll(postRepository.findByCompanyInOrderByCreatedAtDesc(followedCompaniesSet));
+        }
+
+        // Ajouter les autres posts (hors entreprises suivies)
+        homeFeed.addAll(postRepository.findByCompanyNotInOrderByCreatedAtDesc(followedCompaniesSet));
+
+        return homeFeed;
+    }
+
 
 
 }
