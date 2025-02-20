@@ -14,4 +14,25 @@ public interface MeetingServiceInterface {
     public Meeting approveMeetingById(Long meetingId) ;
 
 
+
+     public String generateMeeting(String title);
+    /*
+    public void sendEmailWithLink(Long idReceiver, String link);
+    public void notifyUpcomingMeetings();
+    public String GenerateQrCodeForMeetingLink();
+    public void autoApproveMeetingsfornext24();
+    public int countMeetingsByUser(Long userId);
+    public List<Meeting> listMeetingsForNextWeek();
+    public List<Integer> suggestAlternativeTimes(Long meetingId);
+
+
+
+
+
+     */
+
+
+
+
+
 }

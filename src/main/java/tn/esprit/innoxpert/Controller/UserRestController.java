@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.DTO.JwtRequest;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Service.UserServiceInterface;
-import tn.esprit.innoxpert.util.JwtUtil;
+import tn.esprit.innoxpert.Util.JwtUtil;
 
 import java.util.HashMap;
 import java.util.List;

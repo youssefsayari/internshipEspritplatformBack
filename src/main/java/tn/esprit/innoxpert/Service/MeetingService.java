@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.Entity.Meeting;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.MeetingRepository;
+import tn.esprit.innoxpert.Util.JitsiMeetingService;
 
 import java.util.List;
 
@@ -59,6 +60,12 @@ public class MeetingService implements MeetingServiceInterface {
     }
 
     @Override
+    public String generateMeeting(String title) {
+
+        return new JitsiMeetingService().generateMeetingLink(title);
+    }
+
+    @Override
     public Meeting approveMeetingById(Long meetingId) {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new NotFoundException("Meeting with ID: " + meetingId + " was not found. Cannot update."));
@@ -66,5 +73,7 @@ public class MeetingService implements MeetingServiceInterface {
         meeting.setApproved(true);
         return meetingRepository.save(meeting);
     }
+
+
 
 }
