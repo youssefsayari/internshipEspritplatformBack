@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.Entity.Meeting;
+import tn.esprit.innoxpert.Entity.TypeMeeting;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.MeetingRepository;
 import tn.esprit.innoxpert.Util.JitsiMeetingService;
@@ -30,9 +31,15 @@ public class MeetingService implements MeetingServiceInterface {
 
     @Override
     public Meeting addMeeting(Meeting b) {
+        if ((b.getTypeMeeting() == TypeMeeting.Restitution1 || b.getTypeMeeting() == TypeMeeting.Restitution2)
+                && meetingRepository.existsByTypeMeeting(b.getTypeMeeting())) {
+            throw new IllegalStateException("Cannot add more than one meeting of type " + b.getTypeMeeting());
+        }
+
         b.setApproved(false);
         return meetingRepository.save(b);
     }
+
 
     @Override
     public void removeMeetingById(Long meetingId) {
@@ -44,11 +51,22 @@ public class MeetingService implements MeetingServiceInterface {
 
     @Override
     public Meeting updateMeeting(Meeting b) {
-        if ( !meetingRepository.existsById(b.getIdMeeting())) {
+        if (!meetingRepository.existsById(b.getIdMeeting())) {
             throw new NotFoundException("Meeting with ID: " + b.getIdMeeting() + " was not found. Cannot update.");
         }
+
+        Meeting existingMeeting = meetingRepository.findById(b.getIdMeeting()).orElseThrow(() ->
+                new NotFoundException("Meeting with ID: " + b.getIdMeeting() + " not found"));
+
+        if ((b.getTypeMeeting() == TypeMeeting.Restitution1 || b.getTypeMeeting() == TypeMeeting.Restitution2)
+                && !existingMeeting.getTypeMeeting().equals(b.getTypeMeeting())
+                && meetingRepository.existsByTypeMeetingAndIdMeetingNot(b.getTypeMeeting(), b.getIdMeeting())) {
+            throw new IllegalStateException("Cannot have more than one meeting of type " + b.getTypeMeeting());
+        }
+
         return meetingRepository.save(b);
     }
+
 
     @Override
     public Meeting approveMeeting(Meeting b) {
