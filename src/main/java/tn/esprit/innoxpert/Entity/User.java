@@ -6,8 +6,10 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,14 +20,15 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Long idUser;
+    Long idUser;
     String firstName;
     String lastName;
 
-     String identifiant;
-     String password;
-     String email;
-     Long telephone;
+    String identifiant;
+    String password;
+    String email;
+    Long telephone;
+    String quiz;
 
     @Enumerated(EnumType.STRING)
     TypeUser typeUser;
@@ -37,6 +40,23 @@ public class User implements UserDetails {
     @OneToMany (cascade = CascadeType.ALL, mappedBy="student")
     List<Task> tasks;
 
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
+    Defense defense;
+
+    @ManyToMany(mappedBy = "tutors")
+    Set<Defense> defenses;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_followed_companies",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "company_id")
+    )
+    private List<Company> followedCompanies = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "document_id")
+    private Document document;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
