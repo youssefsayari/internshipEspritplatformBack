@@ -4,18 +4,39 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.Entity.Meeting;
+import tn.esprit.innoxpert.Entity.StudentTutor;
 import tn.esprit.innoxpert.Entity.TypeMeeting;
+import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.MeetingRepository;
+import tn.esprit.innoxpert.Repository.StudentTutorRepository;
+import tn.esprit.innoxpert.Repository.UserRepository;
 import tn.esprit.innoxpert.Util.JitsiMeetingService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class MeetingService implements MeetingServiceInterface {
     @Autowired
     MeetingRepository meetingRepository;
+    @Autowired
+    StudentTutorRepository studentTutorRepository;
+    @Autowired
+    UserRepository userRepository;
+
+
+
+
+   @Override
+    public List<User> getStudentsByTutor(Long tutorId) {
+        List<StudentTutor> relations = studentTutorRepository.findByTutorId(tutorId);
+        List<Long> studentIds = relations.stream()
+                .map(relation -> relation.getStudent().getIdUser())
+                .collect(Collectors.toList());
+        return userRepository.findAllById(studentIds);
+    }
 
     @Override
     public List<Meeting> getAllMeetings() {

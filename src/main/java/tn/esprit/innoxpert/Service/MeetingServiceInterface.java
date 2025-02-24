@@ -1,6 +1,7 @@
 package tn.esprit.innoxpert.Service;
 
 import tn.esprit.innoxpert.Entity.Meeting;
+import tn.esprit.innoxpert.Entity.User;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ public interface MeetingServiceInterface {
     public Meeting updateMeeting (Meeting b );
     public Meeting approveMeeting(Meeting b);
     public Meeting approveMeetingById(Long meetingId) ;
+    public List<User> getStudentsByTutor(Long tutorId);
 
 
 

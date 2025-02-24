@@ -15,10 +15,11 @@ public class StudentTutor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idUser;
 
-    @OneToOne
-    User student ;
-    @OneToOne
-    User tutor ;
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    User student;
 
-
+    @ManyToOne
+    @JoinColumn(name = "tutor_id")
+    User tutor;
 }

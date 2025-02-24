@@ -3,10 +3,13 @@ package tn.esprit.innoxpert.Controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.Entity.Meeting;
+import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Service.MeetingService;
 import tn.esprit.innoxpert.Service.MeetingServiceInterface;
+import tn.esprit.innoxpert.Service.UserService;
 
 import java.util.List;
 
@@ -56,5 +59,28 @@ public class MeetingRestController {
 
 
 
+        @GetMapping("/getStudentsByTutorId/{idTutor}")
+        public ResponseEntity<List<User>> getStudentsByTutorId(@PathVariable("idTutor") Long idTutor) {
+            List<User> students = meetingService.getStudentsByTutor(idTutor);
+            if (students.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(students);
+        }
 
-}
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
