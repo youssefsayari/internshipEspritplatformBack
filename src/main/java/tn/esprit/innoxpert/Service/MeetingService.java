@@ -114,5 +114,16 @@ public class MeetingService implements MeetingServiceInterface {
     }
 
 
+    public Meeting addMeetingAndAffectToParticipant(Meeting meeting, Long organiserId, Long participantId) {
+        User organiser = userRepository.findById(organiserId).get();
+        User participant = userRepository.findById(participantId).get();
+
+        meeting.setOrganiser(organiser);
+        meeting.setParticipant(participant);
+
+        return meetingRepository.save(meeting);
+    }
+
+
 
 }

@@ -37,6 +37,18 @@ public class MeetingRestController {
         return meetingService.addMeeting(meeting);
     }
 
+    @PostMapping("/addMeetingAndAffectToParticipant/{organiserId}/{participantId}")
+    public ResponseEntity<Meeting> addMeetingAndAffectToParticipant(@RequestBody Meeting meeting,
+                                                                    @PathVariable("organiserId") Long organiserId,
+                                                                    @PathVariable("participantId") Long participantId) {
+        try {
+            Meeting savedMeeting = meetingService.addMeetingAndAffectToParticipant(meeting, organiserId, participantId);
+            return ResponseEntity.ok(savedMeeting);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @DeleteMapping("/deleteMeeting/{idMeeting}")
     public void deleteMeetingById(@PathVariable ("idMeeting") Long idMeeting)
     {
