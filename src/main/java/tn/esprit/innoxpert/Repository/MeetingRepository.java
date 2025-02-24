@@ -5,9 +5,13 @@ import org.springframework.stereotype.Repository;
 import tn.esprit.innoxpert.Entity.Meeting;
 import tn.esprit.innoxpert.Entity.TypeMeeting;
 
+import java.util.List;
+
 @Repository
 public interface MeetingRepository extends JpaRepository<Meeting,Long> {
     boolean existsByTypeMeeting(TypeMeeting typeMeeting);
     boolean existsByTypeMeetingAndIdMeetingNot(TypeMeeting typeMeeting, Long idMeeting);
+
+    List<Meeting> findByParticipant_IdUser(Long studentID);
 
 }

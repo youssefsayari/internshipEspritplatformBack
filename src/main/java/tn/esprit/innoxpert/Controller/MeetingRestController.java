@@ -90,6 +90,12 @@ public class MeetingRestController {
         return ResponseEntity.ok(updatedMeeting);
     }
 
+    @GetMapping("/getMeetingsByStudent/{idStudent}")
+    public List<Meeting> getMeetingsByStudent(@PathVariable("idStudent")Long idStudent)
+    {
+        return meetingService.findByParticipant(idStudent);
+    }
+
 
 
 
