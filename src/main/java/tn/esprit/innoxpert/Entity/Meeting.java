@@ -38,11 +38,13 @@ public class Meeting {
     @Enumerated(EnumType.STRING)
     TypeMeeting typeMeeting;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "organiser_id")
     @NotNull(message = "L'organisateur est obligatoire")
     User organiser;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "participant_id")
     @NotNull(message = "Le participant est obligatoire")
     User participant;
 
