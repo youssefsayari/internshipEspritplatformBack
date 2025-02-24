@@ -80,17 +80,28 @@ public class MeetingRestController {
             return ResponseEntity.ok(students);
         }
 
+    @PutMapping("/updateMeetingAndAffectToParticipant/{organiserId}/{participantId}")
+    public ResponseEntity<Meeting> updateMeetingAndAffectToParticipant(
+            @RequestBody Meeting meetingDetails,
+            @PathVariable Long organiserId,
+            @PathVariable Long participantId) {
 
-
-
-
-
-
-
-
-
-
+        Meeting updatedMeeting = meetingService.updateMeetingAndAffectToParticipant(meetingDetails, organiserId, participantId);
+        return ResponseEntity.ok(updatedMeeting);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+}
 
 
 
