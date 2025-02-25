@@ -19,4 +19,8 @@ public class Document {
     TypeDocument typeDocument;
 
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id_user")
+    private User user;
+
 }
