@@ -145,6 +145,15 @@ public class MeetingService implements MeetingServiceInterface {
         meeting.setApproved(true);
         return meetingRepository.save(meeting);
     }
+    @Override
+    public Meeting disapproveMeetingById(Long meetingId) {
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new NotFoundException("Meeting with ID: " + meetingId + " was not found. Cannot update."));
+
+        meeting.setApproved(false);
+        return meetingRepository.save(meeting);
+    }
+
 
 
     public Meeting addMeetingAndAffectToParticipant(Meeting meeting, Long organiserId, Long participantId) {
