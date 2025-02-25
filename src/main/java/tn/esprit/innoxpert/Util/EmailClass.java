@@ -6,8 +6,8 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class EmailClass {
-  private String username = "Innohire45@gmail.com";
-  private String password = "rqau hpkp wtxu dvmg";
+  private String username = "esprit.stagedepartement@gmail.com";
+  private String password = "xmqu futu clki tskp";
 
   public void envoyer(String reciever, String OTP) {
     // Etape 1 : Création de la session

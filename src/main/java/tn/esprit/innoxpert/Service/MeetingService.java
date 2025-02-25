@@ -90,16 +90,11 @@ public class MeetingService implements MeetingServiceInterface {
         return meetingRepository.save(b);
     }
 
-    @Override
-    public Meeting updateMeetingAndAffectToParticipant(Meeting b, Long organiserId, Long participantId) {
-        Meeting existingMeeting = meetingRepository.findById(b.getIdMeeting()).orElseThrow(() ->
-                new NotFoundException("Meeting with ID: " + b.getIdMeeting() + " not found"));
 
-        if ((b.getTypeMeeting() == TypeMeeting.Restitution1 || b.getTypeMeeting() == TypeMeeting.Restitution2)
-                && !existingMeeting.getTypeMeeting().equals(b.getTypeMeeting())
-                && meetingRepository.existsByTypeMeetingAndIdMeetingNot(b.getTypeMeeting(), b.getIdMeeting())) {
-            throw new IllegalStateException("Cannot have more than one meeting of type " + b.getTypeMeeting());
-        }
+    @Override
+    public Meeting updateMeetingAndAffectToParticipant(Meeting meeting, Long organiserId, Long participantId) {
+        Meeting existingMeeting = meetingRepository.findById(meeting.getIdMeeting())
+                .orElseThrow(() -> new NotFoundException("Meeting with ID: " + meeting.getIdMeeting() + " not found"));
 
         User organiser = userRepository.findById(organiserId)
                 .orElseThrow(() -> new NotFoundException("Organiser with ID: " + organiserId + " not found"));
@@ -107,15 +102,21 @@ public class MeetingService implements MeetingServiceInterface {
         User participant = userRepository.findById(participantId)
                 .orElseThrow(() -> new NotFoundException("Participant with ID: " + participantId + " not found"));
 
-        existingMeeting.setDate(b.getDate());
-        existingMeeting.setHeure(b.getHeure());
-        existingMeeting.setDescription(b.getDescription());
-        existingMeeting.setTypeMeeting(b.getTypeMeeting());
+        if ((meeting.getTypeMeeting() == TypeMeeting.Restitution1 || meeting.getTypeMeeting() == TypeMeeting.Restitution2) &&
+                meetingRepository.existsByTypeMeetingAndOrganiserAndParticipantAndIdMeetingNot(meeting.getTypeMeeting(), organiser, participant, meeting.getIdMeeting())) {
+            throw new IllegalStateException("Each student can only have one " + meeting.getTypeMeeting() + " meeting per tutor.");
+        }
+
+        existingMeeting.setDate(meeting.getDate());
+        existingMeeting.setHeure(meeting.getHeure());
+        existingMeeting.setDescription(meeting.getDescription());
+        existingMeeting.setTypeMeeting(meeting.getTypeMeeting());
         existingMeeting.setOrganiser(organiser);
         existingMeeting.setParticipant(participant);
 
         return meetingRepository.save(existingMeeting);
     }
+
 
     @Override
     public List<Meeting> findByParticipant(Long studentId) {
@@ -156,21 +157,23 @@ public class MeetingService implements MeetingServiceInterface {
 
 
 
+    @Override
     public Meeting addMeetingAndAffectToParticipant(Meeting meeting, Long organiserId, Long participantId) {
-        if ((meeting.getTypeMeeting() == TypeMeeting.Restitution1 || meeting.getTypeMeeting() == TypeMeeting.Restitution2)
-                && meetingRepository.existsByTypeMeeting(meeting.getTypeMeeting())) {
-            throw new IllegalStateException("Cannot add more than one meeting of type " + meeting.getTypeMeeting());
-        }
+        User organiser = userRepository.findById(organiserId)
+                .orElseThrow(() -> new NotFoundException("Organiser with ID: " + organiserId + " not found"));
+        User participant = userRepository.findById(participantId)
+                .orElseThrow(() -> new NotFoundException("Participant with ID: " + participantId + " not found"));
 
-        User organiser = userRepository.findById(organiserId).get();
-        User participant = userRepository.findById(participantId).get();
+        if ((meeting.getTypeMeeting() == TypeMeeting.Restitution1 || meeting.getTypeMeeting() == TypeMeeting.Restitution2) &&
+                meetingRepository.existsByTypeMeetingAndOrganiserAndParticipant(meeting.getTypeMeeting(), organiser, participant)) {
+            throw new IllegalStateException("Each student can only have one " + meeting.getTypeMeeting() + " meeting per tutor.");
+        }
 
         meeting.setOrganiser(organiser);
         meeting.setParticipant(participant);
+
         String meetingTitle = meeting.getDescription().replaceAll("\\s+", "_") + "_" + meeting.getDate();
-
         meeting.setLink(jitsiMeetingService.generateMeetingLink(meetingTitle));
-
 
         return meetingRepository.save(meeting);
     }
