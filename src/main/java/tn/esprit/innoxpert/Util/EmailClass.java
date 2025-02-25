@@ -6,13 +6,14 @@ import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class EmailClass {
-  private String username = "esprit.stagedepartement@gmail.com";
-  private String password = "xmqu futu clki tskp";
 
-  public void envoyer(String reciever, String OTP) {
-    // Etape 1 : Création de la session
+  private final String username = "esprit.stagedepartement@gmail.com";
+  private final String password = "xmqu futu clki tskp";
+
+  private Session createEmailSession() {
     Properties props = new Properties();
     props.put("mail.smtp.auth", "true");
+    props.put("mail.smtp.starttls.enable", "true");
     props.put("mail.smtp.ssl.enable", "true");
     props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
     props.put("mail.smtp.socketFactory.fallback", "false");
@@ -20,95 +21,65 @@ public class EmailClass {
     props.put("mail.smtp.port", "465");
     props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
-    Session session = Session.getInstance(props,
-      new Authenticator() {
-        protected PasswordAuthentication getPasswordAuthentication() {
-          return new PasswordAuthentication(username, password);
-        }
-      });
+    return Session.getInstance(props, new Authenticator() {
+      @Override
+      protected PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication(username, password);
+      }
+    });
+  }
 
+  public void sendMeetingReminder(String receiver, String organiserName, String participantName, String meetingDate, String meetingTime, String meetingLink) {
     try {
-      // Etape 2 : Création de l'objet Message
+      Session session = createEmailSession();
       Message message = new MimeMessage(session);
-      message.setFrom(new InternetAddress("Innohire45@gmail.com"));
-      message.setRecipients(Message.RecipientType.TO,
-        InternetAddress.parse(reciever));
-      message.setSubject("Innohire code");
-      message.setText(OTP);
+      message.setFrom(new InternetAddress(username));
+      message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver));
+      message.setSubject("🔔 Rappel de votre réunion - Jitsi Meet");
 
-      // Etape 3 : Envoyer le message
+      // Use HTML format for better readability
+      String formattedMessage = String.format(
+              "<html><body>"
+                      + "<h2>📢 Rappel de réunion</h2>"
+                      + "<p>Bonjour,</p>"
+                      + "<p>Un rappel pour votre réunion prévue entre :</p>"
+                      + "<ul>"
+                      + "<li><b>📌 Organisateur :</b> %s</li>"
+                      + "<li><b>👤 Participant :</b> %s</li>"
+                      + "</ul>"
+                      + "<p><b>📅 Date :</b> %s</p>"
+                      + "<p><b>⏰ Heure :</b> %s</p>"
+                      + "<p><b>🔗 Lien de la réunion :</b> <a href='%s'>Cliquez ici pour rejoindre</a></p>"
+                      + "<p>Merci de vous connecter à l'heure prévue.</p>"
+                      + "<p>Cordialement,<br>Votre équipe.</p>"
+                      + "</body></html>",
+              organiserName, participantName, meetingDate, meetingTime, meetingLink
+      );
+
+      message.setContent(formattedMessage, "text/html; charset=utf-8");
+
       Transport.send(message);
-      System.out.println("Message envoyé");
+      System.out.println("✔️ Email de rappel envoyé à " + receiver);
     } catch (MessagingException e) {
-      throw new RuntimeException(e);
+      System.err.println("❌ Erreur d'envoi de l'email à " + receiver + " : " + e.getMessage());
     }
   }
 
-  public void sendConfirmationEmail(String receiver, String fullName, String dateDebut, String dateFin) {
-    // New confirmation email sending logic
-    Properties props = new Properties();
-    props.put("mail.smtp.auth", "true");
-    props.put("mail.smtp.ssl.enable", "true");
-    props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-    props.put("mail.smtp.socketFactory.fallback", "false");
-    props.put("mail.smtp.host", "smtp.gmail.com");
-    props.put("mail.smtp.port", "465");
-    props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
-    Session session = Session.getInstance(props,
-      new Authenticator() {
-        protected PasswordAuthentication getPasswordAuthentication() {
-          return new PasswordAuthentication(username, password);
-        }
-      });
-
+  public void sendHtmlEmail(String receiver, String subject, String htmlContent) {
     try {
+      Session session = createEmailSession();
       Message message = new MimeMessage(session);
-      message.setFrom(new InternetAddress("Innohire45@gmail.com"));
-      message.setRecipients(Message.RecipientType.TO,
-        InternetAddress.parse(receiver));
-      message.setSubject("Congé Confirmé");
-      message.setText("Bonjour " + fullName + ",\n\nVotre congé prévu pour la période du " + dateDebut + " au " + dateFin + " a été confirmé.\n\nCordialement,\nL'équipe RH");
+      message.setFrom(new InternetAddress(username));
+      message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver));
+      message.setSubject(subject);
+      message.setContent(htmlContent, "text/html; charset=utf-8");
 
       Transport.send(message);
-      System.out.println("email de confirmation envoyé");
+      System.out.println("✔️ Email HTML envoyé à " + receiver);
     } catch (MessagingException e) {
-      throw new RuntimeException(e);
+      System.err.println("❌ Erreur d'envoi de l'email à " + receiver + " : " + e.getMessage());
     }
   }
 
-  public void sendRejectionEmail(String receiver, String fullName, String dateDebut, String dateFin) {
-    // New rejection email sending logic
-    Properties props = new Properties();
-    props.put("mail.smtp.auth", "true");
-    props.put("mail.smtp.ssl.enable", "true");
-    props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-    props.put("mail.smtp.socketFactory.fallback", "false");
-    props.put("mail.smtp.host", "smtp.gmail.com");
-    props.put("mail.smtp.port", "465");
-    props.put("mail.smtp.ssl.protocols", "TLSv1.2");
-
-    Session session = Session.getInstance(props,
-      new Authenticator() {
-        protected PasswordAuthentication getPasswordAuthentication() {
-          return new PasswordAuthentication(username, password);
-        }
-      });
-
-    try {
-      Message message = new MimeMessage(session);
-      message.setFrom(new InternetAddress("Innohire45@gmail.com"));
-      message.setRecipients(Message.RecipientType.TO,
-        InternetAddress.parse(receiver));
-      message.setSubject("Congé Non Accepté");
-      message.setText("Bonjour " + fullName + ",\n\nNous regrettons de vous informer que votre demande de congé pour la période du " + dateDebut + " au " + dateFin + " n'a pas été acceptée.\n\nCordialement,\nL'équipe RH");
-
-      Transport.send(message);
-      System.out.println("email de rejet envoyé");
-    } catch (MessagingException e) {
-      throw new RuntimeException(e);
-    }
-
-
-  }
 }

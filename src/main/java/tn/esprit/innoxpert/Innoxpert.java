@@ -2,14 +2,17 @@ package tn.esprit.innoxpert;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import tn.esprit.innoxpert.Util.EmailClass;
 import tn.esprit.innoxpert.Util.JitsiMeetingService;
 
 @SpringBootApplication
+@EnableScheduling
 public class Innoxpert {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Innoxpert.class, args);
-		System.out.println(new JitsiMeetingService().generateMeetingLink("res"));
+	//	new EmailClass().sendMeetingReminder("kthiri1919@gmail.com", "John Doe", "Jane Smith", "2024-03-15", "14:30", "https://meet.jit.si/MyMeeting");
 
 	}
 

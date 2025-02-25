@@ -6,6 +6,7 @@ import tn.esprit.innoxpert.Entity.Meeting;
 import tn.esprit.innoxpert.Entity.TypeMeeting;
 import tn.esprit.innoxpert.Entity.User;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -19,5 +20,14 @@ public interface MeetingRepository extends JpaRepository<Meeting,Long> {
     boolean existsByTypeMeetingAndOrganiserAndParticipant(TypeMeeting typeMeeting, User organiser, User participant);
 
     boolean existsByTypeMeetingAndOrganiserAndParticipantAndIdMeetingNot(TypeMeeting typeMeeting, User organiser, User participant, Long meetingId);
+
+    List<Meeting> findByDateAndHeureBetweenAndApprovedTrue(LocalDate date, String startTime, String endTime);
+
+    List<Meeting> findByDateAndApprovedTrue(LocalDate date);
+
+    List<Meeting> findByDateAndApprovedTrueAndNotifiedFalse(LocalDate date);
+
+
+
 
 }

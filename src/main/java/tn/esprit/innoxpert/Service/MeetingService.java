@@ -1,7 +1,9 @@
 package tn.esprit.innoxpert.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.Entity.Meeting;
 import tn.esprit.innoxpert.Entity.StudentTutor;
@@ -11,8 +13,11 @@ import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.MeetingRepository;
 import tn.esprit.innoxpert.Repository.StudentTutorRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
+import tn.esprit.innoxpert.Util.EmailClass;
 import tn.esprit.innoxpert.Util.JitsiMeetingService;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,10 +33,11 @@ public class MeetingService implements MeetingServiceInterface {
     @Autowired
 
     JitsiMeetingService jitsiMeetingService ;
+    private final EmailClass emailClass = new EmailClass();
 
 
 
-   @Override
+    @Override
     public List<User> getStudentsByTutor(Long tutorId) {
         List<StudentTutor> relations = studentTutorRepository.findByTutorId(tutorId);
         List<Long> studentIds = relations.stream()
@@ -180,4 +186,74 @@ public class MeetingService implements MeetingServiceInterface {
 
 
 
+
+//    @Scheduled(fixedRate = 10000) // ⏳ Vérifie toutes les heures (3600000 ms = 1 heure)
+//    public void notifyUsersOneDayBeforeMeeting() {
+//        LocalDate tomorrow = LocalDate.now().plusDays(1);
+//
+//        List<Meeting> meetings = meetingRepository.findByDateAndApprovedTrue(tomorrow);
+//
+//        for (Meeting meeting : meetings) {
+//            String organiserEmail = meeting.getOrganiser().getEmail();
+//            String participantEmail = meeting.getParticipant().getEmail();
+//
+//            String subject = "📅 Rappel de votre réunion prévue demain";
+//            String message = "Bonjour,\n\n"
+//                    + "Votre réunion est prévue demain à " + meeting.getHeure() + ".\n"
+//                    + "🔗 Lien de la réunion : " + meeting.getLink() + "\n\n"
+//                    + "Cordialement,\nVotre équipe.";
+//
+//            // Envoyer les e-mails
+//            emailClass.envoyer(organiserEmail, message);
+//            emailClass.envoyer(participantEmail, message);
+//
+//            System.out.println("✔️ Email envoyé à " + organiserEmail + " et " + participantEmail);
+//        }
+//
+//        System.out.println("✔️ Vérification des réunions pour demain terminée !");
+//    }
+
+
+    @Override
+    @Scheduled(fixedRate = 10000) // 🔔 Runs every hour (3600000 ms)
+    @Transactional
+    public void notifyUsersOneDayBeforeMeeting() {
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+
+        List<Meeting> meetings = meetingRepository.findByDateAndApprovedTrueAndNotifiedFalse(tomorrow);
+
+        if (meetings.isEmpty()) {
+            System.out.println("✅ Aucun meeting à notifier.");
+            return;
+        }
+
+        for (Meeting meeting : meetings) {
+            String organiserEmail = meeting.getOrganiser().getEmail();
+            String participantEmail = meeting.getParticipant().getEmail();
+
+            String subject = "📅 Rappel : Réunion prévue demain à " + meeting.getHeure();
+            String message = "<html><body>"
+                    + "<h3>🔔 Rappel de votre réunion</h3>"
+                    + "<p>Bonjour,</p>"
+                    + "<p>Votre réunion est prévue demain :</p>"
+                    + "<ul>"
+                    + "<li>📅 <b>Date :</b> " + meeting.getDate() + "</li>"
+                    + "<li>⏰ <b>Heure :</b> " + meeting.getHeure() + "</li>"
+                    + "<li>🔗 <b>Lien :</b> <a href='" + meeting.getLink() + "'>Rejoindre la réunion</a></li>"
+                    + "</ul>"
+                    + "<p>Merci de vous connecter à l'heure prévue.</p>"
+                    + "<p>Cordialement,<br>Votre équipe.</p>"
+                    + "</body></html>";
+
+            emailClass.sendHtmlEmail(organiserEmail, subject, message);
+            emailClass.sendHtmlEmail(participantEmail, subject, message);
+
+            meeting.setNotified(true);
+            meetingRepository.save(meeting);
+
+            System.out.println("✔️ Email envoyé à " + organiserEmail + " et " + participantEmail);
+        }
+
+        System.out.println("✔️ Notifications envoyées !");
+    }
 }

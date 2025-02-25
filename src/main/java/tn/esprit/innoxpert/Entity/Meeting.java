@@ -49,4 +49,6 @@ public class Meeting {
     User participant;
     String link;
     boolean approved;
+    boolean notified = false;
+
 }

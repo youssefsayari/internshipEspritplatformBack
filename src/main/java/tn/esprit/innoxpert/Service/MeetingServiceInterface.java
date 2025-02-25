@@ -20,6 +20,8 @@ public interface MeetingServiceInterface {
 
     public Meeting disapproveMeetingById(Long meetingId) ;
 
+    public void notifyUsersOneDayBeforeMeeting();
+
 
 
 
