@@ -41,9 +41,8 @@ public class CompanyService implements CompanyServiceInterface {
         user.setTypeUser(TypeUser.Company); // Type d'utilisateur = Company
         user.setEmail(c.getEmail());
 
-        if (c.getPhone() != null && !c.getPhone().isEmpty()) {
-            user.setTelephone(Long.parseLong(c.getPhone()));
-        }
+        user.setTelephone(c.getPhone());
+
 
         // Génération du mot de passe sans encodage
         String rawPassword = companyRepository.generatePassword(c);

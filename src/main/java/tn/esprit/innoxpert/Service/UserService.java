@@ -124,8 +124,8 @@ public class UserService implements UserServiceInterface {
     /*----------------start l5edmet sayari--------------------*/
 
     @Override
-    public void followCompany(Long userId, Long companyId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    public void followCompany(Long idUser, Long companyId) {
+        User user = userRepository.findById(idUser).orElseThrow(() -> new RuntimeException("User not found"));
         Company company = companyRepository.findById(companyId).orElseThrow(() -> new RuntimeException("Company not found"));
 
         if (!user.getFollowedCompanies().contains(company)) {
@@ -135,8 +135,8 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public void unfollowCompany(Long userId, Long companyId) {
-        User user = userRepository.findById(userId)
+    public void unfollowCompany(Long idUser, Long companyId) {
+        User user = userRepository.findById(idUser)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new RuntimeException("Company not found"));
@@ -148,8 +148,8 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public List<Company> getFollowedCompanies(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    public List<Company> getFollowedCompanies(Long idUser) {
+        User user = userRepository.findById(idUser).orElseThrow(() -> new RuntimeException("User not found"));
         return user.getFollowedCompanies();
     }
 

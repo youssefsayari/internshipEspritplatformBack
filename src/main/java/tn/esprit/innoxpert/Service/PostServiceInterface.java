@@ -15,7 +15,7 @@ public interface PostServiceInterface {
 
 
 
-  List<Post> getHomeFeed(Long userId);
+  List<Post> getHomeFeed(Long idUser);
 
 
 

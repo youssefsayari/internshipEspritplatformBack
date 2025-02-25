@@ -33,7 +33,7 @@ public class Company {
     @Column(unique = true, nullable = false)
     String email;
 
-    String phone;
+    Long phone;
 
     LocalDate foundingYear ;
 
@@ -51,7 +51,7 @@ public class Company {
     List<Post> posts;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id", referencedColumnName = "idUser") // Clé étrangère pour l'utilisateur
+    @JoinColumn(name = "idUser", referencedColumnName = "idUser") // Clé étrangère pour l'utilisateur
     User owner;
 
 

@@ -24,9 +24,9 @@ public interface UserServiceInterface {
 
 
     /*----------------start l5edmet sayari--------------------*/
-    void followCompany(Long userId, Long companyId);
-    void unfollowCompany(Long userId, Long companyId) ;
-    List<Company> getFollowedCompanies(Long userId);
+    void followCompany(Long idUser, Long companyId);
+    void unfollowCompany(Long idUser, Long companyId) ;
+    List<Company> getFollowedCompanies(Long idUser);
     /*----------------end l5edmet sayari--------------------*/
 
 
