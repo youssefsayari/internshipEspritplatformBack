@@ -25,7 +25,9 @@ public class MeetingService implements MeetingServiceInterface {
     StudentTutorRepository studentTutorRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
 
+    JitsiMeetingService jitsiMeetingService ;
 
 
 
@@ -156,6 +158,10 @@ public class MeetingService implements MeetingServiceInterface {
 
         meeting.setOrganiser(organiser);
         meeting.setParticipant(participant);
+        String meetingTitle = meeting.getDescription().replaceAll("\\s+", "_") + "_" + meeting.getDate();
+
+        meeting.setLink(jitsiMeetingService.generateMeetingLink(meetingTitle));
+
 
         return meetingRepository.save(meeting);
     }

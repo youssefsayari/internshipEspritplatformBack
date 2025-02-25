@@ -47,6 +47,6 @@ public class Meeting {
     @JoinColumn(name = "participant_id")
     @NotNull(message = "Le participant est obligatoire")
     User participant;
-
+    String link;
     boolean approved;
 }
