@@ -1,5 +1,6 @@
 package tn.esprit.innoxpert.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -27,15 +28,18 @@ public class Defense {
     double defenseDegree;
 
     @OneToOne
-    @JoinColumn(name = "student_id", unique = true) // Ensures one student has only one defense
+    @JoinColumn(name = "student_id", unique = true)
+    @JsonIgnore  // Prevent infinite loop
     User student;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(
             name = "defense_tutors",
             joinColumns = @JoinColumn(name = "defense_id"),
             inverseJoinColumns = @JoinColumn(name = "tutor_id")
     )
+    @JsonIgnore  // Prevent infinite loop
     Set<User> tutors;
+
 
 }

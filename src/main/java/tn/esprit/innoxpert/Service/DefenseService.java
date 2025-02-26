@@ -1,5 +1,6 @@
 package tn.esprit.innoxpert.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,12 +95,33 @@ public class DefenseService implements DefenseServiceInterface {
     }
 
     @Override
+    @Transactional
     public void removeDefenseById(Long idDefense) {
-        if (!defenseRepository.existsById(idDefense)) {
-            throw new NotFoundException("User with ID :  " + idDefense + " was not found.");
+        // Step 1: Fetch the defense entity
+        Defense defense = defenseRepository.findById(idDefense)
+                .orElseThrow(() -> new NotFoundException("Defense with ID: " + idDefense + " was not found."));
+
+        // Step 2: Remove the defense-tutor relationship from the tutors' side
+        for (User tutor : defense.getTutors()) {
+            tutor.getDefenses().remove(defense);  // Remove the relationship from the tutor's side
         }
-        defenseRepository.deleteById(idDefense);
+
+        // Step 3: Clear the tutors collection in the defense
+        defense.getTutors().clear();  // Clear the tutors collection in the defense
+
+        // Step 4: Ensure the changes to the join table are persisted
+        defenseRepository.save(defense);  // This will update the join table
+
+        // Step 5: Delete the defense entity itself
+        defenseRepository.delete(defense);  // Delete the defense entity
     }
+
+
+
+
+
+
+
 
     @Override
     public Defense updateDefense(Defense d) {

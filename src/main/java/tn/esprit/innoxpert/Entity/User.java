@@ -1,5 +1,6 @@
 package tn.esprit.innoxpert.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -38,12 +39,15 @@ public class User implements UserDetails {
     UserInfo userInfo;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy="student")
+    @JsonIgnore  // Prevent infinite loop
     List<Task> tasks;
 
-    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     Defense defense;
 
-    @ManyToMany(mappedBy = "tutors")
+
+    @ManyToMany(mappedBy = "tutors", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @JsonIgnore  // Prevent infinite loop
     Set<Defense> defenses;
 
     @ManyToMany
