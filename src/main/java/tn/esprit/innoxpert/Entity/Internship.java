@@ -36,15 +36,15 @@ public class Internship {
     @NotNull(message = "L'état du stage est obligatoire.")
     InternshipState internshipState;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "post_id")
-    private Post post;
-
-
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(name = "Internship_users",
             joinColumns = @JoinColumn(name = "internship_id"),
             inverseJoinColumns = @JoinColumn(name = "users_idUser"))
     private List<User> users = new ArrayList<>();
+
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "post_id")
+    private Post post;
 
 }

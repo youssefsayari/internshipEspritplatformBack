@@ -137,7 +137,8 @@ public class UserRestController {
             User user = userservice.getUserByIdentifiant(identifiant);
             String role = String.valueOf(user.getTypeUser());  // Assure-toi que cette méthode est disponible dans ton modèle User
             String classe = user.getClasse();
-            UserRole userRole = new UserRole(role, classe);
+            Long id= user.getIdUser();
+            UserRole userRole = new UserRole(role, classe, id);
             return ResponseEntity.ok(userRole);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token: " + e.getMessage());

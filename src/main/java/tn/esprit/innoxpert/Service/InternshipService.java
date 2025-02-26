@@ -50,27 +50,21 @@ public class InternshipService implements InternshipServiceInterface {
     }
 
     @Override
-    public Internship addInternship(AddInternship addInternship) {
-        Long userId = addInternship.getIdUser();
-        User user = userRepository.findById(userId)
+    public void addInternship(AddInternship addInternship) {
+        User user = userRepository.findById(addInternship.getIdUser())
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         if (user.getTypeUser() != TypeUser.Student) {
             throw new RuntimeException("Only students can apply for an internship.");
         }
 
-        List<Document> documents = user.getDocuments();
-        if (documents == null || documents.isEmpty()) {
-            throw new RuntimeException("User does not have any documents.");
-        }
-
-        Document cvDocument = documents.stream()
+        Document cvDocument = user.getDocuments().stream()
                 .filter(doc -> "CV".equalsIgnoreCase(String.valueOf(doc.getTypeDocument())))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("User does not have a CV document."));
+                .orElseThrow(() -> new NotFoundException("User does not have a CV document."));
 
-        Long idPost = addInternship.getIdPost();
-        Post post = postRepository.findById(idPost)
+
+        Post post = postRepository.findById(addInternship.getIdPost())
                 .orElseThrow(() -> new NotFoundException("Post not found"));
         Internship internship = new Internship();
         internship.setTitle(post.getTitle());
@@ -79,8 +73,7 @@ public class InternshipService implements InternshipServiceInterface {
         internship.setId_document(cvDocument.getId());
         internship.setPost(post);
         internship.getUsers().add(user);
-
-        return internshipRepository.save(internship);
+        internshipRepository.save(internship);
     }
 
     @Override

@@ -11,7 +11,7 @@ public interface InternshipServiceInterface {
     public List<Internship> getAllInternships();
     public List<Internship> getInternshipsByCriteria(Long idUser,Long idPost);
     public Internship getInternshipById(Long internshipId);
-    public Internship addInternship(AddInternship addInternship);
+    public void addInternship(AddInternship addInternship);
     public void removeInternshipById(Long internshipId);
     public Internship updateInternship (Internship b);
     public Internship approveInternship(Long internshipId);

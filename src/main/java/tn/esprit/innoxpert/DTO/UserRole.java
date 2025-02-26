@@ -8,10 +8,12 @@ import lombok.Setter;
 public class UserRole {
     private String role;
     private String classe;
+    private Long id;
 
-    public UserRole(String role, String classe) {
+    public UserRole(String role, String classe, Long id) {
         this.role = role;
         this.classe = classe;
+        this.id = id;
     }
 }
 
