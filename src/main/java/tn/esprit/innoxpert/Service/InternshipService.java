@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.DTO.AddInternship;
+import tn.esprit.innoxpert.DTO.InternshipResponse;
 import tn.esprit.innoxpert.Entity.*;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.InternshipRepository;
@@ -27,21 +28,29 @@ public class InternshipService implements InternshipServiceInterface {
     }
 
     @Override
-    public List<Internship> getInternshipsByCriteria(Long idUser, Long idPost) {
+    public List<InternshipResponse> getInternshipsByCriteria(Long idUser, Long idPost) {
         if (idUser != null) {
-            return internshipRepository.findAll().stream()
-                    .filter(internship -> internship.getUsers().stream()
-                            .anyMatch(user -> user.getIdUser().equals(idUser)))
+            return internshipRepository.findByUsers_IdUser(idUser).stream()
+                    .map(this::mapToInternshipResponse)
                     .toList();
-        }
-        else if (idPost != null) {
-            return internshipRepository.findAll().stream()
-                    .filter(internship -> internship.getPost() != null && internship.getPost().getId().equals(idPost))
+        } else if (idPost != null) {
+            return internshipRepository.findByPost_Id(idPost).stream()
+                    .map(this::mapToInternshipResponse)
                     .toList();
         } else {
             throw new IllegalArgumentException("Au moins un critère (idUser ou idPost) doit être fourni.");
         }
     }
+
+    private InternshipResponse mapToInternshipResponse(Internship internship) {
+        return new InternshipResponse(
+                internship.getId(),
+                internship.getTitle(),
+                internship.getDescription(),
+                internship.getInternshipState()
+        );
+    }
+
 
     @Override
     public Internship getInternshipById(Long internshipId) {
@@ -66,6 +75,27 @@ public class InternshipService implements InternshipServiceInterface {
 
         Post post = postRepository.findById(addInternship.getIdPost())
                 .orElseThrow(() -> new NotFoundException("Post not found"));
+        String userClasse = user.getClasse();
+
+        if (userClasse == null || userClasse.isEmpty()) {
+            throw new RuntimeException("User class information is missing.");
+        }
+        TypeInternship internshipType;
+
+        if ("1234".contains(userClasse.substring(0, 1))) {
+            if (!post.getTypeInternship().equals(TypeInternship.Summer))
+            {
+                throw new RuntimeException("You can only apply for a Summer internship.");
+            }
+        } else if (userClasse.startsWith("5")) {
+            if (!post.getTypeInternship().equals(TypeInternship.Graduation))
+            {
+                throw new RuntimeException("You can only apply for a Graduation internship.");
+            }
+        } else {
+            throw new RuntimeException("Invalid user class: " + userClasse);
+        }
+
         Internship internship = new Internship();
         internship.setTitle(post.getTitle());
         internship.setDescription(post.getContent());

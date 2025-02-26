@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public interface InternshipRepository extends JpaRepository<Internship,Long> {
-
+    List<Internship> findByUsers_IdUser(Long idUser);
+    List<Internship> findByPost_Id(Long idPost);
 
 }

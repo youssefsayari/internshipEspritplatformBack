@@ -20,6 +20,8 @@ public class Post {
     Long id;
 
     private String title;
+    @Enumerated(EnumType.STRING)
+    TypeInternship typeInternship;
 
     @Column(columnDefinition = "TEXT") // Permet de stocker du texte long
     private String content;

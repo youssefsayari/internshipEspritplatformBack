@@ -36,7 +36,7 @@ public class Internship {
     @NotNull(message = "L'état du stage est obligatoire.")
     InternshipState internshipState;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "Internship_users",
             joinColumns = @JoinColumn(name = "internship_id"),
             inverseJoinColumns = @JoinColumn(name = "users_idUser"))

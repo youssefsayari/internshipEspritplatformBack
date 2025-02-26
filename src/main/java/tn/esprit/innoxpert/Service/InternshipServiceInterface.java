@@ -1,6 +1,7 @@
 package tn.esprit.innoxpert.Service;
 
 import tn.esprit.innoxpert.DTO.AddInternship;
+import tn.esprit.innoxpert.DTO.InternshipResponse;
 import tn.esprit.innoxpert.Entity.Internship;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Map;
 public interface InternshipServiceInterface {
 
     public List<Internship> getAllInternships();
-    public List<Internship> getInternshipsByCriteria(Long idUser,Long idPost);
+    public List<InternshipResponse> getInternshipsByCriteria(Long idUser, Long idPost);
     public Internship getInternshipById(Long internshipId);
     public void addInternship(AddInternship addInternship);
     public void removeInternshipById(Long internshipId);
