@@ -1,5 +1,6 @@
 package tn.esprit.innoxpert.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -28,14 +29,20 @@ public class Rating {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = true)
+    @JsonIgnore
+
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id", nullable = true)
+    @JsonIgnore
+
     Comment comment;
 
     @ManyToOne
     @JoinColumn(name = "idUser", nullable = false) // Ajout d'une relation avec User
+    @JsonIgnore
+
     private User user;
 
     @Column(nullable = false, updatable = false)

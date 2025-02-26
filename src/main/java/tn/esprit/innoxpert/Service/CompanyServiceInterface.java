@@ -15,4 +15,6 @@ public interface CompanyServiceInterface {
 
     List<User> getCompanyFollowers(Long companyId);
 
+    void followCompany(Long userId, Long companyId) ;
+    void unfollowCompany(Long userId, Long companyId) ;
 }

@@ -15,5 +15,10 @@ public interface CommentServiceInterface {
     Comment addCommentAndAffectToPost(Long idPost, Comment newComment);
     Comment addCommentToComment(Long parentCommentId, Comment newComment);
 
-}
+
+
+
+
+
+    }
 

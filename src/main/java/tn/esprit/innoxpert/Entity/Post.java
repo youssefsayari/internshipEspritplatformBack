@@ -1,5 +1,6 @@
 package tn.esprit.innoxpert.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -12,6 +13,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Post {
     @Id
@@ -30,12 +32,17 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false) // Foreign Key vers Company
+    @JsonIgnore
+
     Company company;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Rating> ratings;
 
 }
