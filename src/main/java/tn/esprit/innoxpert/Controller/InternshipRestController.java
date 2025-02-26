@@ -3,12 +3,14 @@ package tn.esprit.innoxpert.Controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.DTO.AddInternship;
 import tn.esprit.innoxpert.DTO.InternshipResponse;
 import tn.esprit.innoxpert.Entity.Internship;
 import tn.esprit.innoxpert.Entity.Task;
+import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Service.InternshipService;
 
 import java.util.List;
@@ -38,11 +40,18 @@ public class InternshipRestController {
         return internshipService.getInternshipById(internshipId);
     }
     @PostMapping("/addInternship")
-    public ResponseEntity<String> addTask (@RequestBody AddInternship addInternship)
+    public ResponseEntity<String> addInternship (@RequestBody AddInternship addInternship)
     {
-
-        internshipService.addInternship(addInternship);
-        return ResponseEntity.ok("Internship request submitted successfully!");
+        try {
+            internshipService.addInternship(addInternship);
+            return ResponseEntity.ok("Internship request submitted successfully!");
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
+        }
     }
 
     @DeleteMapping("/removeInternshipById/{internshipId}")

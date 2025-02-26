@@ -80,7 +80,11 @@ public class InternshipService implements InternshipServiceInterface {
         if (userClasse == null || userClasse.isEmpty()) {
             throw new RuntimeException("User class information is missing.");
         }
-        TypeInternship internshipType;
+
+        boolean alreadyApplied = internshipRepository.existsByPostAndUsersContains(post, user);
+        if (alreadyApplied) {
+            throw new RuntimeException("You have already applied for this internship.");
+        }
 
         if ("1234".contains(userClasse.substring(0, 1))) {
             if (!post.getTypeInternship().equals(TypeInternship.Summer))
