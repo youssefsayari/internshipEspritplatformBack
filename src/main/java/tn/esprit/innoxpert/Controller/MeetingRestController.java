@@ -71,9 +71,9 @@ public class MeetingRestController {
 
     @PutMapping("/disapproveMeetingById/{idMeeting}")
 
-    public Meeting disapproveMeeting(@PathVariable("idMeeting")Long idMeeting)
+    public Meeting disapproveMeeting(@PathVariable("idMeeting")Long idMeeting,@RequestBody String reason)
     {
-        return meetingService.disapproveMeetingById(idMeeting);
+        return meetingService.disapproveMeetingById(idMeeting,reason);
     }
 
 

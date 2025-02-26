@@ -18,7 +18,7 @@ public interface MeetingServiceInterface {
     public Meeting updateMeetingAndAffectToParticipant(Meeting b, Long organiserId, Long participantId) ;
     public List<Meeting> findByParticipant(Long studentId);
 
-    public Meeting disapproveMeetingById(Long meetingId) ;
+    public Meeting disapproveMeetingById(Long meetingId, String reason) ;
 
     public void notifyUsersOneDayBeforeMeeting();
 

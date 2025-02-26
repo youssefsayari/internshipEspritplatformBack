@@ -153,12 +153,48 @@ public class MeetingService implements MeetingServiceInterface {
         return meetingRepository.save(meeting);
     }
     @Override
-    public Meeting disapproveMeetingById(Long meetingId) {
+    public Meeting disapproveMeetingById(Long meetingId, String reason) {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(() -> new NotFoundException("Meeting with ID: " + meetingId + " was not found. Cannot update."));
 
         meeting.setApproved(false);
-        return meetingRepository.save(meeting);
+        meeting.setNotified(false);
+        meetingRepository.save(meeting);
+
+        String participantEmail = meeting.getParticipant().getEmail();
+        String subject = "⚠️ Réunion annulée - Notification officielle";
+
+        String emailContent = String.format(
+                "<html><body>"
+                        + "<h2>🚨 Réunion Annulée</h2>"
+                        + "<p>Bonjour %s,</p>"
+                        + "<p>Nous vous informons que votre réunion prévue a été <b>annulée</b>.</p>"
+                        + "<ul>"
+                        + "<li><b>📌 Organisateur :</b> %s</li>"
+                        + "<li><b>👤 Vous (Participant) :</b> %s</li>"
+                        + "<li><b>📅 Date :</b> %s</li>"
+                        + "<li><b>⏰ Heure :</b> %s</li>"
+                        + "<li><b>📄 Type de Réunion :</b> %s</li>"
+                        + "</ul>"
+                        + "<p><b>📢 Raison de l'annulation :</b> %s</p>"
+                        + "<p>❌ <b>Cette réunion ne sera pas effectuée.</b></p>"
+                        + "<p>Si vous avez des questions, veuillez contacter votre organisateur.</p>"
+                        + "<p>Cordialement,<br>Votre équipe.</p>"
+                        + "</body></html>",
+                meeting.getParticipant().getFirstName(),
+                meeting.getOrganiser().getFirstName() + " " + meeting.getOrganiser().getLastName(),
+                meeting.getParticipant().getFirstName() + " " + meeting.getParticipant().getLastName(),
+                meeting.getDate(),
+                meeting.getHeure(),
+                meeting.getTypeMeeting(),
+                reason
+        );
+
+        emailClass.sendHtmlEmail(participantEmail, subject, emailContent);
+
+        System.out.println("✔️ Email de désapprobation envoyé à " + participantEmail + " avec la raison: " + reason);
+
+        return meeting;
     }
 
 
@@ -237,12 +273,14 @@ public class MeetingService implements MeetingServiceInterface {
                     + "<p>Bonjour,</p>"
                     + "<p>Votre réunion est prévue demain :</p>"
                     + "<ul>"
+                    + "<li>👨‍💼 <b>Organisateur :</b> " + meeting.getOrganiser().getFirstName() + " " + meeting.getOrganiser().getLastName() + "</li>"
+                    + "<li>🙋 <b>Participant :</b> " + meeting.getParticipant().getFirstName() + " " + meeting.getParticipant().getLastName() + "</li>"
                     + "<li>📅 <b>Date :</b> " + meeting.getDate() + "</li>"
                     + "<li>⏰ <b>Heure :</b> " + meeting.getHeure() + "</li>"
                     + "<li>🔗 <b>Lien :</b> <a href='" + meeting.getLink() + "'>Rejoindre la réunion</a></li>"
                     + "</ul>"
                     + "<p>Merci de vous connecter à l'heure prévue.</p>"
-                    + "<p>Cordialement,<br>Votre équipe.</p>"
+                    + "<p>Cordialement,<br>Departement Stage.</p>"
                     + "</body></html>";
 
             emailClass.sendHtmlEmail(organiserEmail, subject, message);
