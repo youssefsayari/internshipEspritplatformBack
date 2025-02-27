@@ -17,11 +17,13 @@ public class UserInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idUserDetail;
 
+    Long maxValidatedInternships;
+    Long maxInternshipSupervisions;
+
     @OneToOne
     User user;
 
     @OneToMany
     @JoinColumn(name = "user_detail_id")
-
     List<Expertise> expertises;
 }

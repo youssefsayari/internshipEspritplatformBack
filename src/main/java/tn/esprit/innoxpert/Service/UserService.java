@@ -9,6 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import tn.esprit.innoxpert.DTO.UserResponse;
+import tn.esprit.innoxpert.Entity.TypeUser;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Entity.UserInfo;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
@@ -19,6 +21,7 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -39,6 +42,38 @@ public class UserService implements UserServiceInterface {
         return userRepository.findById(UserId)
                 .orElseThrow(() -> new NotFoundException("User with ID : " + UserId + " was not found."));
     }
+
+    @Override
+    public List<UserResponse> getUserBytypeUser(String typeUser) {
+        try {
+            TypeUser type = TypeUser.valueOf(typeUser);
+            List<User> users = userRepository.findByTypeUser(type);
+
+            if (users.isEmpty()) {
+                throw new NotFoundException("No users found with role: " + typeUser);
+            }
+            return users.stream().map(this::mapToUserResponse).collect(Collectors.toList());
+        } catch (IllegalArgumentException e) {
+            throw new NotFoundException("Invalid Role: " + typeUser);
+        }
+    }
+    private UserResponse mapToUserResponse(User user) {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(user.getIdUser());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setClasse(user.getClasse());
+
+        if (user.getInternships() != null && !user.getInternships().isEmpty()) {
+            userResponse.setNameTutor(user.getInternships().get(0).getValidator().getFirstName() + " " +
+                    user.getInternships().get(0).getValidator().getLastName());
+        } else {
+            userResponse.setNameTutor("No Tutor Assigned");
+        }
+        return userResponse;
+    }
+
 
     @Override
     public User addUser(User b) {

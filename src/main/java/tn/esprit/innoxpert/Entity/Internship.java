@@ -47,4 +47,9 @@ public class Internship {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @ManyToOne
+    @JoinColumn(name = "validator_id")
+    private User validator;
+
+
 }

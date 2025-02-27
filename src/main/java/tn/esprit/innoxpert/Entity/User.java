@@ -48,6 +48,11 @@ public class User implements UserDetails {
     )
     private List<Company> followedCompanies = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "tutor_id")
+    private User tutor;
+
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Document> documents = new ArrayList<>();
 

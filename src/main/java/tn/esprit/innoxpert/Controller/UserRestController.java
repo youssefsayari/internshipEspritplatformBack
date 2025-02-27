@@ -13,8 +13,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.DTO.JwtRequest;
+import tn.esprit.innoxpert.DTO.UserResponse;
 import tn.esprit.innoxpert.DTO.UserRole;
 import tn.esprit.innoxpert.Entity.User;
+import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Service.UserServiceInterface;
 import tn.esprit.innoxpert.Util.JwtUtil;
 
@@ -150,6 +152,16 @@ public class UserRestController {
     {
         return userservice.getAllUsers();
     }
+    @GetMapping("/getUserBytypeUser")
+    public ResponseEntity<List<UserResponse>> getUserBytypeUser(@RequestParam String typeUser) {
+        try {
+            List<UserResponse> users = userservice.getUserBytypeUser(typeUser);
+            return ResponseEntity.ok(users);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(404).body(null);
+        }
+    }
+
     @GetMapping("/getUserById/{idUser}")
     public User getUserById(@PathVariable("idUser") Long idUser)
     {
