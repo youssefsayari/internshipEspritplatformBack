@@ -65,11 +65,13 @@ public class UserService implements UserServiceInterface {
         userResponse.setEmail(user.getEmail());
         userResponse.setClasse(user.getClasse());
 
-        if (user.getInternships() != null && !user.getInternships().isEmpty()) {
-            userResponse.setNameTutor(user.getInternships().get(0).getValidator().getFirstName() + " " +
-                    user.getInternships().get(0).getValidator().getLastName());
+
+        if (user.getTutor() != null) {
+            userResponse.setNameTutor(user.getTutor().getFirstName() + " " + user.getTutor().getLastName());
+            userResponse.setIdTutor(user.getTutor().getIdUser());
         } else {
             userResponse.setNameTutor("No Tutor Assigned");
+            userResponse.setIdTutor(null);
         }
         return userResponse;
     }
@@ -79,6 +81,19 @@ public class UserService implements UserServiceInterface {
     public User addUser(User b) {
         return userRepository.save(b);
     }
+
+    @Override
+    public void affectationTutor(Long userId, Long tutorId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        User tutor = userRepository.findById(tutorId)
+                .orElseThrow(() -> new RuntimeException("Tutor not found"));
+
+        user.setTutor(tutor);
+        userRepository.save(user);
+    }
+
 
     @Override
     public void removeUserById(Long UserId) {

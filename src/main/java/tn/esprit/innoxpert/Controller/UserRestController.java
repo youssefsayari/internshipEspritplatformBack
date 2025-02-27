@@ -147,6 +147,13 @@ public class UserRestController {
         }
     }
 
+    @PostMapping("/affectation/{userId}/{tutorId}")
+    public ResponseEntity<?> affectationTutor(@PathVariable Long userId, @PathVariable Long tutorId) {
+        userservice.affectationTutor(userId, tutorId);
+        return ResponseEntity.ok("Tutor affected successfully");
+    }
+
+
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers()
     {

@@ -16,5 +16,6 @@ public class UserResponse {
     private String email;
     private String classe;
     private String nameTutor;
+    private Long idTutor;
 
 }

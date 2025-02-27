@@ -18,7 +18,6 @@ public interface InternshipServiceInterface {
     public Internship approveInternship(Long internshipId);
     public Internship rejectInternship(Long internshipId);
     public Map<String, Object> getInternshipStatistics();
-    public Internship affectationTutor(Long internshipId);
     public Internship GenerateInternshipcertificate (Long interbshipId);
 
 }

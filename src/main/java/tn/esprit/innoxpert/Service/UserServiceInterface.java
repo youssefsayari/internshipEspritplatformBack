@@ -2,6 +2,7 @@ package tn.esprit.innoxpert.Service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import tn.esprit.innoxpert.DTO.UserResponse;
+import tn.esprit.innoxpert.Entity.Internship;
 import tn.esprit.innoxpert.Entity.User;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public interface UserServiceInterface {
     public User getUserById(Long userId);
     public List<UserResponse> getUserBytypeUser(String TypeUser);
     public User addUser(User b);
+    public void affectationTutor(Long userId, Long tutorId);
     public void removeUserById(Long userId);
     public User updateUser (User b );
     public UserDetails loadUserByIdentifiant(String identifiant);

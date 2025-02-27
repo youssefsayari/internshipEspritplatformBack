@@ -139,11 +139,6 @@ public class InternshipService implements InternshipServiceInterface {
     }
 
     @Override
-    public Internship affectationTutor(Long internshipId) {
-        return null;
-    }
-
-    @Override
     public Internship GenerateInternshipcertificate(Long interbshipId) {
         return null;
     }
