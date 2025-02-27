@@ -17,5 +17,7 @@ public class UserResponse {
     private String classe;
     private String nameTutor;
     private Long idTutor;
+    private Long maxValidatedInternships;
+    private Long maxInternshipSupervisions;
 
 }

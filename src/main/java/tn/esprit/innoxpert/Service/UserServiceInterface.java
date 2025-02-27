@@ -14,6 +14,8 @@ public interface UserServiceInterface {
     public List<UserResponse> getUserBytypeUser(String TypeUser);
     public User addUser(User b);
     public void affectationTutor(Long userId, Long tutorId);
+    public void updateTutorAdd(String Key, Long userId);
+    public void updateTutorRem(String Key, Long userId);
     public void removeUserById(Long userId);
     public User updateUser (User b );
     public UserDetails loadUserByIdentifiant(String identifiant);

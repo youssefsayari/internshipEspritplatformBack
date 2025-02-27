@@ -168,6 +168,27 @@ public class UserRestController {
             return ResponseEntity.status(404).body(null);
         }
     }
+    @PutMapping("/updateAdd/{userId}")
+    public ResponseEntity<String> updateTutorAdd(@PathVariable Long userId, @RequestParam String key) {
+        try {
+            userservice.updateTutorAdd(key, userId);
+            return ResponseEntity.ok("Tutor updated successfully");
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.status(500).body("Error updating tutor: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/updateRem/{userId}")
+    public ResponseEntity<String> updateTutorRem(@PathVariable Long userId, @RequestParam String key) {
+        try {
+            userservice.updateTutorRem(key, userId);
+            return ResponseEntity.ok("Tutor updated successfully");
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.status(500).body("Error updating tutor: " + e.getMessage());
+        }
+    }
 
     @GetMapping("/getUserById/{idUser}")
     public User getUserById(@PathVariable("idUser") Long idUser)

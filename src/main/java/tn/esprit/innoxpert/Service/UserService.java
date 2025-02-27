@@ -65,6 +65,14 @@ public class UserService implements UserServiceInterface {
         userResponse.setEmail(user.getEmail());
         userResponse.setClasse(user.getClasse());
 
+        if (user.getTypeUser() == TypeUser.Tutor && user.getUserInfo() != null) {
+            userResponse.setMaxValidatedInternships(user.getUserInfo().getMaxValidatedInternships());
+            userResponse.setMaxInternshipSupervisions(user.getUserInfo().getMaxInternshipSupervisions());
+        } else {
+            userResponse.setMaxValidatedInternships(0L);
+            userResponse.setMaxInternshipSupervisions(0L);
+        }
+
 
         if (user.getTutor() != null) {
             userResponse.setNameTutor(user.getTutor().getFirstName() + " " + user.getTutor().getLastName());
@@ -78,11 +86,6 @@ public class UserService implements UserServiceInterface {
 
 
     @Override
-    public User addUser(User b) {
-        return userRepository.save(b);
-    }
-
-    @Override
     public void affectationTutor(Long userId, Long tutorId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -94,6 +97,47 @@ public class UserService implements UserServiceInterface {
         userRepository.save(user);
     }
 
+    @Override
+    public void updateTutorAdd(String key, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Tutor not found"));
+
+        if (user.getUserInfo() == null) {
+            throw new RuntimeException("UserInfo not found for user with ID: " + userId);
+        }
+
+        if ("maxValidatedInternships".equals(key)) {
+            user.getUserInfo().setMaxValidatedInternships(user.getUserInfo().getMaxValidatedInternships() + 1);
+        } else if ("maxInternshipSupervisions".equals(key)) {
+            user.getUserInfo().setMaxInternshipSupervisions(user.getUserInfo().getMaxInternshipSupervisions() + 1);
+        }
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateTutorRem(String key, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Tutor not found"));
+
+        if (user.getUserInfo() == null) {
+            throw new RuntimeException("UserInfo not found for user with ID: " + userId);
+        }
+
+        if ("maxValidatedInternships".equals(key)) {
+            user.getUserInfo().setMaxValidatedInternships(user.getUserInfo().getMaxValidatedInternships() - 1);
+        } else if ("maxInternshipSupervisions".equals(key)) {
+            user.getUserInfo().setMaxInternshipSupervisions(user.getUserInfo().getMaxInternshipSupervisions() - 1);
+        }
+        userRepository.save(user);
+    }
+
+
+
+
+    @Override
+    public User addUser(User b) {
+        return userRepository.save(b);
+    }
 
     @Override
     public void removeUserById(Long UserId) {

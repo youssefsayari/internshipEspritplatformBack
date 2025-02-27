@@ -33,7 +33,6 @@ public class User implements UserDetails {
     TypeUser typeUser;
 
     @OneToOne
-
     UserInfo userInfo;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy="student")
