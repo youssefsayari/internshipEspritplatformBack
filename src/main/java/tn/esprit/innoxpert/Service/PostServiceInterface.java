@@ -11,10 +11,6 @@ public interface PostServiceInterface {
     Post addPostAndAffectToCompany(Long companyId,Post p);
     void removePostById(Long postId);
     Post updatePost(Post p);
-
-
-
-
     List<Post> getHomeFeed(Long idUser);
 
 
