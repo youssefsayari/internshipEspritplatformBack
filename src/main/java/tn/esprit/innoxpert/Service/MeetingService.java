@@ -3,6 +3,7 @@ package tn.esprit.innoxpert.Service;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.Entity.Meeting;
@@ -48,8 +49,7 @@ public class MeetingService implements MeetingServiceInterface {
 
     @Override
     public List<Meeting> getAllMeetings() {
-        return meetingRepository.findAll();
-    }
+        return meetingRepository.getAllMeetingsOrderedByDate();    }
 
     @Override
     public Meeting getMeetingById(Long meetingId) {

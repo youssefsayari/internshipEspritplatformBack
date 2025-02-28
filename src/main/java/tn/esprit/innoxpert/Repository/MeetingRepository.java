@@ -1,6 +1,7 @@
 package tn.esprit.innoxpert.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import tn.esprit.innoxpert.Entity.Meeting;
 import tn.esprit.innoxpert.Entity.TypeMeeting;
@@ -26,6 +27,9 @@ public interface MeetingRepository extends JpaRepository<Meeting,Long> {
     List<Meeting> findByDateAndApprovedTrue(LocalDate date);
 
     List<Meeting> findByDateAndApprovedTrueAndNotifiedFalse(LocalDate date);
+
+    @Query("SELECT m FROM Meeting m ORDER BY m.date desc ")
+    List<Meeting> getAllMeetingsOrderedByDate();
 
 
 
