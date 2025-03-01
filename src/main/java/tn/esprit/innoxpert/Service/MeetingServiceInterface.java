@@ -17,6 +17,10 @@ public interface MeetingServiceInterface {
     public Meeting addMeetingAndAffectToParticipant(Meeting meeting, Long organiserId, Long participantId) ;
     public Meeting updateMeetingAndAffectToParticipant(Meeting b, Long organiserId, Long participantId) ;
     public List<Meeting> findByParticipant(Long studentId);
+    public List<Meeting> findByOrganiser(Long tutorId);
+    public List<Meeting> findByParticipantAndOrganiser(Long studentId,Long organiserId);
+
+
 
     public Meeting disapproveMeetingById(Long meetingId, String reason) ;
 

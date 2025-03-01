@@ -102,7 +102,18 @@ public class MeetingRestController {
     {
         return meetingService.findByParticipant(idStudent);
     }
+    @GetMapping("/getMeetingsByTutor/{idTutor}")
+    public List<Meeting>getMeetingsByTutor(@PathVariable("idTutor") Long idTutor)
+    {
+        return meetingService.findByOrganiser(idTutor);
+    }
 
+
+    @GetMapping("/getMeetingsByStudentAndTutor/{idStudent}/{idTutor}")
+    public List<Meeting> getMeetingsByStudentAndTutor(@PathVariable("idStudent")Long idStudent,@PathVariable("idTutor")Long idTutor)
+    {
+        return meetingService.findByParticipantAndOrganiser(idStudent,idTutor);
+    }
 
 
 

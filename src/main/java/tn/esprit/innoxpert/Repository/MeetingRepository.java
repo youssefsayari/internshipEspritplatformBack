@@ -16,6 +16,8 @@ public interface MeetingRepository extends JpaRepository<Meeting,Long> {
     boolean existsByTypeMeetingAndIdMeetingNot(TypeMeeting typeMeeting, Long idMeeting);
 
     List<Meeting> findByParticipant_IdUser(Long studentID);
+    List<Meeting> findByOrganiser_IdUser(Long tutorID);
+    List<Meeting>findByParticipant_IdUserAndOrganiser_IdUser(Long studentID,Long organiserId);
 
 
     boolean existsByTypeMeetingAndOrganiserAndParticipant(TypeMeeting typeMeeting, User organiser, User participant);
