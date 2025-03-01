@@ -140,6 +140,11 @@ public class MeetingService implements MeetingServiceInterface {
     }
 
     @Override
+    public Long findTutorIdByStudentId(Long studentId) {
+        return studentTutorRepository.findTutorIdByStudentId(studentId);
+    }
+
+    @Override
     public Meeting approveMeeting(Meeting b) {
         if ( !meetingRepository.existsById(b.getIdMeeting())) {
             throw new NotFoundException("Meeting with ID: " + b.getIdMeeting() + " was not found. Cannot update.");

@@ -116,6 +116,14 @@ public class MeetingRestController {
     }
 
 
+    @GetMapping("/findTutorIdByStudentId/{idStudent}")
+
+    public Long findTutorIdByStudentId(@PathVariable("idStudent") Long studentId)
+    {
+        return meetingService.findTutorIdByStudentId(studentId);
+    }
+
+
 
 
 

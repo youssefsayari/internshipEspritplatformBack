@@ -12,5 +12,8 @@ import java.util.List;
 public interface StudentTutorRepository extends JpaRepository<StudentTutor, Long> {
     @Query("SELECT st FROM StudentTutor st WHERE st.tutor.idUser = :tutorId")
     List<StudentTutor> findByTutorId(@Param("tutorId") Long tutorId);
+    @Query("SELECT st.tutor.idUser FROM StudentTutor st WHERE st.student.idUser = :studentId")
+    Long findTutorIdByStudentId(@Param("studentId") Long studentId);
+
 }
 

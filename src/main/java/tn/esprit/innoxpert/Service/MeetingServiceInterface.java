@@ -1,5 +1,6 @@
 package tn.esprit.innoxpert.Service;
 
+import org.springframework.data.repository.query.Param;
 import tn.esprit.innoxpert.Entity.Meeting;
 import tn.esprit.innoxpert.Entity.User;
 
@@ -19,6 +20,8 @@ public interface MeetingServiceInterface {
     public List<Meeting> findByParticipant(Long studentId);
     public List<Meeting> findByOrganiser(Long tutorId);
     public List<Meeting> findByParticipantAndOrganiser(Long studentId,Long organiserId);
+    Long findTutorIdByStudentId(Long studentId);
+
 
 
 
