@@ -1,6 +1,9 @@
 package tn.esprit.innoxpert.Service;
 
+import org.springframework.http.ResponseEntity;
 import tn.esprit.innoxpert.Entity.Defense;
+
+import java.io.IOException;
 import java.util.List;
 
 public interface DefenseServiceInterface {
@@ -9,5 +12,6 @@ public interface DefenseServiceInterface {
     public Defense addDefense(Defense d);
     public void removeDefenseById(Long idDefense);
     public Defense updateDefense (Defense d );
+
 
 }

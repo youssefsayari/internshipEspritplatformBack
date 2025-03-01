@@ -3,6 +3,7 @@ package tn.esprit.innoxpert.Service;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.Entity.Defense;
 import tn.esprit.innoxpert.Entity.TypeUser;
@@ -11,6 +12,7 @@ import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.DefenseRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -130,4 +132,6 @@ public class DefenseService implements DefenseServiceInterface {
         }
         return defenseRepository.save(d);
     }
+
+
 }

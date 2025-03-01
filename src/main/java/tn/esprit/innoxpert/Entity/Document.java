@@ -14,9 +14,14 @@ public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    String name;
+
+    String name; // Document title
     @Enumerated(EnumType.STRING)
     TypeDocument typeDocument;
 
+    String fileName;  // Stores the file name
+    String filePath;  // Stores the file location
 
+    @ManyToOne
+    User student;
 }
