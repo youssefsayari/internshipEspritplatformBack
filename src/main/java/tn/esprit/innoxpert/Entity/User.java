@@ -42,9 +42,9 @@ public class User implements UserDetails {
     @JsonIgnore  // Prevent infinite loop
     List<Task> tasks;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy="student")
-    @JsonIgnore  // Prevent infinite loop
-    List<Document> documents;
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    List<Document> documents = new ArrayList<>();
 
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     Defense defense;

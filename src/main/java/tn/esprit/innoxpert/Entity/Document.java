@@ -22,6 +22,8 @@ public class Document {
     String fileName;  // Stores the file name
     String filePath;  // Stores the file location
 
+    boolean isDownloadable = false;
+
     @ManyToOne
     User student;
 }

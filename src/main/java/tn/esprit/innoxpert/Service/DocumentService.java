@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.innoxpert.Entity.Document;
+import tn.esprit.innoxpert.Entity.TypeDocument;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.DocumentRepository;
 
@@ -118,4 +119,6 @@ public class DocumentService implements DocumentServiceInterface {
         }
         return documentRepository.save(d);
     }
+
+
 }

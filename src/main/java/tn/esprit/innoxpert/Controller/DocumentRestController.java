@@ -2,6 +2,8 @@ package tn.esprit.innoxpert.Controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.innoxpert.Entity.Document;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Service.DocumentServiceInterface;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,17 +28,32 @@ import java.util.List;
 public class DocumentRestController {
 
     private final DocumentServiceInterface documentService;
+    private static final String DOCUMENTS_DIR = "src/main/resources/documents/";
 
+    private static final List<String> ALLOWED_FILES = List.of(
+            "lettre_affectation.pdf",
+            "demande_de_stage.pdf",
+            "journal.pdf",
+            "convention_de_stage.pdf"
+    );
+
+    // ✅ Get All Documents
     @GetMapping("/getAllDocuments")
     public List<Document> getAllDocuments() {
         return documentService.getAllDocuments();
     }
 
+    // ✅ Get Document by ID
     @GetMapping("/getDocumentById/{idDocument}")
-    public Document getDocumentById(@PathVariable("idDocument") Long idDocument) {
-        return documentService.getDocumentById(idDocument);
+    public ResponseEntity<Document> getDocumentById(@PathVariable Long idDocument) {
+        try {
+            return ResponseEntity.ok(documentService.getDocumentById(idDocument));
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
+    // ✅ Add Document
     @PostMapping("/addDocument")
     public ResponseEntity<Document> addDocument(
             @RequestParam("name") String name,
@@ -45,22 +63,19 @@ public class DocumentRestController {
             Document savedDocument = documentService.addDocument(name, typeDocument, file);
             return ResponseEntity.ok(savedDocument);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(null); // Return a 400 Bad Request if file is empty
+            return ResponseEntity.badRequest().build(); // 400 Bad Request if file is empty
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
+    // ✅ Upload Document by ID
     @GetMapping("/uploadDocument/{id}")
     public ResponseEntity<byte[]> uploadDocument(@PathVariable Long id) {
         try {
             byte[] fileData = documentService.getDocumentFile(id);
-
-            // Get the document from the database to retrieve its original filename
             Document document = documentService.getDocumentById(id);
             String fileName = document.getFileName();
-
-            // Detect file type dynamically
             Path path = Paths.get(document.getFilePath());
             String mimeType = Files.probeContentType(path);
 
@@ -73,8 +88,9 @@ public class DocumentRestController {
         }
     }
 
+    // ✅ Delete Document
     @DeleteMapping("/deleteDocument/{idDocument}")
-    public ResponseEntity<Void> deleteDocumentById(@PathVariable("idDocument") Long idDocument) {
+    public ResponseEntity<Void> deleteDocumentById(@PathVariable Long idDocument) {
         try {
             documentService.removeDocumentById(idDocument);
             return ResponseEntity.noContent().build();
@@ -83,6 +99,7 @@ public class DocumentRestController {
         }
     }
 
+    // ✅ Update Document
     @PutMapping("/updateDocument")
     public ResponseEntity<Document> updateDocument(@RequestBody Document document) {
         try {
@@ -92,8 +109,10 @@ public class DocumentRestController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    // ✅ Download Document by ID
     @GetMapping("/downloadDocument/{id}")
-    public ResponseEntity<byte[]> downloadDocument(@PathVariable("id") Long id) {
+    public ResponseEntity<byte[]> downloadDocument(@PathVariable Long id) {
         try {
             return documentService.downloadDocument(id);
         } catch (IOException e) {
@@ -101,5 +120,30 @@ public class DocumentRestController {
         }
     }
 
+    // ✅ Download Predefined Documents
+    @GetMapping("/download/{fileName}")
+    public ResponseEntity<Resource> downloadPredefinedDocument(@PathVariable String fileName) {
+        try {
+            // Ensure only predefined files can be downloaded
+            if (!ALLOWED_FILES.contains(fileName)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+
+            Path filePath = Paths.get(DOCUMENTS_DIR + fileName);
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists() && resource.isReadable()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                        .body(resource);
+            } else {
+                System.err.println("File not found: " + filePath);  // Log file path for debugging
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }

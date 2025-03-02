@@ -1,5 +1,11 @@
 package tn.esprit.innoxpert.Entity;
 
 public enum TypeDocument {
-    CV, Rapport, LettreMotivation, Autre,Journal
+    JOURNAL,
+    DEMANDESTAGE,
+    LETTRE_AFFECTATION,
+    CONVENTION_STAGE,
+    RAPPORT,
+    CV,
+    Autre;
 }

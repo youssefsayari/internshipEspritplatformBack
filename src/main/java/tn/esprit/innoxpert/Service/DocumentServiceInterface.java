@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.innoxpert.Entity.Document;
 import tn.esprit.innoxpert.Entity.Meeting;
+import tn.esprit.innoxpert.Entity.TypeDocument;
 
 import javax.print.Doc;
 import java.io.IOException;
