@@ -68,7 +68,14 @@ public class UserService implements UserServiceInterface {
         if (user.getTypeUser() == TypeUser.Tutor && user.getUserInfo() != null) {
             userResponse.setMaxValidatedInternships(user.getUserInfo().getMaxValidatedInternships());
             userResponse.setMaxInternshipSupervisions(user.getUserInfo().getMaxInternshipSupervisions());
-        } else {
+            if (user.getUserInfo().getExpertises() != null && !user.getUserInfo().getExpertises().isEmpty()) {
+                List<String> expertises = user.getUserInfo().getExpertises().stream()
+                        .map(e -> e.getTypeExpertise().name())
+                        .collect(Collectors.toList());
+                userResponse.setExpertise(String.join(", ", expertises));
+            }
+        }
+        else {
             userResponse.setMaxValidatedInternships(0L);
             userResponse.setMaxInternshipSupervisions(0L);
         }

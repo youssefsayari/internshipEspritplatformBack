@@ -19,5 +19,6 @@ public class UserResponse {
     private Long idTutor;
     private Long maxValidatedInternships;
     private Long maxInternshipSupervisions;
+    private String expertise;
 
 }
