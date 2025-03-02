@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.innoxpert.DTO.PostAdminResponse;
 import tn.esprit.innoxpert.Entity.Post;
 import tn.esprit.innoxpert.Service.PostServiceInterface;
 
@@ -20,7 +21,7 @@ public class PostRestController {
 
     // Récupérer tous les posts
     @GetMapping("/getAllPosts")
-    public List<Post> getAllPosts() {
+    public List<PostAdminResponse> getAllPosts() {
         return postService.getAllPosts();
     }
 

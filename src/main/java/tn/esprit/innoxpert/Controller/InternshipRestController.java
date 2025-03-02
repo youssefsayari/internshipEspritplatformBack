@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.DTO.AddInternship;
+import tn.esprit.innoxpert.DTO.InternshipAdminResponse;
 import tn.esprit.innoxpert.DTO.InternshipResponse;
 import tn.esprit.innoxpert.Entity.Internship;
 import tn.esprit.innoxpert.Entity.Task;
@@ -34,6 +35,14 @@ public class InternshipRestController {
         List<InternshipResponse> internships = internshipService.getInternshipsByCriteria(idUser, idPost);
         return internships;
     }
+
+    @GetMapping("/getInternshipsForAdmin")
+    public List<InternshipAdminResponse> getInternshipsForAdmin(
+            @RequestParam(required = false) Long idPost) {
+        List<InternshipAdminResponse> internshipAdminResponse = internshipService.getInternshipsForAdmin(idPost);
+        return internshipAdminResponse;
+    }
+
     @GetMapping("/getInternshipById")
     public Internship getInternshipById(@RequestParam Long internshipId )
     {

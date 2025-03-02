@@ -1,5 +1,6 @@
 package tn.esprit.innoxpert.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -57,6 +58,13 @@ public class User implements UserDetails {
 
     @ManyToMany(mappedBy = "users")
     private List<Internship> internships = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "User_skills",
+            joinColumns = @JoinColumn(name = "user_idUser"),
+            inverseJoinColumns = @JoinColumn(name = "skills_id"))
+    @JsonIgnore
+    private List<Skill> skills = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

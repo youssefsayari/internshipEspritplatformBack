@@ -3,6 +3,7 @@ package tn.esprit.innoxpert.Service;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tn.esprit.innoxpert.DTO.PostAdminResponse;
 import tn.esprit.innoxpert.Entity.Company;
 import tn.esprit.innoxpert.Entity.Post;
 import tn.esprit.innoxpert.Entity.Rating;
@@ -28,9 +29,33 @@ public class PostService implements PostServiceInterface {
     private UserRepository userRepository;
 
     @Override
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public List<PostAdminResponse> getAllPosts() {
+        List<Post> posts = postRepository.findAll();
+
+        List<PostAdminResponse> postResponses = posts.stream().map(post -> {
+            PostAdminResponse response = new PostAdminResponse();
+            response.setId(post.getId());
+            response.setTitle(post.getTitle());
+            response.setContent(post.getContent());
+            response.setCreatedAt(java.sql.Timestamp.valueOf(post.getCreatedAt()));
+            response.setTypeInternship(post.getTypeInternship().name());
+
+            if (post.getCompany() != null) {
+                response.setCompanyName(post.getCompany().getName());
+            }
+
+            if (post.getSkills() != null && !post.getSkills().isEmpty()) {
+                response.setSkills(new ArrayList<>(post.getSkills()));
+            } else {
+                response.setSkills(new ArrayList<>());
+            }
+
+            return response;
+        }).toList();
+
+        return postResponses;
     }
+
 
     @Override
     public List<Post> getPostsByCompany(Long companyId) {

@@ -1,6 +1,7 @@
 package tn.esprit.innoxpert.Service;
 
 import tn.esprit.innoxpert.DTO.AddInternship;
+import tn.esprit.innoxpert.DTO.InternshipAdminResponse;
 import tn.esprit.innoxpert.DTO.InternshipResponse;
 import tn.esprit.innoxpert.Entity.Internship;
 
@@ -11,6 +12,7 @@ public interface InternshipServiceInterface {
 
     public List<Internship> getAllInternships();
     public List<InternshipResponse> getInternshipsByCriteria(Long idUser, Long idPost);
+    public List<InternshipAdminResponse> getInternshipsForAdmin(Long idPost);
     public Internship getInternshipById(Long internshipId);
     public void addInternship(AddInternship addInternship);
     public void removeInternshipById(Long internshipId);
