@@ -131,6 +131,7 @@ public class InternshipService implements InternshipServiceInterface {
                 String studentName = internship.getUsers().get(0).getFirstName() + " " + internship.getUsers().get(0).getLastName();
                 response.setStudentName(studentName);
                 response.setClasse(internship.getUsers().get(0).getClasse());
+                response.setIdStudent(internship.getUsers().get(0).getIdUser());
             }
 
                 User user = internship.getUsers().get(0);
