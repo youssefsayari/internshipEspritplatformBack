@@ -48,9 +48,7 @@ public class User implements UserDetails {
     )
     private List<Company> followedCompanies = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "tutor_id")
-    private User tutor;
+
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -65,6 +63,10 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "skills_id"))
     @JsonIgnore
     private List<Skill> skills = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "tutor_id")
+    private User tutor;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

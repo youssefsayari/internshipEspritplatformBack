@@ -10,6 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InternshipAdminResponse {
+    private Long idInternship;
+    private Long idTutor;
     private String studentName;
     private String classe;
     private String tutorName;

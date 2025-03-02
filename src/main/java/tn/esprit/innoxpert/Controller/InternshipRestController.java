@@ -77,5 +77,11 @@ public class InternshipRestController {
         return internshipService.updateInternship(internship);
     }
 
+    @PostMapping("/affectationV/{internshipId}/{tutorId}")
+    public ResponseEntity<?> affectationValidator(@PathVariable Long internshipId, @PathVariable Long tutorId) {
+        internshipService.affectationValidator(internshipId, tutorId);
+        return ResponseEntity.ok("Tutor affected successfully");
+    }
+
 
 }

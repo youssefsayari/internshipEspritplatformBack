@@ -126,15 +126,18 @@ public class InternshipService implements InternshipServiceInterface {
 
         List<InternshipAdminResponse> responseList = internships.stream().map(internship -> {
             InternshipAdminResponse response = new InternshipAdminResponse();
+            response.setIdInternship(internship.getId());
             if (!internship.getUsers().isEmpty()) {
                 String studentName = internship.getUsers().get(0).getFirstName() + " " + internship.getUsers().get(0).getLastName();
                 response.setStudentName(studentName);
+                response.setClasse(internship.getUsers().get(0).getClasse());
             }
-            response.setClasse(internship.getDescription());
+
                 User user = internship.getUsers().get(0);
             if (user.getTutor() != null) {
                 String tutorName = user.getTutor().getFirstName() + " " + user.getTutor().getLastName();
                 response.setTutorName(tutorName);
+                response.setIdTutor(user.getTutor().getIdUser());
             }else {
                 response.setTutorName("No tutor assigned");
             }
@@ -152,6 +155,18 @@ public class InternshipService implements InternshipServiceInterface {
         }).collect(Collectors.toList());
 
         return responseList;
+    }
+
+    @Override
+    public void affectationValidator(Long internshipId, Long tutorId) {
+        Internship internship = internshipRepository.findById(internshipId)
+                .orElseThrow(() -> new RuntimeException("Internship not found"));
+
+        User validator = userRepository.findById(tutorId)
+                .orElseThrow(() -> new RuntimeException("Tutor not found"));
+
+        internship.setValidator(validator);
+        internshipRepository.save(internship);
     }
 
 
