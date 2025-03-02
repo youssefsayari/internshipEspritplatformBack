@@ -19,30 +19,36 @@ public class QuestionReponseService implements QuestionReponseServiceInterface {
     @Autowired
     private QuestionReponseRepository questionRepository;
     private QuizRepository quizRepository;
+    @Override
 
     public List<QuestionReponse> getQuestionsByQuizId(Long quizId) {
         return questionRepository.findByQuiz_IdQuiz(quizId);
     }
+    @Override
 
     public Optional<QuestionReponse> getQuestionById(Long id) {
         return questionRepository.findById(id);
     }
+    @Override
 
     public QuestionReponse createQuestion(QuestionReponse question) {
         return questionRepository.save(question);
     }
 
 
+    @Override
     public QuestionReponse updateQuestion(QuestionReponse questionReponse) {
         if ( !questionRepository.existsById(questionReponse.getIdQuestionReponse())) {
             throw new NotFoundException("Question with ID: " + questionReponse.getIdQuestionReponse() + " was not found. Cannot update.");
         }
         return questionRepository.save(questionReponse);
     }
+   @Override
     public void deleteQuestion(Long id) {
         questionRepository.deleteById(id);
     }
 
+   @Override
     public QuestionReponse addAndaffectQuestionToQuiz(Long idQuiz, QuestionReponse newQuestion) {
         Quiz quiz = quizRepository.findById(idQuiz)
                 .orElseThrow(() -> new NotFoundException("Quiz with ID: " + idQuiz + " not found"));

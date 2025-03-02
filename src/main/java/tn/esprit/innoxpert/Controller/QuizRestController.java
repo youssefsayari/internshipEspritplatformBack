@@ -1,10 +1,10 @@
 package tn.esprit.innoxpert.Controller;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.innoxpert.Entity.Meeting;
 import tn.esprit.innoxpert.Entity.Quiz;
 import tn.esprit.innoxpert.Service.QuizServiceInterface;
 import org.springframework.validation.BindingResult;
@@ -19,8 +19,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/quiz")
 public class QuizRestController {
 
+
     private final QuizServiceInterface quizService;
 
+    @JsonIgnore
     @GetMapping("/getAllQuizzes")
     public List<Quiz> getAllQuizzes() {
         return quizService.getAllQuizzes();

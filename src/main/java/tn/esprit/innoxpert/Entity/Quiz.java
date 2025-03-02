@@ -1,5 +1,6 @@
 package tn.esprit.innoxpert.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -35,7 +36,10 @@ public class Quiz {
     Date date_passage;
 
     @ManyToOne
+    @JsonIgnore
+
     Societe societe;
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+
     private List<QuestionReponse> questions = new ArrayList<>();
 }

@@ -10,7 +10,6 @@ public interface QuizServiceInterface {
 
     public Optional<Quiz> getQuizById(Long id);
 
-    public Quiz createQuiz(Quiz quiz);
 
     public void deleteQuiz(Long id);
 
