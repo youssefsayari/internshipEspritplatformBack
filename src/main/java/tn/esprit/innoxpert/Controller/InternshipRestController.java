@@ -90,7 +90,18 @@ public class InternshipRestController {
             return ResponseEntity.ok("Internship accepted successfully!");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Error: " + e.getMessage());  // Plus détaillé dans l'erreur.
+                    .body("Error: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/rejectInternship/{internshipId}")
+    public ResponseEntity<String> rejectInternship(@PathVariable Long internshipId) {
+        try {
+            internshipService.rejectInternship(internshipId);
+            return ResponseEntity.ok("Internship application denied!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Error: " + e.getMessage());
         }
     }
 
