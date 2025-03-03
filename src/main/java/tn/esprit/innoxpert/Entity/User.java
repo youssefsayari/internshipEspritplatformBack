@@ -39,7 +39,7 @@ public class User implements UserDetails {
     UserInfo userInfo;
 
     @OneToMany (cascade = CascadeType.ALL, mappedBy="student")
-    @JsonIgnore  // Prevent infinite loop
+    @JsonIgnore
     List<Task> tasks;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)

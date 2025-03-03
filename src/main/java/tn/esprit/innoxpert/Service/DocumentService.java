@@ -9,6 +9,7 @@ import tn.esprit.innoxpert.Entity.Document;
 import tn.esprit.innoxpert.Entity.TypeDocument;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.DocumentRepository;
+import tn.esprit.innoxpert.Repository.UserRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,12 +17,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class DocumentService implements DocumentServiceInterface {
     private final DocumentRepository documentRepository;
+    private final UserRepository userRepository;
     private static final String UPLOAD_DIR = "C:/uploads/";  // Ensure this directory exists
 
     @Override
@@ -118,6 +119,39 @@ public class DocumentService implements DocumentServiceInterface {
             throw new NotFoundException("Document with ID: " + d.getId() + " was not found. Cannot update.");
         }
         return documentRepository.save(d);
+    }
+
+    @Override
+    public void saveDocument(String name, String typeDocument, MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("File is empty. Please upload a valid document.");
+        }
+
+        // Ensure the upload directory exists
+        File uploadFolder = new File(UPLOAD_DIR);
+        if (!uploadFolder.exists()) {
+            uploadFolder.mkdirs();  // Create directory if it doesn't exist
+        }
+
+        // Create a unique filename to prevent conflicts
+        String originalFileName = file.getOriginalFilename();
+        String uniqueFileName = System.currentTimeMillis() + "_" + originalFileName;
+        String filePath = UPLOAD_DIR + uniqueFileName;
+
+        // Save the file to disk
+        file.transferTo(new File(filePath));
+
+        // Ensure the typeDocument is valid
+        TypeDocument type = TypeDocument.valueOf(typeDocument); // This maps the string to the enum
+
+        // Save document details in the database
+        Document document = new Document();
+        document.setName(name);
+        document.setTypeDocument(type); // Set the mapped enum type
+        document.setFileName(uniqueFileName);
+        document.setFilePath(filePath);
+
+        documentRepository.save(document); // Save document in database
     }
 
 

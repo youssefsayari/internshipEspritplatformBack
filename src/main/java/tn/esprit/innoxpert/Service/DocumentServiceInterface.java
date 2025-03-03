@@ -3,10 +3,6 @@ package tn.esprit.innoxpert.Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.innoxpert.Entity.Document;
-import tn.esprit.innoxpert.Entity.Meeting;
-import tn.esprit.innoxpert.Entity.TypeDocument;
-
-import javax.print.Doc;
 import java.io.IOException;
 import java.util.List;
 
@@ -18,7 +14,7 @@ public interface DocumentServiceInterface {
     public Document  updateDocument (Document d );
     byte[] getDocumentFile(Long documentId) throws IOException;
     ResponseEntity<byte[]> downloadDocument(Long documentId) throws IOException;
-
+    void saveDocument(String name, String typeDocument, MultipartFile file) throws IOException;
 
 
 }

@@ -13,13 +13,15 @@ import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.innoxpert.Entity.Document;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Service.DocumentServiceInterface;
-import org.springframework.core.io.ClassPathResource;
+import tn.esprit.innoxpert.Service.UserServiceInterface;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "Document Management")
 @RestController
@@ -28,6 +30,7 @@ import java.util.List;
 public class DocumentRestController {
 
     private final DocumentServiceInterface documentService;
+    private final UserServiceInterface userService;
     private static final String DOCUMENTS_DIR = "src/main/resources/documents/";
 
     private static final List<String> ALLOWED_FILES = List.of(
@@ -145,5 +148,32 @@ public class DocumentRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    // ✅ upload Predefined Documents
+    @PostMapping("/uploadDocuments")
+    public ResponseEntity<Map<String, String>> uploadDocuments(
+            @RequestParam("files") List<MultipartFile> files,
+            @RequestParam("types") List<String> types) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            if (files.size() != types.size()) {
+                response.put("message", "Mismatch between the number of files and types.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+
+            for (int i = 0; i < files.size(); i++) {
+                documentService.saveDocument("Document_" + (i + 1), types.get(i), files.get(i));
+            }
+
+            response.put("message", "Documents uploaded successfully!");
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            response.put("message", "Upload failed: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+
+
 
 }
