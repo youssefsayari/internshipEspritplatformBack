@@ -83,5 +83,17 @@ public class InternshipRestController {
         return ResponseEntity.ok("Tutor affected successfully");
     }
 
+    @PostMapping("/approveInternship/{internshipId}")
+    public ResponseEntity<String> approveInternship(@PathVariable Long internshipId) {
+        try {
+            internshipService.approveInternship(internshipId);
+            return ResponseEntity.ok("Internship accepted successfully!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Error: " + e.getMessage());  // Plus détaillé dans l'erreur.
+        }
+    }
+
+
 
 }

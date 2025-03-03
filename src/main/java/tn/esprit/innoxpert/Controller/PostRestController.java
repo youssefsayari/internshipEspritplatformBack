@@ -33,7 +33,7 @@ public class PostRestController {
 
     // Récupérer les posts d'une entreprise spécifique
     @GetMapping("/getPostsByCompany/{companyId}")
-    public List<Post> getPostsByCompany(@PathVariable("companyId") Long companyId) {
+    public List<PostAdminResponse> getPostsByCompany(@PathVariable("companyId") Long companyId) {
         return postService.getPostsByCompany(companyId);
     }
 

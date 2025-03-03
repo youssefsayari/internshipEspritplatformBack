@@ -58,10 +58,38 @@ public class PostService implements PostServiceInterface {
 
 
     @Override
-    public List<Post> getPostsByCompany(Long companyId) {
-        return postRepository.findByCompanyId(companyId);
+    public List<PostAdminResponse> getPostsByCompany(Long companyId) {
+        User user = userRepository.findById(companyId).orElseThrow(() -> new RuntimeException("User not found"));
 
+        Company company = companyRepository.findByOwner(user).orElseThrow(() -> new RuntimeException("Company not found"));
+
+        List<Post> posts = postRepository.findByCompanyId(company.getId());
+
+        List<PostAdminResponse> postResponses = posts.stream().map(post -> {
+            PostAdminResponse response = new PostAdminResponse();
+            response.setId(post.getId());
+            response.setTitle(post.getTitle());
+            response.setContent(post.getContent());
+            response.setCreatedAt(java.sql.Timestamp.valueOf(post.getCreatedAt()));
+            response.setTypeInternship(post.getTypeInternship().name());
+
+            if (post.getCompany() != null) {
+                response.setCompanyName(post.getCompany().getName());
+            }
+
+            if (post.getSkills() != null && !post.getSkills().isEmpty()) {
+                response.setSkills(new ArrayList<>(post.getSkills()));
+            } else {
+                response.setSkills(new ArrayList<>());
+            }
+
+            return response;
+        }).toList();
+
+        return postResponses;
     }
+
+
 
     @Override
     public Post getPostById(Long postId) {

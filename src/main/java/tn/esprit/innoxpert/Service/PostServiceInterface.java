@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PostServiceInterface {
     List<PostAdminResponse> getAllPosts();
-    List<Post> getPostsByCompany(Long companyId);
+    List<PostAdminResponse> getPostsByCompany(Long companyId);
     Post getPostById(Long postId);
     Post addPostAndAffectToCompany(Long companyId,Post p);
     void removePostById(Long postId);

@@ -177,9 +177,18 @@ public class InternshipService implements InternshipServiceInterface {
     }
 
     @Override
-    public Internship approveInternship(Long internshipId) {
-        return null;
+    public void approveInternship(Long internshipId) {
+        Internship internship = internshipRepository.findById(internshipId)
+                .orElseThrow(() -> new RuntimeException("Internship not found"));
+
+        if (!internship.getInternshipState().equals(InternshipState.PENDING)) {
+            throw new RuntimeException("Internship is not in a state that can be approved.");
+        }
+
+        internship.setInternshipState(InternshipState.APPROVEDBYCOMPANY);
+        internshipRepository.save(internship);
     }
+
 
     @Override
     public Internship rejectInternship(Long internshipId) {
