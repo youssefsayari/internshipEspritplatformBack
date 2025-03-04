@@ -3,9 +3,7 @@ package tn.esprit.innoxpert.Service;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -174,7 +172,7 @@ public class DocumentService implements DocumentServiceInterface {
 
         documentRepository.save(document);
     }
-    
+
 
     @Override
     public byte[] generateStudentCV(Long userId) throws IOException {
@@ -205,29 +203,26 @@ public class DocumentService implements DocumentServiceInterface {
 
         // Header - CV Title
         document.add(new Paragraph("Curriculum Vitae")
-                .setFontSize(32)
+                .setFontSize(36)
                 .setBold()
-                .setFontColor(new DeviceRgb(50, 50, 150))
+                .setFontColor(new DeviceRgb(0, 102, 204))
                 .setTextAlignment(TextAlignment.CENTER));
         document.add(new Paragraph("\n"));
 
-        // Personal Info (Full Name, Email, and Phone)
-        document.add(new Paragraph("Full Name: " + student.getFirstName() + " " + student.getLastName())
-                .setFontSize(14)
-                .setFontColor(new DeviceRgb(0, 0, 0)));
-        document.add(new Paragraph("Email: " + student.getEmail())
-                .setFontSize(14)
-                .setFontColor(new DeviceRgb(0, 0, 0)));
-        document.add(new Paragraph("Phone: " + student.getTelephone().toString())
-                .setFontSize(14)
-                .setFontColor(new DeviceRgb(0, 0, 0)));
+        // Full Name Styling
+        document.add(new Paragraph(student.getFirstName() + " " + student.getLastName())
+                .setFontSize(22)
+                .setBold()
+                .setFontColor(new DeviceRgb(0, 0, 0))
+                .setTextAlignment(TextAlignment.CENTER));
         document.add(new Paragraph("\n"));
 
         // Professional Summary
         document.add(new Paragraph("Professional Summary")
-                .setFontSize(18)
+                .setFontSize(20)
                 .setBold()
-                .setFontColor(new DeviceRgb(50, 50, 150)));
+                .setFontColor(new DeviceRgb(50, 50, 150))
+                .setBackgroundColor(new DeviceRgb(240, 240, 240)));
         document.add(new Paragraph("A highly motivated and results-driven individual with a passion for software development, seeking a position to utilize my skills in web development and software engineering."));
         document.add(new Paragraph("\n"));
 
@@ -235,10 +230,13 @@ public class DocumentService implements DocumentServiceInterface {
         document.add(new Paragraph("Core Competencies")
                 .setFontSize(18)
                 .setBold()
-                .setFontColor(new DeviceRgb(50, 50, 150)));
+                .setFontColor(new DeviceRgb(50, 50, 150))
+                .setBackgroundColor(new DeviceRgb(240, 240, 240)));
         if (!expertiseList.isEmpty()) {
             for (Expertise expertise : expertiseList) {
-                document.add(new Paragraph("✔ " + expertise.getTypeExpertise().name()));
+                document.add(new Paragraph("✔ " + expertise.getTypeExpertise().name())
+                        .setFontSize(12)
+                        .setFontColor(new DeviceRgb(0, 0, 0)));
             }
         } else {
             document.add(new Paragraph("No expertise listed."));
@@ -247,14 +245,15 @@ public class DocumentService implements DocumentServiceInterface {
 
         // Experience Section
         document.add(new Paragraph("Experience")
-                .setFontSize(18)
+                .setFontSize(20)
                 .setBold()
-                .setFontColor(new DeviceRgb(50, 50, 150)));
+                .setFontColor(new DeviceRgb(50, 50, 150))
+                .setBackgroundColor(new DeviceRgb(240, 240, 240)));
         if (!experienceList.isEmpty()) {
             for (String experience : experienceList) {
-                document.add(new Paragraph(experience)
+                document.add(new Paragraph("• " + experience)
                         .setFontSize(12)
-                        .setFontColor(new DeviceRgb(50, 50, 150)));
+                        .setFontColor(new DeviceRgb(0, 0, 0)));
                 document.add(new Paragraph("\n"));
             }
         } else {
@@ -263,14 +262,15 @@ public class DocumentService implements DocumentServiceInterface {
 
         // Languages Section
         document.add(new Paragraph("Languages")
-                .setFontSize(18)
+                .setFontSize(20)
                 .setBold()
-                .setFontColor(new DeviceRgb(50, 50, 150)));
+                .setFontColor(new DeviceRgb(50, 50, 150))
+                .setBackgroundColor(new DeviceRgb(240, 240, 240)));
         if (!languageList.isEmpty()) {
             for (String language : languageList) {
-                document.add(new Paragraph(language)
+                document.add(new Paragraph("• " + language)
                         .setFontSize(12)
-                        .setFontColor(new DeviceRgb(50, 50, 150)));
+                        .setFontColor(new DeviceRgb(0, 0, 0)));
             }
         } else {
             document.add(new Paragraph("No languages listed."));
@@ -279,22 +279,49 @@ public class DocumentService implements DocumentServiceInterface {
 
         // Education Section
         document.add(new Paragraph("Education")
-                .setFontSize(18)
+                .setFontSize(20)
                 .setBold()
-                .setFontColor(new DeviceRgb(50, 50, 150)));
+                .setFontColor(new DeviceRgb(50, 50, 150))
+                .setBackgroundColor(new DeviceRgb(240, 240, 240)));
         document.add(new Paragraph("Bachelor of Science in Computer Science, ESPRIT, 2020 - 2023"));
         document.add(new Paragraph("\n"));
 
         // Certifications Section
         document.add(new Paragraph("Certifications")
-                .setFontSize(18)
+                .setFontSize(20)
                 .setBold()
-                .setFontColor(new DeviceRgb(50, 50, 150)));
+                .setFontColor(new DeviceRgb(50, 50, 150))
+                .setBackgroundColor(new DeviceRgb(240, 240, 240)));
         document.add(new Paragraph("Certified Java Developer - Oracle"));
         document.add(new Paragraph("Web Development Bootcamp - XYZ Academy"));
         document.add(new Paragraph("\n"));
 
-        // Footer (optional, for contact or additional links)
+        // Contact Info with social media links (below other content)
+        String fullName = student.getFirstName() + " " + student.getLastName();
+        document.add(new Paragraph("Contact Info:")
+                .setFontSize(18)
+                .setBold()
+                .setFontColor(new DeviceRgb(50, 50, 150))
+                .setBackgroundColor(new DeviceRgb(240, 240, 240)));
+
+        // Email and Phone
+        document.add(new Paragraph("📧 " + student.getEmail())
+                .setFontSize(14)
+                .setFontColor(new DeviceRgb(0, 0, 0)));
+        document.add(new Paragraph("📱 " + student.getTelephone().toString())
+                .setFontSize(14)
+                .setFontColor(new DeviceRgb(0, 0, 0)));
+
+        // Facebook and LinkedIn Links
+        document.add(new Paragraph("🔗 Facebook: " + fullName)
+                .setFontSize(14)
+                .setFontColor(new DeviceRgb(59, 89, 152)));  // Facebook blue
+        document.add(new Paragraph("🔗 LinkedIn: " + fullName)
+                .setFontSize(14)
+                .setFontColor(new DeviceRgb(0, 119, 181)));  // LinkedIn blue
+        document.add(new Paragraph("\n"));
+
+        // Footer (optional, for additional contact or links)
         document.add(new Paragraph("Contact: " + student.getEmail())
                 .setFontSize(10)
                 .setItalic()
@@ -304,7 +331,7 @@ public class DocumentService implements DocumentServiceInterface {
         document.close();
         return byteArrayOutputStream.toByteArray();
     }
-
+    
 
     @Override
     public ResponseEntity<byte[]> downloadCV(Long userId) throws IOException {
