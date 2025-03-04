@@ -23,6 +23,5 @@ public interface InternshipServiceInterface {
     public void rejectInternship(Long internshipId);
     public List<InternshipTutorResponse> getInternshipsForTutor(Long idUser);
     public Map<String, Object> getInternshipStatistics();
-    public Internship GenerateInternshipcertificate (Long interbshipId);
 
 }

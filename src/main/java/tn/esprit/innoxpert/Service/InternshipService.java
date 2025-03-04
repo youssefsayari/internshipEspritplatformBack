@@ -262,10 +262,6 @@ public class InternshipService implements InternshipServiceInterface {
         return null;
     }
 
-    @Override
-    public Internship GenerateInternshipcertificate(Long interbshipId) {
-        return null;
-    }
 
 }
 
