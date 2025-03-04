@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.innoxpert.Entity.Document;
 import tn.esprit.innoxpert.Entity.TypeDocument;
+import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.DocumentRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -65,6 +65,29 @@ public class DocumentService implements DocumentServiceInterface {
 
         return documentRepository.save(document);
     }
+    @Override
+    public void removeDocumentById(Long documentId) {
+        if (!documentRepository.existsById(documentId)) {
+            throw new NotFoundException("Document with ID " + documentId + " was not found.");
+        }
+
+        // Find the document and delete the associated file from storage
+        Document document = documentRepository.findById(documentId).orElseThrow(() -> new NotFoundException("Document not found"));
+        File file = new File(document.getFilePath());
+        if (file.exists()) {
+            file.delete(); // Delete the physical file
+        }
+
+        documentRepository.deleteById(documentId);
+    }
+    
+    @Override
+    public Document updateDocument(Document d) {
+        if (!documentRepository.existsById(d.getId())) {
+            throw new NotFoundException("Document with ID: " + d.getId() + " was not found. Cannot update.");
+        }
+        return documentRepository.save(d);
+    }
 
     @Override
     public byte[] getDocumentFile(Long documentId) throws IOException {
@@ -97,29 +120,7 @@ public class DocumentService implements DocumentServiceInterface {
                 .body(fileData);
     }
 
-    @Override
-    public void removeDocumentById(Long documentId) {
-        if (!documentRepository.existsById(documentId)) {
-            throw new NotFoundException("Document with ID " + documentId + " was not found.");
-        }
 
-        // Find the document and delete the associated file from storage
-        Document document = documentRepository.findById(documentId).orElseThrow(() -> new NotFoundException("Document not found"));
-        File file = new File(document.getFilePath());
-        if (file.exists()) {
-            file.delete(); // Delete the physical file
-        }
-
-        documentRepository.deleteById(documentId);
-    }
-
-    @Override
-    public Document updateDocument(Document d) {
-        if (!documentRepository.existsById(d.getId())) {
-            throw new NotFoundException("Document with ID: " + d.getId() + " was not found. Cannot update.");
-        }
-        return documentRepository.save(d);
-    }
 
     @Override
     public void saveDocument(String name, String typeDocument, MultipartFile file) throws IOException {
@@ -142,17 +143,30 @@ public class DocumentService implements DocumentServiceInterface {
         file.transferTo(new File(filePath));
 
         // Ensure the typeDocument is valid
-        TypeDocument type = TypeDocument.valueOf(typeDocument); // This maps the string to the enum
+        TypeDocument type = TypeDocument.valueOf(typeDocument);
+
+        // Retrieve the static user (student with id=1)
+        User student = userRepository.findById(1L).orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Check if the student has already uploaded a document of the same type
+        boolean alreadyUploaded = student.getDocuments().stream()
+                .anyMatch(doc -> doc.getTypeDocument().equals(type));
+
+        if (alreadyUploaded) {
+            throw new IllegalArgumentException("You have already uploaded a document of type: " + type);
+        }
 
         // Save document details in the database
         Document document = new Document();
         document.setName(name);
-        document.setTypeDocument(type); // Set the mapped enum type
+        document.setTypeDocument(type);
         document.setFileName(uniqueFileName);
         document.setFilePath(filePath);
+        document.setStudent(student); // Associate with user
 
-        documentRepository.save(document); // Save document in database
+        documentRepository.save(document);
     }
+
 
 
 }
