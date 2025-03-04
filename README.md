@@ -39,6 +39,24 @@ backend/
 │   │   │   ├─ tn.esprit.innoxpert/
 │   ├─ pom.xml
 ```
+## Module Assignments
+
+| **Module**             | **Developer**         |
+|------------------------|-----------------------|
+| User Management        | All                   |
+| Internship Management  | Ghassen Ben Aissa     |
+| Event Management       | Skander Mercini       |
+| Complaint Management   | Skander Mercini       |
+| Company Management     | Youssef Sayari        |
+| Publication Management | Youssef Sayari        |
+| Document Management    | Amine Kaboubi         |
+| Quiz Management        | Ala Gafsi             |
+| Meeting Management     | Amanellah Kthiri      |
+| Convention Management  | Ghassen Ben Aissa     |
+| Defense Management     | Amine Kaboubi         |
+| Notification System    | Ala Gafsi             |
+| Task Management        | Amanellah Kthiri      |
+
 
 ## Security
 
