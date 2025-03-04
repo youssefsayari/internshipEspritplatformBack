@@ -15,6 +15,9 @@ public interface DocumentServiceInterface {
     byte[] getDocumentFile(Long documentId) throws IOException;
     ResponseEntity<byte[]> downloadDocument(Long documentId) throws IOException;
     void saveDocument(String name, String typeDocument, MultipartFile file) throws IOException;
+    public byte[] generateStudentCV(Long userId) throws IOException ;
+    public ResponseEntity<byte[]> downloadCV(Long userId) throws IOException;
 
 
-}
+
+    }

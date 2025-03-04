@@ -172,6 +172,29 @@ public class DocumentRestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+    // ✅ Generate and Download Student CV
+    @GetMapping("/generateStudentCV/{userId}")
+    public ResponseEntity<byte[]> generateStudentCV(@PathVariable Long userId) {
+        try {
+            byte[] pdfBytes = documentService.generateStudentCV(userId);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=CV_" + userId + ".pdf")
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(pdfBytes);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // ✅ Download Generated Student CV
+    @GetMapping("/downloadStudentCV/{userId}")
+    public ResponseEntity<byte[]> downloadStudentCV(@PathVariable Long userId) {
+        try {
+            return documentService.downloadCV(userId);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 
 

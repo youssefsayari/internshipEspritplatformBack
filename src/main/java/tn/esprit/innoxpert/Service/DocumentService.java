@@ -1,16 +1,23 @@
 package tn.esprit.innoxpert.Service;
 
+import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import tn.esprit.innoxpert.Entity.Document;
-import tn.esprit.innoxpert.Entity.TypeDocument;
-import tn.esprit.innoxpert.Entity.User;
+import tn.esprit.innoxpert.Entity.*;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.DocumentRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,6 +26,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class DocumentService implements DocumentServiceInterface {
     private final DocumentRepository documentRepository;
@@ -65,6 +73,7 @@ public class DocumentService implements DocumentServiceInterface {
 
         return documentRepository.save(document);
     }
+
     @Override
     public void removeDocumentById(Long documentId) {
         if (!documentRepository.existsById(documentId)) {
@@ -80,7 +89,7 @@ public class DocumentService implements DocumentServiceInterface {
 
         documentRepository.deleteById(documentId);
     }
-    
+
     @Override
     public Document updateDocument(Document d) {
         if (!documentRepository.existsById(d.getId())) {
@@ -119,7 +128,6 @@ public class DocumentService implements DocumentServiceInterface {
                 .headers(headers)
                 .body(fileData);
     }
-
 
 
     @Override
@@ -166,7 +174,147 @@ public class DocumentService implements DocumentServiceInterface {
 
         documentRepository.save(document);
     }
+    
+
+    @Override
+    public byte[] generateStudentCV(Long userId) throws IOException {
+        // Fetch user and associated data
+        User student = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+
+        UserInfo userInfo = student.getUserInfo();
+        List<Expertise> expertiseList = (userInfo != null) ? userInfo.getExpertises() : List.of();
+
+        // Static experiences and languages (hardcoded)
+        List<String> experienceList = List.of(
+                "Software Developer Intern at ABC Technologies (June 2022 - August 2022)\n   Worked on developing and maintaining web applications.",
+                "Junior Web Developer at XYZ Solutions (September 2022 - Present)\n   Building responsive websites using HTML, CSS, and JavaScript."
+        );
+
+        List<String> languageList = List.of(
+                "English - Fluent",
+                "French - Intermediate",
+                "Arabic - Native"
+        );
+
+        // PDF generation
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PdfWriter writer = new PdfWriter(byteArrayOutputStream);
+        PdfDocument pdfDocument = new PdfDocument(writer);
+        com.itextpdf.layout.Document document = new com.itextpdf.layout.Document(pdfDocument);
+
+        // Header - CV Title
+        document.add(new Paragraph("Curriculum Vitae")
+                .setFontSize(32)
+                .setBold()
+                .setFontColor(new DeviceRgb(50, 50, 150))
+                .setTextAlignment(TextAlignment.CENTER));
+        document.add(new Paragraph("\n"));
+
+        // Personal Info (Full Name, Email, and Phone)
+        document.add(new Paragraph("Full Name: " + student.getFirstName() + " " + student.getLastName())
+                .setFontSize(14)
+                .setFontColor(new DeviceRgb(0, 0, 0)));
+        document.add(new Paragraph("Email: " + student.getEmail())
+                .setFontSize(14)
+                .setFontColor(new DeviceRgb(0, 0, 0)));
+        document.add(new Paragraph("Phone: " + student.getTelephone().toString())
+                .setFontSize(14)
+                .setFontColor(new DeviceRgb(0, 0, 0)));
+        document.add(new Paragraph("\n"));
+
+        // Professional Summary
+        document.add(new Paragraph("Professional Summary")
+                .setFontSize(18)
+                .setBold()
+                .setFontColor(new DeviceRgb(50, 50, 150)));
+        document.add(new Paragraph("A highly motivated and results-driven individual with a passion for software development, seeking a position to utilize my skills in web development and software engineering."));
+        document.add(new Paragraph("\n"));
+
+        // Expertise Section
+        document.add(new Paragraph("Core Competencies")
+                .setFontSize(18)
+                .setBold()
+                .setFontColor(new DeviceRgb(50, 50, 150)));
+        if (!expertiseList.isEmpty()) {
+            for (Expertise expertise : expertiseList) {
+                document.add(new Paragraph("✔ " + expertise.getTypeExpertise().name()));
+            }
+        } else {
+            document.add(new Paragraph("No expertise listed."));
+        }
+        document.add(new Paragraph("\n"));
+
+        // Experience Section
+        document.add(new Paragraph("Experience")
+                .setFontSize(18)
+                .setBold()
+                .setFontColor(new DeviceRgb(50, 50, 150)));
+        if (!experienceList.isEmpty()) {
+            for (String experience : experienceList) {
+                document.add(new Paragraph(experience)
+                        .setFontSize(12)
+                        .setFontColor(new DeviceRgb(50, 50, 150)));
+                document.add(new Paragraph("\n"));
+            }
+        } else {
+            document.add(new Paragraph("No experience listed."));
+        }
+
+        // Languages Section
+        document.add(new Paragraph("Languages")
+                .setFontSize(18)
+                .setBold()
+                .setFontColor(new DeviceRgb(50, 50, 150)));
+        if (!languageList.isEmpty()) {
+            for (String language : languageList) {
+                document.add(new Paragraph(language)
+                        .setFontSize(12)
+                        .setFontColor(new DeviceRgb(50, 50, 150)));
+            }
+        } else {
+            document.add(new Paragraph("No languages listed."));
+        }
+        document.add(new Paragraph("\n"));
+
+        // Education Section
+        document.add(new Paragraph("Education")
+                .setFontSize(18)
+                .setBold()
+                .setFontColor(new DeviceRgb(50, 50, 150)));
+        document.add(new Paragraph("Bachelor of Science in Computer Science, ESPRIT, 2020 - 2023"));
+        document.add(new Paragraph("\n"));
+
+        // Certifications Section
+        document.add(new Paragraph("Certifications")
+                .setFontSize(18)
+                .setBold()
+                .setFontColor(new DeviceRgb(50, 50, 150)));
+        document.add(new Paragraph("Certified Java Developer - Oracle"));
+        document.add(new Paragraph("Web Development Bootcamp - XYZ Academy"));
+        document.add(new Paragraph("\n"));
+
+        // Footer (optional, for contact or additional links)
+        document.add(new Paragraph("Contact: " + student.getEmail())
+                .setFontSize(10)
+                .setItalic()
+                .setFontColor(new DeviceRgb(50, 50, 150)));
+
+        // Finalize document
+        document.close();
+        return byteArrayOutputStream.toByteArray();
+    }
 
 
-
+    @Override
+    public ResponseEntity<byte[]> downloadCV(Long userId) throws IOException {
+        byte[] pdfBytes = generateStudentCV(userId);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=CV.pdf")
+                .body(pdfBytes);
+    }
 }
+
+
+
+
