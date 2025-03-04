@@ -204,7 +204,8 @@ public class InternshipService implements InternshipServiceInterface {
         Internship internship = internshipRepository.findById(internshipId)
                 .orElseThrow(() -> new RuntimeException("Internship not found"));
 
-        if (!internship.getInternshipState().equals(InternshipState.PENDING)) {
+        if (!(internship.getInternshipState().equals(InternshipState.PENDING) ||
+                internship.getInternshipState().equals(InternshipState.APPROVEDBYCOMPANY))) {
             throw new RuntimeException("Internship is not in a state that can be approved.");
         }
 

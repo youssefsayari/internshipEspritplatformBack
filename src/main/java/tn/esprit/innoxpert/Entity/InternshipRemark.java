@@ -1,5 +1,6 @@
 package tn.esprit.innoxpert.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,6 +19,7 @@ public class InternshipRemark {
 
     @ManyToOne
     @JoinColumn(name = "internship_id")
+    @JsonIgnore
     private Internship internship;
 
 }
