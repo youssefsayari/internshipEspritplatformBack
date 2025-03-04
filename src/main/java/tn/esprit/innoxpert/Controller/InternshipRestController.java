@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.DTO.AddInternship;
 import tn.esprit.innoxpert.DTO.InternshipAdminResponse;
 import tn.esprit.innoxpert.DTO.InternshipResponse;
+import tn.esprit.innoxpert.DTO.InternshipTutorResponse;
 import tn.esprit.innoxpert.Entity.Internship;
 import tn.esprit.innoxpert.Entity.Task;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
@@ -103,6 +104,13 @@ public class InternshipRestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Error: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/getInternshipsForTutor")
+    public List<InternshipTutorResponse> getInternshipsForTutor(
+            @RequestParam(required = false) Long idUser) {
+        List<InternshipTutorResponse> internshipTutorResponse = internshipService.getInternshipsForTutor(idUser);
+        return internshipTutorResponse;
     }
 
 

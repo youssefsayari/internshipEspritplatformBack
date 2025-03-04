@@ -6,12 +6,14 @@ import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.DTO.AddInternship;
 import tn.esprit.innoxpert.DTO.InternshipAdminResponse;
 import tn.esprit.innoxpert.DTO.InternshipResponse;
+import tn.esprit.innoxpert.DTO.InternshipTutorResponse;
 import tn.esprit.innoxpert.Entity.*;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.InternshipRepository;
 import tn.esprit.innoxpert.Repository.PostRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -180,14 +182,20 @@ public class InternshipService implements InternshipServiceInterface {
     public void approveInternship(Long internshipId) {
         Internship internship = internshipRepository.findById(internshipId)
                 .orElseThrow(() -> new RuntimeException("Internship not found"));
-
-        if (!internship.getInternshipState().equals(InternshipState.PENDING)) {
+        if (!(internship.getInternshipState().equals(InternshipState.PENDING) ||
+                internship.getInternshipState().equals(InternshipState.APPROVEDBYCOMPANY))) {
             throw new RuntimeException("Internship is not in a state that can be approved.");
         }
+        if (internship.getInternshipState().equals(InternshipState.APPROVEDBYCOMPANY)) {
+            internship.setInternshipState(InternshipState.APPROVED);
+        } else {
+            internship.setInternshipState(InternshipState.APPROVEDBYCOMPANY);
+        }
 
-        internship.setInternshipState(InternshipState.APPROVEDBYCOMPANY);
         internshipRepository.save(internship);
     }
+
+
 
 
     @Override
@@ -203,6 +211,50 @@ public class InternshipService implements InternshipServiceInterface {
         internship.setInternshipState(InternshipState.REJECTED);
         internshipRepository.save(internship);
     }
+
+    @Override
+    public List<InternshipTutorResponse> getInternshipsForTutor(Long idUser) {
+        User tutor = userRepository.findById(idUser)
+                .orElseThrow(() -> new RuntimeException("Tutor not found"));
+
+        List<User> students = userRepository.findByTutor_IdUser(idUser);
+        if (students.isEmpty()) {
+            throw new RuntimeException("Students not found");
+        }
+
+        List<Internship> allInternships = new ArrayList<>();
+        for (User student : students) {
+            allInternships.addAll(student.getInternships());
+        }
+
+        List<InternshipTutorResponse> responseList = allInternships.stream().map(internship -> {
+            InternshipTutorResponse response = new InternshipTutorResponse();
+            response.setIdInternship(internship.getId());
+
+            if (!internship.getUsers().isEmpty()) {
+                User student = internship.getUsers().get(0);
+                response.setStudentName(student.getFirstName() + " " + student.getLastName());
+                response.setClasse(student.getClasse());
+            }
+
+            response.setInternshipState(internship.getInternshipState().name());
+            response.setTypeInternship(internship.getPost().getTypeInternship().name());
+            response.setTitle(internship.getPost().getTitle());
+            response.setContent(internship.getPost().getContent());
+            response.setCompanyName(internship.getPost().getCompany().getName());
+
+            if (internship.getPost().getSkills() != null && !internship.getPost().getSkills().isEmpty()) {
+                response.setSkills(new ArrayList<>(internship.getPost().getSkills()));
+            } else {
+                response.setSkills(new ArrayList<>());
+            }
+
+            return response;
+        }).collect(Collectors.toList());
+
+        return responseList;
+    }
+
 
     @Override
     public Map<String, Object> getInternshipStatistics() {
