@@ -29,7 +29,7 @@ public class PostService implements PostServiceInterface {
     private UserRepository userRepository;
 
     @Override
-    public List<PostAdminResponse> getAllPosts() {
+    public List<PostAdminResponse> getAllPostsDTO() {
         List<Post> posts = postRepository.findAll();
 
         List<PostAdminResponse> postResponses = posts.stream().map(post -> {
@@ -58,7 +58,7 @@ public class PostService implements PostServiceInterface {
 
 
     @Override
-    public List<PostAdminResponse> getPostsByCompany(Long companyId) {
+    public List<PostAdminResponse> getPostsByCompanyDTO(Long companyId) {
         User user = userRepository.findById(companyId).orElseThrow(() -> new RuntimeException("User not found"));
 
         Company company = companyRepository.findByOwner(user).orElseThrow(() -> new RuntimeException("Company not found"));

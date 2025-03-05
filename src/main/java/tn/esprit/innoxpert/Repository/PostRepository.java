@@ -12,8 +12,6 @@ import java.util.Set;
 public interface PostRepository extends JpaRepository<Post,Long> {
     List<Post> findByCompanyId(Long companyId);
 
-
-
     List<Post> findByCompanyInOrderByCreatedAtDesc(Set<Company> companies);
     List<Post> findByCompanyNotInOrderByCreatedAtDesc(Set<Company> companies);
 

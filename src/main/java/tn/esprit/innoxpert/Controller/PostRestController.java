@@ -19,10 +19,10 @@ public class PostRestController {
     @Autowired
     PostServiceInterface postService;
 
-    // Récupérer tous les posts
-    @GetMapping("/getAllPosts")
-    public List<PostAdminResponse> getAllPosts() {
-        return postService.getAllPosts();
+    // GHASSEN
+    @GetMapping("/getAllPostsDTO")
+    public List<PostAdminResponse> getAllPostsDTO() {
+        return postService.getAllPostsDTO();
     }
 
     // Récupérer un post par ID
@@ -32,9 +32,9 @@ public class PostRestController {
     }
 
     // Récupérer les posts d'une entreprise spécifique
-    @GetMapping("/getPostsByCompany/{companyId}")
-    public List<PostAdminResponse> getPostsByCompany(@PathVariable("companyId") Long companyId) {
-        return postService.getPostsByCompany(companyId);
+    @GetMapping("/getPostsByCompanyDTO/{companyId}")
+    public List<PostAdminResponse> getPostsByCompanyDTO(@PathVariable("companyId") Long companyId) {
+        return postService.getPostsByCompanyDTO(companyId);
     }
 
     // Ajouter un post et l'affecter à une entreprise

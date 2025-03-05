@@ -2,6 +2,8 @@ package tn.esprit.innoxpert.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -20,19 +22,27 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @NotBlank(message = "Le titre est obligatoire")
+    @Size(min = 3, max = 255, message = "Le titre doit contenir entre 3 et 255 caractères")
     private String title;
-    @Enumerated(EnumType.STRING)
-    TypeInternship typeInternship;
 
+    @NotBlank(message = "Le contenu est obligatoire")
+    @Size(min = 10, max = 255, message = "Le content doit contenir entre 10 et 255 caractères")
     @Column(columnDefinition = "TEXT")
     private String content;
+
 
     @Column(nullable = false, updatable = false)
     LocalDateTime createdAt = LocalDateTime.now();
 
+    @Enumerated(EnumType.STRING)
+    TypeInternship typeInternship;
+
+    @Column(nullable = true) // Peut être NULL si pas d'expiration
+    LocalDateTime expiryDateTime;
+
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
-    @JsonIgnore
     Company company;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)

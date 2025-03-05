@@ -34,7 +34,7 @@ public class Company {
     @Column(unique = true, nullable = false)
     String email;
 
-    String phone;
+    Long phone;
 
     LocalDate foundingYear ;
 
@@ -52,13 +52,13 @@ public class Company {
     @JsonIgnore
     List<Post> posts;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id", referencedColumnName = "idUser")
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+    @JoinColumn(name = "idUser", referencedColumnName = "idUser")
     User owner;
 
 
-    @ManyToMany(mappedBy = "followedCompanies")
-    private List<User> followers; // Liste des utilisateurs qui suivent cette entreprise
+    @ManyToMany(mappedBy = "followedCompanies", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private List<User> followers;
 
 
 
