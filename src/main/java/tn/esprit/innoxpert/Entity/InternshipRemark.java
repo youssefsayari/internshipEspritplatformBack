@@ -1,10 +1,9 @@
 package tn.esprit.innoxpert.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -12,20 +11,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserInfo {
+public class InternshipRemark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long idUserDetail;
+    Long id;
+    String remark;
 
+    @ManyToOne
+    @JoinColumn(name = "internship_id")
+    @JsonIgnore
+    private Internship internship;
 
-    Long maxValidatedInternships;
-    Long maxInternshipSupervisions;
-
-    @OneToOne
-    User user;
-
-    @OneToMany
-    @JoinColumn(name = "user_detail_id")
-
-    List<Expertise> expertises;
 }

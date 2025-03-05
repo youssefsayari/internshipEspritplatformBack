@@ -4,28 +4,22 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserInfo {
+public class Setting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long idUserDetail;
+    private Long id;
 
+    @Column(name = "setting_key",unique = true, nullable = false)
+    private String key;
 
-    Long maxValidatedInternships;
-    Long maxInternshipSupervisions;
+    @Column(nullable = false)
+    private String value;
 
-    @OneToOne
-    User user;
-
-    @OneToMany
-    @JoinColumn(name = "user_detail_id")
-
-    List<Expertise> expertises;
+    private String description;
 }

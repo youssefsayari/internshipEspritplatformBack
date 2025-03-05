@@ -1,6 +1,5 @@
 package tn.esprit.innoxpert.Entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
