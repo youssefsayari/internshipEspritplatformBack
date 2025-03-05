@@ -58,13 +58,6 @@ public class User implements UserDetails {
     @JsonIgnore
     List<Task> tasks;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_followed_companies",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "company_id")
-    )
-    private List<Company> followedCompanies = new ArrayList<>();
 
     /*----------------start l5edmet sayari--------------------*/
 
