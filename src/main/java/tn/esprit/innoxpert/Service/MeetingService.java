@@ -136,7 +136,7 @@ public class MeetingService implements MeetingServiceInterface {
 
     @Override
     public Long findTutorIdByStudentId(Long studentId) {
-        return studentTutorRepository.findTutorIdByStudentId(studentId);
+        return userRepository.findTutorIdByStudentId(studentId);
     }
 
     @Override
