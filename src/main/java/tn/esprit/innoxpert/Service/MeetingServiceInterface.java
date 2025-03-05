@@ -29,6 +29,9 @@ public interface MeetingServiceInterface {
 
     public void notifyUsersOneDayBeforeMeeting();
 
+    public List<User> getMostActiveStudents() ;
+
+
 
 
 

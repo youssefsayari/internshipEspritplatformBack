@@ -125,6 +125,12 @@ public class MeetingRestController {
         return meetingService.findTutorIdByStudentId(studentId);
     }
 
+    @GetMapping("/getMostActiveStudents")
+    public List<User> getMostActiveStudents()
+    {
+        return meetingService.getMostActiveStudents();
+    }
+
 
 
 

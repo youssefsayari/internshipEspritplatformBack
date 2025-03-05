@@ -34,6 +34,12 @@ public interface MeetingRepository extends JpaRepository<Meeting,Long> {
     List<Meeting> getAllMeetingsOrderedByDate();
 
 
+    @Query("SELECT m.participant, COUNT(m) as meetingCount " +
+            "FROM Meeting m " +
+            "GROUP BY m.participant " +
+            "ORDER BY meetingCount DESC")
+    List<User> findMostActiveStudents();
+
 
 
 }

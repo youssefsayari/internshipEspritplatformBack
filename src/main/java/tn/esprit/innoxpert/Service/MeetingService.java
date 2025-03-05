@@ -304,4 +304,11 @@ public class MeetingService implements MeetingServiceInterface {
 
         System.out.println("✔️ Notifications envoyées !");
     }
+
+    @Override
+    @Transactional
+    public List<User> getMostActiveStudents() {
+        return meetingRepository.findMostActiveStudents();
+
+    }
 }
