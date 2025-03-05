@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+
 public class Quiz {
 
     @Id
@@ -42,4 +43,16 @@ public class Quiz {
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
 
     private List<QuestionReponse> questions = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Quiz{" +
+                "idQuiz=" + idQuiz +
+                ", titre='" + titre + '\'' +
+                ", description='" + description + '\'' +
+                ", date_passage=" + date_passage +
+                ", societe=" + societe +
+                ", questions=" + questions +
+                '}';
+    }
 }

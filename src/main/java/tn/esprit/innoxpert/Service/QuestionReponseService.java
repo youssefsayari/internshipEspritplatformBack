@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.Entity.Meeting;
 import tn.esprit.innoxpert.Entity.QuestionReponse;
 import tn.esprit.innoxpert.Entity.Quiz;
+import tn.esprit.innoxpert.Entity.Societe;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.QuestionReponseRepository;
 import tn.esprit.innoxpert.Repository.QuizRepository;
@@ -38,9 +39,15 @@ public class QuestionReponseService implements QuestionReponseServiceInterface {
 
     @Override
     public QuestionReponse updateQuestion(QuestionReponse questionReponse) {
+        Quiz q=questionRepository.findQuizByQuestionReponseId(questionReponse.getIdQuestionReponse());
+
         if ( !questionRepository.existsById(questionReponse.getIdQuestionReponse())) {
             throw new NotFoundException("Question with ID: " + questionReponse.getIdQuestionReponse() + " was not found. Cannot update.");
         }
+        System.out.println("aaaa" +q.getIdQuiz());
+        System.out.println(questionReponse.getQuiz());
+        questionReponse.setQuiz(q);
+
         return questionRepository.save(questionReponse);
     }
    @Override

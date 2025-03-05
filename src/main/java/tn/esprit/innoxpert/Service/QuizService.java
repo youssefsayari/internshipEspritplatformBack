@@ -44,9 +44,13 @@ public class QuizService implements QuizServiceInterface {
 
    @Override
     public Quiz updateQuiz(Quiz quiz) {
+        Societe s=quizRepository.findSocieteByQuizId(quiz.getIdQuiz());
         if ( !quizRepository.existsById(quiz.getIdQuiz())) {
             throw new NotFoundException("Quiz with ID: " + quiz.getIdQuiz() + " was not found. Cannot update.");
         }
+       System.out.println("aaaa" +s.getIdSociete());
+       System.out.println(quiz.getSociete());
+       quiz.setSociete(s);
         return quizRepository.save(quiz);
     }
     @Override

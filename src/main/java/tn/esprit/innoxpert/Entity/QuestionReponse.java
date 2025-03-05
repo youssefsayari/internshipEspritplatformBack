@@ -38,6 +38,6 @@ public class QuestionReponse {
     String reponse_correcte;
 
     @ManyToOne
-            @JsonIgnore
+    @JsonIgnore
     Quiz quiz;
 }
