@@ -42,4 +42,8 @@ public class Comment {
     @Column(nullable = false, updatable = false)
     LocalDateTime createdAt = LocalDateTime.now(); // Ajout de la date de création
 
+    @ManyToOne
+    @JoinColumn(name = "idUser", nullable = false) // Ajout d'une relation avec User
+    private User user;
+
 }
