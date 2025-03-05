@@ -17,11 +17,13 @@ import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.UserRepository;
 import tn.esprit.innoxpert.Util.JwtUtil;
 
+
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 
 
 @Service
@@ -44,6 +46,7 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
+
     public List<UserResponse> getUserBytypeUser(String typeUser) {
         try {
             TypeUser type = TypeUser.valueOf(typeUser);

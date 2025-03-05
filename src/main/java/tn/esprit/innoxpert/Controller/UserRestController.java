@@ -20,6 +20,7 @@ import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Service.UserServiceInterface;
 import tn.esprit.innoxpert.Util.JwtUtil;
 
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,6 +133,7 @@ public class UserRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token: " + e.getMessage());
         }
     }
+
     @PostMapping("/decode-token-Role")
     public ResponseEntity<?> decodeTokenRole(@RequestBody String token) {
         try {
@@ -164,6 +166,7 @@ public class UserRestController {
     {
         return userservice.getAllUsers();
     }
+
     @GetMapping("/getUserBytypeUser")
     public ResponseEntity<List<UserResponse>> getUserBytypeUser(@RequestParam String typeUser) {
         try {

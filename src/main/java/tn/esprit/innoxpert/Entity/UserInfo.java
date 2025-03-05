@@ -17,6 +17,7 @@ public class UserInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idUserDetail;
 
+
     Long maxValidatedInternships;
     Long maxInternshipSupervisions;
 
@@ -25,5 +26,6 @@ public class UserInfo {
 
     @OneToMany
     @JoinColumn(name = "user_detail_id")
+
     List<Expertise> expertises;
 }
