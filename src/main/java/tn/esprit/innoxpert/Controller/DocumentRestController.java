@@ -1,13 +1,16 @@
 package tn.esprit.innoxpert.Controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.innoxpert.Entity.Document;
@@ -22,6 +25,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Tag(name = "Document Management")
 @RestController
@@ -58,19 +62,33 @@ public class DocumentRestController {
 
     // ✅ Add Document
     @PostMapping("/addDocument")
-    public ResponseEntity<Document> addDocument(
+    public ResponseEntity<?> addDocument(
             @RequestParam("name") String name,
             @RequestParam("typeDocument") String typeDocument,
-            @RequestParam("file") MultipartFile file) {
+            @RequestPart("file") MultipartFile file,
+            @Valid Document document, // Document validation triggered here
+            BindingResult bindingResult) { // BindingResult to capture validation errors
+
+        if (bindingResult.hasErrors()) {
+            // Collect all error messages into a list
+            List<String> errorMessages = bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+
+            // Return the error messages directly as a map (or you can also return as a list)
+            return ResponseEntity.badRequest().body(Map.of("errors", errorMessages));
+        }
+
         try {
             Document savedDocument = documentService.addDocument(name, typeDocument, file);
             return ResponseEntity.ok(savedDocument);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build(); // 400 Bad Request if file is empty
+            return ResponseEntity.badRequest().body(Map.of("error", "File upload failed: " + e.getMessage()));
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Internal server error"));
         }
     }
+
 
     // ✅ Upload Document by ID
     @GetMapping("/uploadDocument/{id}")
