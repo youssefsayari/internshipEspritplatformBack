@@ -2,6 +2,7 @@ package tn.esprit.innoxpert.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -23,6 +24,7 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
      Long idUser;
 
      String firstName;
@@ -42,9 +44,17 @@ public class User implements UserDetails {
     @OneToOne
     UserInfo userInfo;
 
-    @OneToMany (cascade = CascadeType.ALL, mappedBy="student")
-    List<Task> tasks;
+    @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
+    @JsonIgnore
+    List<Meeting> meetingsAsParticipant;
 
+    @OneToMany(mappedBy = "organiser", cascade = CascadeType.ALL)
+    @JsonIgnore
+    List<Meeting> meetingsAsOrganiser;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "student")
+    @JsonIgnore
+    List<Task> tasks;
 
     @ManyToMany
     @JoinTable(
@@ -86,21 +96,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return true;
     }
 }
