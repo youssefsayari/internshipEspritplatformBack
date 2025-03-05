@@ -45,11 +45,15 @@ public class PostService implements PostServiceInterface {
     }
 
     @Override
-    public Post addPostAndAffectToCompany(Long companyId,Post p) {
-        Company company = companyRepository.findById(companyId).get();
-        p.setCompany(company); // Associer le post à la company
+    public Post addPostAndAffectToCompany(Long companyId, Post p) {
+        // Vérifier si l'entreprise existe
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("Entreprise non trouvée"));
+        // Associer le post à l'entreprise et enregistrer
+        p.setCompany(company);
         return postRepository.save(p);
     }
+
 
     @Override
     public void removePostById(Long postId) {
@@ -58,6 +62,16 @@ public class PostService implements PostServiceInterface {
 
     @Override
     public Post updatePost(Post p) {
+        // Si la date de création est modifiée dans la requête, on la garde inchangée
+        Post existingPost = postRepository.findById(p.getId()).orElseThrow(() -> new RuntimeException("Post not found"));
+
+        // Garder la date d'origine
+        p.setCreatedAt(existingPost.getCreatedAt());
+        p.setComments(existingPost.getComments());
+        p.setRatings(existingPost.getRatings());
+        p.setCompany(existingPost.getCompany());
+
+        // Maintenant on enregistre le post avec la date inchangée
         return postRepository.save(p);
     }
 
@@ -82,6 +96,7 @@ public class PostService implements PostServiceInterface {
 
         return homeFeed;
     }
+
 
 
 

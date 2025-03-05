@@ -10,16 +10,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.Entity.Company;
+import tn.esprit.innoxpert.Entity.TypeUser;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.CompanyRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
 import tn.esprit.innoxpert.Util.JwtUtil;
 
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -151,6 +149,11 @@ public class UserService implements UserServiceInterface {
     public List<Company> getFollowedCompanies(Long idUser) {
         User user = userRepository.findById(idUser).orElseThrow(() -> new RuntimeException("User not found"));
         return user.getFollowedCompanies();
+    }
+    @Override
+    public TypeUser getUserType(Long idUser) {
+        Optional<User> user = userRepository.findById(idUser);
+        return user.map(User::getTypeUser).orElse(null);
     }
 
     /*----------------end l5edmet sayari--------------------*/

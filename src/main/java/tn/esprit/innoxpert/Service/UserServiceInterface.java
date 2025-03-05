@@ -2,6 +2,7 @@ package tn.esprit.innoxpert.Service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import tn.esprit.innoxpert.Entity.Company;
+import tn.esprit.innoxpert.Entity.TypeUser;
 import tn.esprit.innoxpert.Entity.User;
 
 import java.util.List;
@@ -27,7 +28,9 @@ public interface UserServiceInterface {
     void followCompany(Long idUser, Long companyId);
     void unfollowCompany(Long idUser, Long companyId) ;
     List<Company> getFollowedCompanies(Long idUser);
-    /*----------------end l5edmet sayari--------------------*/
+    public TypeUser getUserType(Long idUser) ;
+
+        /*----------------end l5edmet sayari--------------------*/
 
 
     }

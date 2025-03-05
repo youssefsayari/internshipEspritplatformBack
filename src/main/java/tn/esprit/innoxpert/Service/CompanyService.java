@@ -149,4 +149,23 @@ public class CompanyService implements CompanyServiceInterface {
         }
     }
 
+    @Override
+    public Long getCompanyIdByUserId(Long userId) {
+        Company company = companyRepository.findByOwnerId(userId);
+        if (company != null) {
+            return company.getId();
+        }
+        return null; // or throw an exception if company not found
+    }
+
+    @Override
+    public Boolean IsCompany(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null && TypeUser.Company.equals(user.getTypeUser())) {
+            return true;
+        }
+        return false; // or throw an exception if company not found
+    }
+
+
 }

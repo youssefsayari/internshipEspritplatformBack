@@ -12,7 +12,7 @@ public interface CommentServiceInterface {
     Comment getCommentById(Long commentId);
     void removeCommentById(Long commentId);
     Comment updateComment(Comment c);
-    Comment addCommentAndAffectToPost(Long idPost, Comment newComment);
+    Comment addCommentAndAffectToPostAndToUser(Long idPost, Comment newComment,Long userId);
     Comment addCommentToComment(Long parentCommentId, Comment newComment);
 
 

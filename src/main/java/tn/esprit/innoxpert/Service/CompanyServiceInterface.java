@@ -11,9 +11,13 @@ public interface CompanyServiceInterface {
     Company addCompanyAndAffectToNewUser(Company c);
     void removeCompanyByIdAndUserAffected(Long companyId);
     Company updateCompany(Company c);
+     Long getCompanyIdByUserId(Long userId) ;
+    public Boolean IsCompany(Long userId) ;
 
 
-    List<User> getCompanyFollowers(Long companyId);
+
+
+        List<User> getCompanyFollowers(Long companyId);
 
     void followCompany(Long userId, Long companyId) ;
     void unfollowCompany(Long userId, Long companyId) ;

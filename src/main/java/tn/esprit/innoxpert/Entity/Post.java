@@ -1,9 +1,13 @@
 package tn.esprit.innoxpert.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import tn.esprit.innoxpert.Entity.Comment;
+import tn.esprit.innoxpert.Entity.Company;
+import tn.esprit.innoxpert.Entity.Rating;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,36 +17,35 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @NotBlank(message = "Le titre est obligatoire")
+    @Size(min = 3, max = 255, message = "Le titre doit contenir entre 3 et 255 caractères")
     private String title;
 
-    @Column(columnDefinition = "TEXT") // Permet de stocker du texte long
+    @NotBlank(message = "Le contenu est obligatoire")
+    @Size(min = 10, max = 255, message = "Le content doit contenir entre 10 et 255 caractères")
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-
-
     @Column(nullable = false, updatable = false)
-    LocalDateTime createdAt = LocalDateTime.now(); // Ajout de la date de création
+    LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false) // Foreign Key vers Company
-    @JsonIgnore
-
+    @JoinColumn(name = "company_id", nullable = false)
     Company company;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<Rating> ratings;
+
+
+
 
 }

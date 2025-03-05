@@ -31,10 +31,7 @@ public class RatingService implements RatingServiceInterface{
         return ratingRepository.findByPostId(postId);  // Filtrer par ID du post
     }
 
-    @Override
-    public List<Rating> getAllRatingsByComment(Long commentId) {
-        return ratingRepository.findByCommentId(commentId);  // Filtrer par ID du post
-    }
+
 
 
     @Override
@@ -49,53 +46,44 @@ public class RatingService implements RatingServiceInterface{
         ratingRepository.deleteById(ratingId);
     }
 
-    @Override
-    public Rating updateRating(Rating r) {
-        return ratingRepository.save(r);
+    public Rating updateRating(Long postId, Long userId, int newRating) {
+        // Trouver la note existante par postId et userId
+        Rating existingRating = ratingRepository.findByPostIdAndUserId(postId, userId);
+
+        if (existingRating != null) {
+            // Si la note existe, la mettre à jour
+            existingRating.setStars(newRating);
+            return ratingRepository.save(existingRating);
+        }
+
+        // Retourner null si aucune note existante n'est trouvée
+        return null;
     }
 
     @Override
     public Rating addRatingAndAffectToPost(Long postId, Long userId, int stars) {
-        // Vérifier si l'utilisateur a déjà donné un rating pour ce post
-        if (ratingRepository.existsByUserIdAndPostId(userId, postId)) {
-            throw new RuntimeException("User has already rated this post.");
+        // Récupérer le post et l'utilisateur en vérifiant leur existence
+        Post post = postRepository.findById(postId).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
+
+        // Si le post ou l'utilisateur n'existe pas, retourner null ou lever une exception
+        if (post == null || user == null) {
+            throw new RuntimeException("Post ou utilisateur non trouvé");
         }
 
-        // Récupérer le post et l'utilisateur
-        Post post = postRepository.findById(postId).get();
-        User user = userRepository.findById(userId).get();
-
-        // Créer et associer le rating
+        // Créer une nouvelle note et l'associer au post et à l'utilisateur
         Rating newRating = new Rating();
         newRating.setStars(stars);
         newRating.setPost(post);
         newRating.setUser(user);
 
-        // Sauvegarder et retourner le rating
+        // Sauvegarder et retourner la nouvelle note
         return ratingRepository.save(newRating);
     }
 
 
-    @Override
-    public Rating addRatingAndAffectToComment(Long commentId, Long userId, int stars) {
-        // Vérifier si l'utilisateur a déjà donné un rating pour ce commentaire
-        if (ratingRepository.existsByUserIdAndCommentId(userId, commentId)) {
-            throw new RuntimeException("User has already rated this comment.");
-        }
 
-        // Récupérer le commentaire et l'utilisateur
-        Comment comment = commentRepository.findById(commentId).get();
-        User user = userRepository.findById(userId).get();
 
-        // Créer et associer le rating
-        Rating newRating = new Rating();
-        newRating.setStars(stars);
-        newRating.setComment(comment);
-        newRating.setUser(user);
-
-        // Sauvegarder et retourner le rating
-        return ratingRepository.save(newRating);
-    }
 
 
     @Override
@@ -103,11 +91,15 @@ public class RatingService implements RatingServiceInterface{
         return ratingRepository.findByPostIdAndUserId(postId, userId);
     }
 
-
     @Override
-    public Rating getMyRatingForComment(Long commentId, Long userId) {
-        return ratingRepository.findByCommentIdAndUserId(commentId, userId);
+
+    public boolean existsByPostAndUser(Long postId, Long userId) {
+        return ratingRepository.existsByUserIdAndPostId(postId, userId);
     }
+
+
+
+
 
 
 

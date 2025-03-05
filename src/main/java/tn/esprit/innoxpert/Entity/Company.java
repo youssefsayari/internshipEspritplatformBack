@@ -45,19 +45,16 @@
         // ✅ Suppression en cascade des posts, mais pas de mise à jour forcée
         @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
         @JsonIgnore
-
         List<Post> posts;
     
         // ✅ Suppression en cascade de l'owner mais éviter la mise à jour accidentelle
         @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
         @JoinColumn(name = "idUser", referencedColumnName = "idUser")
-        @JsonIgnore
 
         User owner;
     
         // ✅ Suppression en cascade des followers mais éviter la mise à jour accidentelle
         @ManyToMany(mappedBy = "followedCompanies", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-        @JsonIgnore
 
         private List<User> followers;
     }

@@ -23,10 +23,7 @@ public class RatingRestController {
         return ResponseEntity.ok(ratingService.getAllRatingsByPost(postId));
     }
 
-    @GetMapping("/getAllRatingsByComment/{commentId}")
-    public ResponseEntity<List<Rating>> getAllRatingsByComment(@PathVariable Long commentId) {
-        return ResponseEntity.ok(ratingService.getAllRatingsByComment(commentId));
-    }
+
 
     @GetMapping("/getRatingById/{ratingId}")
     public ResponseEntity<Rating> getRatingById(@PathVariable Long ratingId) {
@@ -39,36 +36,58 @@ public class RatingRestController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/updateRating")
-    public ResponseEntity<Rating> updateRating(@RequestBody Rating rating) {
-        return ResponseEntity.ok(ratingService.updateRating(rating));
+    @PutMapping("/update/{postId}/{userId}")
+    public ResponseEntity<Rating> updateRating(@PathVariable Long postId,
+                                               @PathVariable Long userId,
+                                               @RequestBody Rating rating) {
+        // Mettre à jour la note dans la base de données
+        Rating updatedRating = ratingService.updateRating(postId, userId, rating.getStars());
+
+        // Vérifier si l'évaluation a été mise à jour avec succès
+        if (updatedRating != null) {
+            return ResponseEntity.ok(updatedRating);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @PostMapping("/addRatingToPost/{postId}/{userId}/{stars}")
     public ResponseEntity<?> addRatingToPost(@PathVariable Long postId, @PathVariable Long userId, @PathVariable int stars) {
         try {
-            return ResponseEntity.ok(ratingService.addRatingAndAffectToPost(postId, userId, stars));
+            // Tentative de récupérer la note existante pour ce post et utilisateur
+            Rating existingRating = ratingService.updateRating(postId, userId, stars);
+
+            if (existingRating != null) {
+                // Si une note existante a été mise à jour
+                System.out.println("Updated rating for postId: " + postId + ", userId: " + userId + ", stars: " + stars);
+                return ResponseEntity.ok(existingRating);
+            } else {
+                // Si aucune note n'existait, on crée une nouvelle note
+                System.out.println("Adding new rating for postId: " + postId + ", userId: " + userId + ", stars: " + stars);
+                Rating newRating = ratingService.addRatingAndAffectToPost(postId, userId, stars);
+                return ResponseEntity.ok(newRating);
+            }
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            // Gérer les erreurs
+            System.err.println("Error adding or updating rating: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error adding or updating rating: " + e.getMessage());
         }
     }
 
-    @PostMapping("/addRatingToComment/{commentId}/{userId}/{stars}")
-    public ResponseEntity<?> addRatingToComment(@PathVariable Long commentId, @PathVariable Long userId, @PathVariable int stars) {
-        try {
-            return ResponseEntity.ok(ratingService.addRatingAndAffectToComment(commentId, userId, stars));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
+
+
+
+
 
     @GetMapping("/getMyRatingForPost/{postId}/{userId}")
     public ResponseEntity<Rating> getMyRatingForPost(@PathVariable Long postId, @PathVariable Long userId) {
         return ResponseEntity.ok(ratingService.getMyRatingForPost(postId, userId));
     }
 
-    @GetMapping("/getMyRatingForComment/{commentId}/{userId}")
-    public ResponseEntity<Rating> getMyRatingForComment(@PathVariable Long commentId, @PathVariable Long userId) {
-        return ResponseEntity.ok(ratingService.getMyRatingForComment(commentId, userId));
+    @GetMapping("/hasRated/{postId}/{userId}")
+    public boolean hasUserRated(@PathVariable Long postId, @PathVariable Long userId) {
+        return ratingService.existsByPostAndUser(postId, userId);
     }
+
+
 }

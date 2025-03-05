@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"idUser", "post_id"}),
-        @UniqueConstraint(columnNames = {"idUser", "comment_id"})
 })
 
 
@@ -30,19 +29,13 @@ public class Rating {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = true)
     @JsonIgnore
-
     private Post post;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id", nullable = true)
-    @JsonIgnore
 
-    Comment comment;
 
     @ManyToOne
     @JoinColumn(name = "idUser", nullable = false) // Ajout d'une relation avec User
     @JsonIgnore
-
     private User user;
 
     @Column(nullable = false, updatable = false)

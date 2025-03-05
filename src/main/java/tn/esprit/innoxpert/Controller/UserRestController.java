@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.DTO.JwtRequest;
+import tn.esprit.innoxpert.Entity.TypeUser;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Service.UserServiceInterface;
 import tn.esprit.innoxpert.Util.JwtUtil;
@@ -158,4 +159,10 @@ public class UserRestController {
     {
         return userservice.updateUser(User);
     }
+
+/*SAYAAAAAAAAAAARIIIIIIIIIIIIIII*/
+@GetMapping("/getTypeUser/{idUser}")
+public TypeUser getUserType(@PathVariable Long idUser) {
+    return userservice.getUserType(idUser);
+}
 }

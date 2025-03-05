@@ -81,4 +81,14 @@ public class CompanyRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @GetMapping("/getCompanyIdByUserId/company/{userId}")
+    public Long getCompanyIdByUserId( @PathVariable Long userId) {
+        return companyService.getCompanyIdByUserId(userId);
+    }
+
+    @GetMapping("/IsCompany/company/{userId}")
+    public Boolean IsCompany( @PathVariable Long userId) {
+        return companyService.IsCompany(userId);
+    }
 }

@@ -36,9 +36,9 @@ public class CommentRestController {
         return comment != null ? ResponseEntity.ok(comment) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/addToPost/{postId}")
-    public ResponseEntity<Comment> addCommentToPost(@PathVariable Long postId, @RequestBody Comment newComment) {
-        Comment savedComment = commentService.addCommentAndAffectToPost(postId, newComment);
+    @PostMapping("/addToPostAndUser/{postId}/{userId}")
+    public ResponseEntity<Comment> addCommentToPostAndToUser(@PathVariable Long postId, @RequestBody Comment newComment,@PathVariable Long userId) {
+        Comment savedComment = commentService.addCommentAndAffectToPostAndToUser(postId, newComment,userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedComment);
     }
 
