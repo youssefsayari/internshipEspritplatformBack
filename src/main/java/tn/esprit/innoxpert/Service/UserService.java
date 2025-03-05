@@ -9,16 +9,22 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import tn.esprit.innoxpert.DTO.UserResponse;
+import tn.esprit.innoxpert.Entity.TypeUser;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Entity.UserInfo;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.UserRepository;
 import tn.esprit.innoxpert.Util.JwtUtil;
 
+
+
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 
 
 @Service
@@ -39,6 +45,105 @@ public class UserService implements UserServiceInterface {
         return userRepository.findById(UserId)
                 .orElseThrow(() -> new NotFoundException("User with ID : " + UserId + " was not found."));
     }
+
+    @Override
+
+    public List<UserResponse> getUserBytypeUser(String typeUser) {
+        try {
+            TypeUser type = TypeUser.valueOf(typeUser);
+            List<User> users = userRepository.findByTypeUser(type);
+
+            if (users.isEmpty()) {
+                throw new NotFoundException("No users found with role: " + typeUser);
+            }
+            return users.stream().map(this::mapToUserResponse).collect(Collectors.toList());
+        } catch (IllegalArgumentException e) {
+            throw new NotFoundException("Invalid Role: " + typeUser);
+        }
+    }
+    private UserResponse mapToUserResponse(User user) {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(user.getIdUser());
+        userResponse.setFirstName(user.getFirstName());
+        userResponse.setLastName(user.getLastName());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setClasse(user.getClasse());
+
+        if (user.getTypeUser() == TypeUser.Tutor && user.getUserInfo() != null) {
+            userResponse.setMaxValidatedInternships(user.getUserInfo().getMaxValidatedInternships());
+            userResponse.setMaxInternshipSupervisions(user.getUserInfo().getMaxInternshipSupervisions());
+            if (user.getUserInfo().getExpertises() != null && !user.getUserInfo().getExpertises().isEmpty()) {
+                List<String> expertises = user.getUserInfo().getExpertises().stream()
+                        .map(e -> e.getTypeExpertise().name())
+                        .collect(Collectors.toList());
+                userResponse.setExpertise(String.join(", ", expertises));
+            }
+        }
+        else {
+            userResponse.setMaxValidatedInternships(0L);
+            userResponse.setMaxInternshipSupervisions(0L);
+        }
+
+
+        if (user.getTutor() != null) {
+            userResponse.setNameTutor(user.getTutor().getFirstName() + " " + user.getTutor().getLastName());
+            userResponse.setIdTutor(user.getTutor().getIdUser());
+        } else {
+            userResponse.setNameTutor("No Tutor Assigned");
+            userResponse.setIdTutor(null);
+        }
+        return userResponse;
+    }
+
+
+    @Override
+    public void affectationTutor(Long userId, Long tutorId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        User tutor = userRepository.findById(tutorId)
+                .orElseThrow(() -> new RuntimeException("Tutor not found"));
+
+        user.setTutor(tutor);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateTutorAdd(String key, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Tutor not found"));
+
+        if (user.getUserInfo() == null) {
+            throw new RuntimeException("UserInfo not found for user with ID: " + userId);
+        }
+
+        if ("maxValidatedInternships".equals(key)) {
+            user.getUserInfo().setMaxValidatedInternships(user.getUserInfo().getMaxValidatedInternships() + 1);
+        } else if ("maxInternshipSupervisions".equals(key)) {
+            user.getUserInfo().setMaxInternshipSupervisions(user.getUserInfo().getMaxInternshipSupervisions() + 1);
+        }
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateTutorRem(String key, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Tutor not found"));
+
+        if (user.getUserInfo() == null) {
+            throw new RuntimeException("UserInfo not found for user with ID: " + userId);
+        }
+
+        if ("maxValidatedInternships".equals(key)) {
+            user.getUserInfo().setMaxValidatedInternships(user.getUserInfo().getMaxValidatedInternships() - 1);
+        } else if ("maxInternshipSupervisions".equals(key)) {
+            user.getUserInfo().setMaxInternshipSupervisions(user.getUserInfo().getMaxInternshipSupervisions() - 1);
+        }
+        userRepository.save(user);
+    }
+
+
+
 
     @Override
     public User addUser(User b) {
