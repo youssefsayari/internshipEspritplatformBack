@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.DTO.JwtRequest;
 import tn.esprit.innoxpert.DTO.UserResponse;
 import tn.esprit.innoxpert.DTO.UserRole;
+import tn.esprit.innoxpert.Entity.TypeUser;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Service.UserServiceInterface;
 import tn.esprit.innoxpert.Util.JwtUtil;
-
-
 
 import java.util.HashMap;
 import java.util.List;
@@ -135,70 +134,11 @@ public class UserRestController {
         }
     }
 
-    @PostMapping("/decode-token-Role")
-    public ResponseEntity<?> decodeTokenRole(@RequestBody String token) {
-        try {
-            String classe = "";
-            String identifiant = userservice.extractIdentifiantFromJwt(token);
-            User user = userservice.getUserByIdentifiant(identifiant);
-            String role = String.valueOf(user.getTypeUser());
-            if (role.equals("Company")) {
-                classe = String.valueOf(user.getIdUser());
-            }else{
-                classe = user.getClasse();
-            }
-            Long id= user.getIdUser();
-            UserRole userRole = new UserRole(role, classe, id);
-            return ResponseEntity.ok(userRole);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token: " + e.getMessage());
-        }
-    }
-
-    @PostMapping("/affectation/{userId}/{tutorId}")
-    public ResponseEntity<?> affectationTutor(@PathVariable Long userId, @PathVariable Long tutorId) {
-        userservice.affectationTutor(userId, tutorId);
-        return ResponseEntity.ok("Tutor affected successfully");
-    }
-
-
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers()
     {
         return userservice.getAllUsers();
     }
-
-    @GetMapping("/getUserBytypeUser")
-    public ResponseEntity<List<UserResponse>> getUserBytypeUser(@RequestParam String typeUser) {
-        try {
-            List<UserResponse> users = userservice.getUserBytypeUser(typeUser);
-            return ResponseEntity.ok(users);
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(404).body(null);
-        }
-    }
-    @PutMapping("/updateAdd/{userId}")
-    public ResponseEntity<String> updateTutorAdd(@PathVariable Long userId, @RequestParam String key) {
-        try {
-            userservice.updateTutorAdd(key, userId);
-            return ResponseEntity.ok("Tutor updated successfully");
-        }
-        catch (RuntimeException e) {
-            return ResponseEntity.status(500).body("Error updating tutor: " + e.getMessage());
-        }
-    }
-
-    @PutMapping("/updateRem/{userId}")
-    public ResponseEntity<String> updateTutorRem(@PathVariable Long userId, @RequestParam String key) {
-        try {
-            userservice.updateTutorRem(key, userId);
-            return ResponseEntity.ok("Tutor updated successfully");
-        }
-        catch (RuntimeException e) {
-            return ResponseEntity.status(500).body("Error updating tutor: " + e.getMessage());
-        }
-    }
-
     @GetMapping("/getUserById/{idUser}")
     public User getUserById(@PathVariable("idUser") Long idUser)
     {
@@ -221,6 +161,11 @@ public class UserRestController {
     public User updateUser(@RequestBody User User)
     {
         return userservice.updateUser(User);
+    }
+    /*SAYAAAAAAAAAAARIIIIIIIIIIIIIII*/
+    @GetMapping("/getTypeUser/{idUser}")
+    public TypeUser getUserType(@PathVariable Long idUser) {
+        return userservice.getUserType(idUser);
     }
     @PostMapping("/send-otp")
     public ResponseEntity<Map<String, String>> sendOtp(@RequestBody String email) {

@@ -2,9 +2,6 @@ package tn.esprit.innoxpert;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import tn.esprit.innoxpert.Util.EmailClass;
-import tn.esprit.innoxpert.Util.JitsiMeetingService;
 
 @SpringBootApplication
 @EnableScheduling

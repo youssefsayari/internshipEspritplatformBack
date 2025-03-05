@@ -9,11 +9,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import tn.esprit.innoxpert.Entity.Company;
 import tn.esprit.innoxpert.DTO.UserResponse;
 import tn.esprit.innoxpert.Entity.TypeUser;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Entity.UserInfo;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
+import tn.esprit.innoxpert.Repository.CompanyRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
 import tn.esprit.innoxpert.Util.EmailClass;
 import tn.esprit.innoxpert.Util.JwtUtil;
@@ -29,6 +31,9 @@ import java.util.stream.Collectors;
 public class UserService implements UserServiceInterface {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
     @Autowired
     private JwtUtil jwtUtil;
     private final EmailClass emailClass = new EmailClass();
@@ -262,7 +267,7 @@ public class UserService implements UserServiceInterface {
         return response;
     }
 
-   @Override
+    @Override
     public boolean changePassword(String email, String newPassword) {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
@@ -277,6 +282,47 @@ public class UserService implements UserServiceInterface {
 
         return true;
     }
+
+
+
+    /*----------------start l5edmet sayari--------------------*/
+
+    @Override
+    public void followCompany(Long idUser, Long companyId) {
+        User user = userRepository.findById(idUser).orElseThrow(() -> new RuntimeException("User not found"));
+        Company company = companyRepository.findById(companyId).orElseThrow(() -> new RuntimeException("Company not found"));
+
+        if (!user.getFollowedCompanies().contains(company)) {
+            user.getFollowedCompanies().add(company);
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    public void unfollowCompany(Long idUser, Long companyId) {
+        User user = userRepository.findById(idUser)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+        if (user.getFollowedCompanies().contains(company)) {
+            user.getFollowedCompanies().remove(company);
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    public List<Company> getFollowedCompanies(Long idUser) {
+        User user = userRepository.findById(idUser).orElseThrow(() -> new RuntimeException("User not found"));
+        return user.getFollowedCompanies();
+    }
+    @Override
+    public TypeUser getUserType(Long idUser) {
+        Optional<User> user = userRepository.findById(idUser);
+        return user.map(User::getTypeUser).orElse(null);
+    }
+
+    /*----------------end l5edmet sayari--------------------*/
 
 
 }

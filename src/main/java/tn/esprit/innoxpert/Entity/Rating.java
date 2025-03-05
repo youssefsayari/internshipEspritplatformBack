@@ -1,5 +1,6 @@
 package tn.esprit.innoxpert.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -15,8 +16,7 @@ import java.time.LocalDateTime;
 
 
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"user_id", "post_id"}),
-        @UniqueConstraint(columnNames = {"user_id", "comment_id"})
+        @UniqueConstraint(columnNames = {"idUser", "post_id"}),
 })
 
 
@@ -26,16 +26,16 @@ public class Rating {
     private Long id;
     private int stars;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = true)
+    @JsonIgnore
     private Post post;
 
-    @ManyToOne
-    @JoinColumn(name = "comment_id", nullable = true)
-    Comment comment;
+
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false) // Ajout d'une relation avec User
+    @JoinColumn(name = "idUser", nullable = false) // Ajout d'une relation avec User
+    @JsonIgnore
     private User user;
 
     @Column(nullable = false, updatable = false)
