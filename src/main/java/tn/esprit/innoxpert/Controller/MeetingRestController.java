@@ -80,7 +80,9 @@ public class MeetingRestController {
 
         @GetMapping("/getStudentsByTutorId/{idTutor}")
         public ResponseEntity<List<User>> getStudentsByTutorId(@PathVariable("idTutor") Long idTutor) {
-            List<User> students = meetingService.getStudentsByTutor(idTutor);
+            User tutor = new User();
+            tutor.setIdUser(idTutor);
+            List<User> students = meetingService.getStudentsByTutor(tutor);
             if (students.isEmpty()) {
                 return ResponseEntity.noContent().build();
             }

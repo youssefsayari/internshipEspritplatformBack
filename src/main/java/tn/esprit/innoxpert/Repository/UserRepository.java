@@ -15,6 +15,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,Long> {
 
     Optional<User> findByIdentifiant(String identifiant);
+    List<User> findByTutor(User tutor);
+
 
     List<User> findByTypeUser(TypeUser typeUser);
     List<User> findByTutor_IdUser(Long idUser);

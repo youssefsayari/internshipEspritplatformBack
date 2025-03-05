@@ -14,7 +14,7 @@ public interface MeetingServiceInterface {
     public Meeting updateMeeting (Meeting b );
     public Meeting approveMeeting(Meeting b);
     public Meeting approveMeetingById(Long meetingId) ;
-    public List<User> getStudentsByTutor(Long tutorId);
+    public List<User> getStudentsByTutor(User tutor);
     public Meeting addMeetingAndAffectToParticipant(Meeting meeting, Long organiserId, Long participantId) ;
     public Meeting updateMeetingAndAffectToParticipant(Meeting b, Long organiserId, Long participantId) ;
     public List<Meeting> findByParticipant(Long studentId);

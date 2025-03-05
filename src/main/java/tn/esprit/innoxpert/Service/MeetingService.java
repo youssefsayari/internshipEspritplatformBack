@@ -37,14 +37,9 @@ public class MeetingService implements MeetingServiceInterface {
     private final EmailClass emailClass = new EmailClass();
 
 
-
     @Override
-    public List<User> getStudentsByTutor(Long tutorId) {
-        List<StudentTutor> relations = studentTutorRepository.findByTutorId(tutorId);
-        List<Long> studentIds = relations.stream()
-                .map(relation -> relation.getStudent().getIdUser())
-                .collect(Collectors.toList());
-        return userRepository.findAllById(studentIds);
+    public List<User> getStudentsByTutor(User tutor) {
+        return userRepository.findByTutor(tutor);
     }
 
     @Override
