@@ -46,6 +46,7 @@ public class Post {
     private List<Rating> ratings;
 
 
-
+    @Column(nullable = true) // Peut être NULL si pas d'expiration
+    LocalDateTime expiryDateTime;
 
 }
