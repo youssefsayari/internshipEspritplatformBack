@@ -134,6 +134,26 @@ public class UserRestController {
         }
     }
 
+    @PostMapping("/decode-token-Role")
+    public ResponseEntity<?> decodeTokenRole(@RequestBody String token) {
+        try {
+            String classe = "";
+            String identifiant = userservice.extractIdentifiantFromJwt(token);
+            User user = userservice.getUserByIdentifiant(identifiant);
+            String role = String.valueOf(user.getTypeUser());
+            if (role.equals("Company")) {
+                classe = String.valueOf(user.getIdUser());
+            }else{
+                classe = user.getClasse();
+            }
+            Long id= user.getIdUser();
+            UserRole userRole = new UserRole(role, classe, id);
+            return ResponseEntity.ok(userRole);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers()
     {
