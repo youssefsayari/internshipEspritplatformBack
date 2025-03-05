@@ -15,14 +15,11 @@ import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Entity.UserInfo;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.UserRepository;
+import tn.esprit.innoxpert.Util.EmailClass;
 import tn.esprit.innoxpert.Util.JwtUtil;
 
 
-
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -34,6 +31,10 @@ public class UserService implements UserServiceInterface {
     private UserRepository userRepository;
     @Autowired
     private JwtUtil jwtUtil;
+    private final EmailClass emailClass = new EmailClass();
+    private final Random random = new Random();
+
+
 
     @Override
     public List<User> getAllUsers() {
@@ -218,5 +219,64 @@ public class UserService implements UserServiceInterface {
             throw new RuntimeException("Invalid or malformed JWT: " + e.getMessage());
         }
     }
+
+    @Override
+    public String generateOtp(String email) {
+
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            return "❌ User not found!";
+        }
+
+        User user = userOptional.get();
+        long otp = 100000 + (long) (Math.random() * 900000);
+
+        user.setOTP(otp);
+        userRepository.save(user);
+
+        emailClass.sendOtpEmail(user.getEmail(), otp);
+
+        return "✅ OTP sent successfully to " + email;
+    }
+
+
+    @Override
+    public boolean validateOtp(String email, Long enteredOtp) {
+        Boolean response;
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            return false;
+        }
+
+        User user = userOptional.get();
+
+        response = user.getOTP() != null && user.getOTP().equals(enteredOtp);
+
+        if (response) {
+            user.setOTP(null);
+            userRepository.save(user);
+        }
+
+        return response;
+    }
+
+   @Override
+    public boolean changePassword(String email, String newPassword) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            return false;
+        }
+
+        User user = userOptional.get();
+
+        user.setPassword(newPassword);
+        userRepository.save(user);
+
+        return true;
+    }
+
 
 }

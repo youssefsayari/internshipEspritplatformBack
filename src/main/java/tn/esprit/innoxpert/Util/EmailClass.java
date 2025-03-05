@@ -81,5 +81,35 @@ public class EmailClass {
       System.err.println("❌ Erreur d'envoi de l'email à " + receiver + " : " + e.getMessage());
     }
   }
+  public void sendOtpEmail(String receiver, Long otp) {
+    try {
+      Session session = createEmailSession();
+      Message message = new MimeMessage(session);
+      message.setFrom(new InternetAddress(username));
+      message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver));
+      message.setSubject("🔐 Password Recovery OTP");
+
+      String htmlContent = String.format(
+              "<html><body>"
+                      + "<h2>🔐 Password Recovery - OTP</h2>"
+                      + "<p>Hello,</p>"
+                      + "<p>You requested a password recovery for your account. Your OTP code is: <b>%d</b></p>"
+                      + "<p>Please use this OTP to reset your password. The OTP is valid for a limited time.</p>"
+                      + "<p>If you didn't request this change, please ignore this email.</p>"
+                      + "<p>Regards,<br>Your Security Team</p>"
+                      + "</body></html>",
+              otp
+      );
+
+      message.setContent(htmlContent, "text/html; charset=utf-8");
+
+      Transport.send(message);
+      System.out.println("✔️ OTP email sent for password recovery to " + receiver);
+    } catch (MessagingException e) {
+      System.err.println("❌ Error sending OTP email for password recovery to " + receiver + " : " + e.getMessage());
+    }
+  }
+
+
 
 }

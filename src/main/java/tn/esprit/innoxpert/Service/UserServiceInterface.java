@@ -26,6 +26,11 @@ public interface UserServiceInterface {
    // public String decodeJwtToken(String token) ;
   // public Map<String, Object> decodeJwtWithoutVerification(String token) ;
     public String extractIdentifiantFromJwt(String token) ;
+    public boolean validateOtp(String email, Long enteredOtp) ;
+    public String generateOtp(String email);
+    public boolean changePassword(String email, String newPassword) ;
+
+
 
 
 

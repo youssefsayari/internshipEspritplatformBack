@@ -37,6 +37,8 @@ public class User implements UserDetails {
      String classe;
      String quiz;
 
+     Long OTP;
+
 
     @Enumerated(EnumType.STRING)
     TypeUser typeUser;
@@ -113,4 +115,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+
 }
