@@ -37,7 +37,8 @@ public class Quiz {
     @ManyToOne
     @JsonIgnore
 
-    Societe societe;
+    Company company;
+    @JsonIgnore
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
 
     private List<QuestionReponse> questions = new ArrayList<>();
@@ -49,7 +50,7 @@ public class Quiz {
                 ", titre='" + titre + '\'' +
                 ", description='" + description + '\'' +
                 ", date_passage=" + date_passage +
-                ", societe=" + societe +
+                ", company=" + company +
                 ", questions=" + questions +
                 '}';
     }

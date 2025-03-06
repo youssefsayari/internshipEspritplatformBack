@@ -34,11 +34,10 @@ public class QuestionReponse {
     @NotBlank(message = "L'option 4 est obligatoire")
     String option4;
 
-    @NotBlank(message = "La réponse correcte est obligatoire")
-    @Pattern(regexp = "option1|option2|option3|option4", message = "La réponse correcte doit être 'option1', 'option2', 'option3' ou 'option4'")
-    String reponse_correcte;
+    int reponse_correcte;
 
     @ManyToOne
+    @JsonIgnore
     Quiz quiz;
 }
 

@@ -5,13 +5,12 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tn.esprit.innoxpert.Entity.Meeting;
-import tn.esprit.innoxpert.Entity.QuestionReponse;
-import tn.esprit.innoxpert.Entity.Quiz;
-import tn.esprit.innoxpert.Entity.Societe;
+import tn.esprit.innoxpert.Entity.*;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
+import tn.esprit.innoxpert.Repository.CompanyRepository;
 import tn.esprit.innoxpert.Repository.QuizRepository;
 import tn.esprit.innoxpert.Repository.SocieteRepository;
+import tn.esprit.innoxpert.Repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +23,8 @@ public class QuizService implements QuizServiceInterface {
     @Autowired
     private QuizRepository quizRepository;
     private SocieteRepository societeRepository;
+    private UserRepository userRepository;
+    private CompanyRepository companyRepository;
     @Override
 
 
@@ -44,13 +45,13 @@ public class QuizService implements QuizServiceInterface {
 
    @Override
     public Quiz updateQuiz(Quiz quiz) {
-        Societe s=quizRepository.findSocieteByQuizId(quiz.getIdQuiz());
+        Company s=quizRepository.findCompanyByQuizId(quiz.getIdQuiz());
         if ( !quizRepository.existsById(quiz.getIdQuiz())) {
             throw new NotFoundException("Quiz with ID: " + quiz.getIdQuiz() + " was not found. Cannot update.");
         }
-       System.out.println("aaaa" +s.getIdSociete());
-       System.out.println(quiz.getSociete());
-       quiz.setSociete(s);
+       System.out.println("aaaa" +s.getId());
+       System.out.println(quiz.getCompany());
+       quiz.setCompany(s);
         return quizRepository.save(quiz);
     }
     @Override
@@ -59,10 +60,9 @@ public class QuizService implements QuizServiceInterface {
     }
     @Override
     public Quiz addAndaffectQuizToSociete(Long idSociete, Quiz newQuiz) {
-        Societe societe = societeRepository.findById(idSociete)
-                .orElseThrow(() -> new NotFoundException("Quiz with ID: " + idSociete + " not found"));
+        Company company = companyRepository.findByOwnerId(idSociete);
 
-        newQuiz.setSociete(societe);
+        newQuiz.setCompany(company);
         return quizRepository.save(newQuiz);    }
 
 }
