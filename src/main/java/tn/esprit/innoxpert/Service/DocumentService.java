@@ -57,7 +57,7 @@ public class DocumentService implements DocumentServiceInterface {
         // Create a unique filename to prevent conflicts
         String originalFileName = file.getOriginalFilename();
         String uniqueFileName = System.currentTimeMillis() + "_" + originalFileName;
-        String filePath = UPLOAD_DIR + uniqueFileName;
+        String filePath = UPLOAD_DIR + File.separator + uniqueFileName;
 
         // Save the file to disk
         file.transferTo(new File(filePath));
@@ -65,12 +65,13 @@ public class DocumentService implements DocumentServiceInterface {
         // Save document details in the database
         Document document = new Document();
         document.setName(name);
-        document.setTypeDocument(tn.esprit.innoxpert.Entity.TypeDocument.valueOf(typeDocument));
+        document.setTypeDocument(TypeDocument.valueOf(typeDocument));  // Enum value conversion
         document.setFileName(uniqueFileName);
         document.setFilePath(filePath);
 
         return documentRepository.save(document);
     }
+
 
     @Override
     public void removeDocumentById(Long documentId) {

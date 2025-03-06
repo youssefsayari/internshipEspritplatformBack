@@ -29,18 +29,15 @@ public class Document {
     TypeDocument typeDocument;
 
     @NotNull(message = "You should upload a PDF file.")
-    @Size(min = 5, max = 255, message = "You should upload a PDF file.")
     String fileName;  // Stores the file name
 
 
     @NotNull(message = "You should upload a PDF file.")
-    @Size(min = 5, max = 255, message = "You should upload a PDF file.")
     String filePath;  // Stores the file location
 
     boolean isDownloadable = false;
 
     @ManyToOne
     @JsonIgnore
-    @NotNull(message = "Student is required.")
     User student;
 }

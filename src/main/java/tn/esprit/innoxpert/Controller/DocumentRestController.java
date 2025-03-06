@@ -60,34 +60,34 @@ public class DocumentRestController {
         }
     }
 
-    // ✅ Add Document
     @PostMapping("/addDocument")
     public ResponseEntity<?> addDocument(
             @RequestParam("name") String name,
             @RequestParam("typeDocument") String typeDocument,
-            @RequestPart("file") MultipartFile file,
-            @Valid Document document, // Document validation triggered here
-            BindingResult bindingResult) { // BindingResult to capture validation errors
-
-        if (bindingResult.hasErrors()) {
-            // Collect all error messages into a list
-            List<String> errorMessages = bindingResult.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.toList());
-
-            // Return the error messages directly as a map (or you can also return as a list)
-            return ResponseEntity.badRequest().body(Map.of("errors", errorMessages));
-        }
+            @RequestPart("file") MultipartFile file) {
 
         try {
+            // Validate input before passing to the service
+            if (name == null || name.isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Document name is required"));
+            }
+            if (typeDocument == null || typeDocument.isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("error", "Document type is required"));
+            }
+
+            // Call the service method to add the document
             Document savedDocument = documentService.addDocument(name, typeDocument, file);
             return ResponseEntity.ok(savedDocument);
+
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", "File upload failed: " + e.getMessage()));
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Internal server error"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "An unexpected error occurred"));
         }
     }
+
 
 
     // ✅ Upload Document by ID
