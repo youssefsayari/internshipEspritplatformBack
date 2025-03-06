@@ -1,6 +1,10 @@
 package tn.esprit.innoxpert.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,17 +14,33 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
+    @NotNull(message = "Document name cannot be null.")
+    @Size(min = 5, max = 100, message = "Document name must be between 5 and 100 characters.")
     String name;
+
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "Document type is required.")
     TypeDocument typeDocument;
 
+    @NotNull(message = "You should upload a PDF file.")
+    @Size(min = 5, max = 255, message = "You should upload a PDF file.")
+    String fileName;  // Stores the file name
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id_user")
-    private User user;
 
+    @NotNull(message = "You should upload a PDF file.")
+    @Size(min = 5, max = 255, message = "You should upload a PDF file.")
+    String filePath;  // Stores the file location
+
+    boolean isDownloadable = false;
+
+    @ManyToOne
+    @JsonIgnore
+    @NotNull(message = "Student is required.")
+    User student;
 }

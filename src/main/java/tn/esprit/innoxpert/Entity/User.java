@@ -57,7 +57,31 @@ public class User implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "student")
     @JsonIgnore
     List<Task> tasks;
+    /*----------------start l5edmet amin--------------------*/
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    List<Document> documents = new ArrayList<>();
+
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    Defense defense;
+
+
+    @ManyToMany(mappedBy = "tutors", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @JsonIgnore  // Prevent infinite loop
+    Set<Defense> defenses;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_followed_companies",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "company_id")
+    )
+    private List<Company> followedCompanies = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "document_id")
+    private Document document;
 
     /*----------------start l5edmet sayari--------------------*/
 
