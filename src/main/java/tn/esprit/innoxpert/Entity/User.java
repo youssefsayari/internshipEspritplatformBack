@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -71,13 +72,6 @@ public class User implements UserDetails {
     @JsonIgnore  // Prevent infinite loop
     Set<Defense> defenses;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_followed_companies",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "company_id")
-    )
-    private List<Company> followedCompanies = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "document_id")
@@ -99,9 +93,6 @@ public class User implements UserDetails {
     /*----------------end l5edmet sayari--------------------*/
 
 
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Document> documents = new ArrayList<>();
 
     @ManyToMany(mappedBy = "users")
     private List<Internship> internships = new ArrayList<>();
