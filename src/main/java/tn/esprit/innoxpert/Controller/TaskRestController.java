@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.Entity.Task;
+import tn.esprit.innoxpert.Entity.TypeStatus;
 import tn.esprit.innoxpert.Service.TaskServiceInterface;
 
 import java.util.List;
@@ -52,6 +53,12 @@ public class TaskRestController {
     public Task addTaskAndAssignToStudent(@RequestBody Task task, @PathVariable("idUser") Long idUser) {
         return taskService.addAndaffectTaskToStudent(idUser, task);
     }
+
+    @PutMapping("/changeTaskStatus/{idTask}/{typeStatus}")
+    public Task changeTaskStatus(@PathVariable("idTask") Long idTask, @PathVariable("typeStatus") TypeStatus typeStatus) {
+        return taskService.ChangeTaskStatus(idTask, typeStatus);
+    }
+
 
 
 

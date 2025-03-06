@@ -13,7 +13,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.DTO.JwtRequest;
+import tn.esprit.innoxpert.DTO.UserResponse;
+import tn.esprit.innoxpert.DTO.UserRole;
+import tn.esprit.innoxpert.Entity.TypeUser;
 import tn.esprit.innoxpert.Entity.User;
+import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Service.UserServiceInterface;
 import tn.esprit.innoxpert.Util.JwtUtil;
 
@@ -130,6 +134,26 @@ public class UserRestController {
         }
     }
 
+    @PostMapping("/decode-token-Role")
+    public ResponseEntity<?> decodeTokenRole(@RequestBody String token) {
+        try {
+            String classe = "";
+            String identifiant = userservice.extractIdentifiantFromJwt(token);
+            User user = userservice.getUserByIdentifiant(identifiant);
+            String role = String.valueOf(user.getTypeUser());
+            if (role.equals("Company")) {
+                classe = String.valueOf(user.getIdUser());
+            }else{
+                classe = user.getClasse();
+            }
+            Long id= user.getIdUser();
+            UserRole userRole = new UserRole(role, classe, id);
+            return ResponseEntity.ok(userRole);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers()
     {
@@ -158,4 +182,42 @@ public class UserRestController {
     {
         return userservice.updateUser(User);
     }
+    /*SAYAAAAAAAAAAARIIIIIIIIIIIIIII*/
+    @GetMapping("/getTypeUser/{idUser}")
+    public TypeUser getUserType(@PathVariable Long idUser) {
+        return userservice.getUserType(idUser);
+    }
+    @PostMapping("/send-otp")
+    public ResponseEntity<Map<String, String>> sendOtp(@RequestBody String email) {
+        if (email == null || email.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Email is required"));
+        }
+
+        String responseMessage = userservice.generateOtp(email);
+
+        return ResponseEntity.ok(Map.of("message", responseMessage));
+    }
+
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<Boolean> verifyOtp(@RequestParam String email,@RequestParam Long otp) {
+        boolean response = userservice.validateOtp(email,otp);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<Map<String, String>> changePassword(@RequestParam String email, @RequestParam String newPassword) {
+        boolean isChanged = userservice.changePassword(email, newPassword);
+
+        Map<String, String> response = new HashMap<>();
+        if (isChanged) {
+            response.put("message", "Password successfully changed.");
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("error", "User not found.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+
 }

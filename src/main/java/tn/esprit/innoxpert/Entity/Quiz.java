@@ -1,5 +1,4 @@
 package tn.esprit.innoxpert.Entity;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -17,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
 public class Quiz {
 
     @Id
@@ -56,3 +54,4 @@ public class Quiz {
                 '}';
     }
 }
+

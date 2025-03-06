@@ -17,6 +17,10 @@ public class UserInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long idUserDetail;
 
+
+    Long maxValidatedInternships;
+    Long maxInternshipSupervisions;
+
     @OneToOne
     User user;
 
