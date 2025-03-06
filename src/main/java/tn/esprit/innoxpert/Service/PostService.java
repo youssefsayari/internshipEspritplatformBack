@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.DTO.PostAdminResponse;
-import tn.esprit.innoxpert.Entity.Company;
-import tn.esprit.innoxpert.Entity.Post;
-import tn.esprit.innoxpert.Entity.Rating;
-import tn.esprit.innoxpert.Entity.User;
+import tn.esprit.innoxpert.Entity.*;
 import tn.esprit.innoxpert.Repository.CompanyRepository;
 import tn.esprit.innoxpert.Repository.PostRepository;
 import tn.esprit.innoxpert.Repository.RatingRepository;
@@ -111,6 +108,7 @@ public class PostService implements PostServiceInterface {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new RuntimeException("Entreprise non trouvée"));
         // Associer le post à l'entreprise et enregistrer
+        p.setTypeInternship(TypeInternship.Graduation);
         p.setCompany(company);
         return postRepository.save(p);
     }
