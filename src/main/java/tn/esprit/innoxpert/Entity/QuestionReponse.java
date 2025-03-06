@@ -40,4 +40,5 @@ public class QuestionReponse {
 
     @ManyToOne
     Quiz quiz;
+}
 
