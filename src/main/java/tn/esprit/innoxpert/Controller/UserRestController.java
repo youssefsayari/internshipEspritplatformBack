@@ -154,11 +154,49 @@ public class UserRestController {
         }
     }
 
+    @PostMapping("/affectation/{userId}/{tutorId}")
+    public ResponseEntity<?> affectationTutor(@PathVariable Long userId, @PathVariable Long tutorId) {
+        userservice.affectationTutor(userId, tutorId);
+        return ResponseEntity.ok("Tutor affected successfully");
+    }
+
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers()
     {
         return userservice.getAllUsers();
     }
+
+    @GetMapping("/getUserBytypeUser")
+    public ResponseEntity<List<UserResponse>> getUserBytypeUser(@RequestParam String typeUser) {
+        try {
+            List<UserResponse> users = userservice.getUserBytypeUser(typeUser);
+            return ResponseEntity.ok(users);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(404).body(null);
+        }
+    }
+    @PutMapping("/updateAdd/{userId}")
+    public ResponseEntity<String> updateTutorAdd(@PathVariable Long userId, @RequestParam String key) {
+        try {
+            userservice.updateTutorAdd(key, userId);
+            return ResponseEntity.ok("Tutor updated successfully");
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.status(500).body("Error updating tutor: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/updateRem/{userId}")
+    public ResponseEntity<String> updateTutorRem(@PathVariable Long userId, @RequestParam String key) {
+        try {
+            userservice.updateTutorRem(key, userId);
+            return ResponseEntity.ok("Tutor updated successfully");
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.status(500).body("Error updating tutor: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/getUserById/{idUser}")
     public User getUserById(@PathVariable("idUser") Long idUser)
     {
