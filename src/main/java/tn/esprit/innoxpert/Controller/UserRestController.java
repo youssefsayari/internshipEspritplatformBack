@@ -128,11 +128,16 @@ public class UserRestController {
         try {
             String identifiant = userservice.extractIdentifiantFromJwt(token);
             User user = userservice.getUserByIdentifiant(identifiant);
-            return ResponseEntity.ok(user);
+
+            // Log pour vérifier l'objet renvoyé
+            System.out.println("Decoded user: " + user.getIdUser());
+
+            return ResponseEntity.ok(user);  // Assurez-vous que l'objet User contient bien 'idUser'
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token: " + e.getMessage());
         }
     }
+
 
     @PostMapping("/decode-token-Role")
     public ResponseEntity<?> decodeTokenRole(@RequestBody String token) {

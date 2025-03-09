@@ -106,6 +106,7 @@ public class User implements UserDetails {
 
     @ManyToOne
     @JoinColumn(name = "tutor_id")
+    @JsonIgnore
     private User tutor;
 
     @Override
