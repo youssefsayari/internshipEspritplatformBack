@@ -3,6 +3,8 @@ package tn.esprit.innoxpert.Util;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.mail.SimpleMailMessage;
+
 import java.util.Properties;
 
 public class EmailClass {
@@ -106,4 +108,20 @@ public class EmailClass {
       System.err.println("❌ Error sending OTP email for password recovery to " + receiver + " : " + e.getMessage());
     }
   }
+  public void sendEmail(String recipient, String body, String subject) {
+    try {
+      Session session = createEmailSession();
+      Message message = new MimeMessage(session);
+      message.setFrom(new InternetAddress(username));
+      message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+      message.setSubject(subject);
+      message.setText(body);  // Envoi du texte brut
+
+      Transport.send(message);
+      System.out.println("✔️ Email envoyé avec succès à " + recipient);
+    } catch (MessagingException e) {
+      System.err.println("❌ Erreur d'envoi de l'email à " + recipient + " : " + e.getMessage());
+    }
+  }
 }
+

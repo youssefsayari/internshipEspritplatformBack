@@ -10,6 +10,7 @@ import tn.esprit.innoxpert.Repository.CommentRepository;
 import tn.esprit.innoxpert.Repository.PostRepository;
 import tn.esprit.innoxpert.Repository.RatingRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
+import tn.esprit.innoxpert.Util.EmailClass;
 
 import java.util.List;
 
@@ -30,6 +31,8 @@ public class CommentService implements CommentServiceInterface {
     private UserRepository userRepository;
     @Autowired
     private SendEmailService sendEmailService;
+
+    private final EmailClass emailClass = new EmailClass();
 
     @Override
     public List<Comment> getAllComments() {
@@ -92,7 +95,7 @@ public class CommentService implements CommentServiceInterface {
         String userEmail = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found")).getEmail();
 
         // Envoi de l'email
-       // sendEmailService.sendEmail(userEmail, body, subject);
+       emailClass.sendEmail(userEmail, body, subject);
     }
 
 
