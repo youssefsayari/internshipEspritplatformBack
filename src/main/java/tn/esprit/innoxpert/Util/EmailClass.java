@@ -1,8 +1,8 @@
 package tn.esprit.innoxpert.Util;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.*;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import java.util.Properties;
 
 public class EmailClass {
@@ -21,7 +21,7 @@ public class EmailClass {
     props.put("mail.smtp.port", "465");
     props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
-    return Session.getInstance(props, new Authenticator() {
+    return Session.getInstance(props, new jakarta.mail.Authenticator() {
       @Override
       protected PasswordAuthentication getPasswordAuthentication() {
         return new PasswordAuthentication(username, password);
@@ -37,7 +37,6 @@ public class EmailClass {
       message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver));
       message.setSubject("🔔 Rappel de votre réunion - Jitsi Meet");
 
-      // Use HTML format for better readability
       String formattedMessage = String.format(
               "<html><body>"
                       + "<h2>📢 Rappel de réunion</h2>"
@@ -57,14 +56,12 @@ public class EmailClass {
       );
 
       message.setContent(formattedMessage, "text/html; charset=utf-8");
-
       Transport.send(message);
       System.out.println("✔️ Email de rappel envoyé à " + receiver);
     } catch (MessagingException e) {
       System.err.println("❌ Erreur d'envoi de l'email à " + receiver + " : " + e.getMessage());
     }
   }
-
 
   public void sendHtmlEmail(String receiver, String subject, String htmlContent) {
     try {
@@ -81,6 +78,7 @@ public class EmailClass {
       System.err.println("❌ Erreur d'envoi de l'email à " + receiver + " : " + e.getMessage());
     }
   }
+
   public void sendOtpEmail(String receiver, Long otp) {
     try {
       Session session = createEmailSession();
@@ -102,14 +100,10 @@ public class EmailClass {
       );
 
       message.setContent(htmlContent, "text/html; charset=utf-8");
-
       Transport.send(message);
       System.out.println("✔️ OTP email sent for password recovery to " + receiver);
     } catch (MessagingException e) {
       System.err.println("❌ Error sending OTP email for password recovery to " + receiver + " : " + e.getMessage());
     }
   }
-
-
-
 }

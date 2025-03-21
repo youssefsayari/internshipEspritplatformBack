@@ -92,7 +92,7 @@ public class CommentService implements CommentServiceInterface {
         String userEmail = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found")).getEmail();
 
         // Envoi de l'email
-        sendEmailService.sendEmail(userEmail, body, subject);
+       // sendEmailService.sendEmail(userEmail, body, subject);
     }
 
 

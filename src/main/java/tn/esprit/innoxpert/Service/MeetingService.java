@@ -3,32 +3,25 @@ package tn.esprit.innoxpert.Service;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.Entity.Meeting;
-import tn.esprit.innoxpert.Entity.StudentTutor;
 import tn.esprit.innoxpert.Entity.TypeMeeting;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.MeetingRepository;
-import tn.esprit.innoxpert.Repository.StudentTutorRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
 import tn.esprit.innoxpert.Util.EmailClass;
 import tn.esprit.innoxpert.Util.JitsiMeetingService;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class MeetingService implements MeetingServiceInterface {
     @Autowired
     MeetingRepository meetingRepository;
-    @Autowired
-    StudentTutorRepository studentTutorRepository;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -311,4 +304,5 @@ public class MeetingService implements MeetingServiceInterface {
         return meetingRepository.findMostActiveStudents();
 
     }
+
 }

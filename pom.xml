@@ -115,6 +115,13 @@
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<dependency>
+			<groupId>jakarta.mail</groupId>
+			<artifactId>jakarta.mail-api</artifactId>
+			<version>2.1.2</version>
+		</dependency>
+
+
 
 		<!-- sayaaariiiiiiiiiiiiiiii -->
 		<dependency>
