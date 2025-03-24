@@ -12,7 +12,7 @@ public interface CompanyServiceInterface {
     Company getCompanyById(Long companyId);
     public Company addCompanyAndAffectToNewUser(Company c, MultipartFile file) throws IOException;
     void removeCompanyByIdAndUserAffected(Long companyId);
-    Company updateCompany(Company c);
+     Company updateCompany(Long companyId, Company updatedData);
      Long getCompanyIdByUserId(Long userId) ;
     public Boolean IsCompany(Long userId) ;
         List<User> getCompanyFollowers(Long companyId);

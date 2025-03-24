@@ -10,6 +10,7 @@ import tn.esprit.innoxpert.Entity.Company;
 import tn.esprit.innoxpert.Entity.Image;
 import tn.esprit.innoxpert.Entity.TypeUser;
 import tn.esprit.innoxpert.Entity.User;
+import tn.esprit.innoxpert.Exceptions.ResourceNotFoundException;
 import tn.esprit.innoxpert.Repository.CompanyRepository;
 import tn.esprit.innoxpert.Repository.ImageRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
@@ -123,21 +124,25 @@ public class CompanyService implements CompanyServiceInterface {
 
     @Override
     @Transactional
-    public Company updateCompany(Company c) {
-        Company existingCompany = companyRepository.findById(c.getId())
-                .orElseThrow(() -> new RuntimeException("Company not found"));
+    public Company updateCompany(Long companyId, Company updatedData) {
+        Company existingCompany = companyRepository.findById(companyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found with id: " + companyId));
 
+        // Validation des données
+        if (updatedData.getName() == null || updatedData.getName().isBlank()) {
+            throw new IllegalArgumentException("Company name cannot be empty");
+        }
         // Mise à jour des champs autorisés (on ne touche pas aux relations)
-        existingCompany.setName(c.getName());
-        existingCompany.setAbbreviation(c.getAbbreviation());
-        existingCompany.setAddress(c.getAddress());
-        existingCompany.setSector(c.getSector());
-        existingCompany.setEmail(c.getEmail());
-        existingCompany.setPhone(c.getPhone());
-        existingCompany.setFoundingYear(c.getFoundingYear());
-        existingCompany.setLabelDate(c.getLabelDate());
-        existingCompany.setWebsite(c.getWebsite());
-        existingCompany.setFounders(c.getFounders());
+        existingCompany.setName(updatedData.getName());
+        existingCompany.setAbbreviation(updatedData.getAbbreviation());
+        existingCompany.setAddress(updatedData.getAddress());
+        existingCompany.setSector(updatedData.getSector());
+        existingCompany.setEmail(updatedData.getEmail());
+        existingCompany.setPhone(updatedData.getPhone());
+        existingCompany.setFoundingYear(updatedData.getFoundingYear());
+        existingCompany.setLabelDate(updatedData.getLabelDate());
+        existingCompany.setWebsite(updatedData.getWebsite());
+        existingCompany.setFounders(updatedData.getFounders());
 
         // On ne touche pas aux relations : posts, owner, followers
         return companyRepository.save(existingCompany);

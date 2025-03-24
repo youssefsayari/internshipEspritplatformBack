@@ -91,13 +91,16 @@ public class CompanyRestController {
     }
 
     @PutMapping("/updateCompany/{companyId}")
-    public ResponseEntity<Company> updateCompany(@PathVariable Long companyId, @RequestBody Company updatedCompany) {
-        Company existingCompany = companyService.getCompanyById(companyId);
-        if (existingCompany == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<Company> updateCompany(
+            @PathVariable Long companyId,
+            @RequestBody Company updatedCompany) {
+
+        try {
+            Company result = companyService.updateCompany(companyId, updatedCompany);
+            return ResponseEntity.ok(result);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
-        updatedCompany.setId(companyId);
-        return ResponseEntity.ok(companyService.updateCompany(updatedCompany));
     }
 
     @GetMapping("/getCompanyFollowers/{companyId}")
