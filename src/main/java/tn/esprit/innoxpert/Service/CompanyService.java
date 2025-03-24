@@ -88,25 +88,36 @@ public class CompanyService implements CompanyServiceInterface {
     @Override
     @Transactional
     public void removeCompanyByIdAndUserAffected(Long companyId) {
-        if (companyRepository.existsById(companyId)) {
-            Company company = companyRepository.findById(companyId).orElse(null);
-            if (company != null) {
-                // Supprimer le propriétaire de l'entreprise
-                if (company.getOwner() != null) {
-                    userRepository.delete(company.getOwner());
-                }
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
 
-                // Supprimer tous les followers de cette entreprise
-                if (company.getFollowers() != null) {
-                    for (User follower : company.getFollowers()) {
-                        follower.getFollowedCompanies().remove(company);
-                        userRepository.save(follower); // Mettre à jour les followers
-                    }
-                }
-
-                // Supprimer l'entreprise
-                companyRepository.delete(company);
+        try {
+            // 1. Delete company image from Cloudinary and database
+            if (company.getImage() != null) {
+                // Delete from Cloudinary first
+                cloudinaryService.delete(company.getImage().getImageId());
+                // Then delete from database
+                imageRepository.delete(company.getImage());
             }
+
+            // 2. Handle followers (remove relationships)
+            if (company.getFollowers() != null && !company.getFollowers().isEmpty()) {
+                for (User follower : company.getFollowers()) {
+                    follower.getFollowedCompanies().remove(company);
+                    userRepository.save(follower);
+                }
+            }
+
+            // 3. Delete owner user if exists
+            if (company.getOwner() != null) {
+                userRepository.delete(company.getOwner());
+            }
+
+            // 4. Finally delete the company
+            companyRepository.delete(company);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete company image from Cloudinary", e);
         }
     }
 
@@ -201,6 +212,9 @@ public class CompanyService implements CompanyServiceInterface {
                 .orElseThrow(() -> new RuntimeException("Company not found"));
         company.setImage(image);
         return companyRepository.save(company);
+    }
+    public Company getCompanyByUserId(Long userId) {
+        return companyRepository.findByOwnerId(userId);
     }
 
 

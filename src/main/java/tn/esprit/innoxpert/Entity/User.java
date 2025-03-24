@@ -78,6 +78,9 @@ public class User implements UserDetails {
     private Document document;
 
     /*----------------start l5edmet sayari--------------------*/
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Comment> comments = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(

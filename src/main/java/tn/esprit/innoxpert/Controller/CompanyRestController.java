@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.innoxpert.Entity.Company;
 import tn.esprit.innoxpert.Entity.Image;
 import tn.esprit.innoxpert.Entity.User;
+import tn.esprit.innoxpert.Exceptions.ResourceNotFoundException;
 import tn.esprit.innoxpert.Service.CloudinaryService;
 import tn.esprit.innoxpert.Service.CompanyService;
 import tn.esprit.innoxpert.Service.ImageService;
@@ -73,12 +74,20 @@ public class CompanyRestController {
 
     @Transactional
     @DeleteMapping("/deleteCompany/{companyId}")
-    public ResponseEntity<String> deleteCompanyById(@PathVariable Long companyId) {
-        if (companyService.getCompanyById(companyId) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Company not found");
+    public ResponseEntity<?> deleteCompany(@PathVariable Long companyId) {
+        try {
+            companyService.removeCompanyByIdAndUserAffected(companyId);
+            return ResponseEntity.ok().body(Map.of(
+                    "success", true,
+                    "message", "Company deleted successfully"
+            ));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of(
+                            "success", false,
+                            "message", "Failed to delete company: " + e.getMessage()
+                    ));
         }
-        companyService.removeCompanyByIdAndUserAffected(companyId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Company deleted successfully");
     }
 
     @PutMapping("/updateCompany/{companyId}")
@@ -124,6 +133,16 @@ public class CompanyRestController {
     @GetMapping("/IsCompany/company/{userId}")
     public Boolean IsCompany( @PathVariable Long userId) {
         return companyService.IsCompany(userId);
+    }
+    @GetMapping("/getCompanyByUserId/{userId}")
+    public ResponseEntity<Company> getCompanyByUserId(@PathVariable Long userId) {
+        try {
+            Company company = companyService.getCompanyByUserId(userId);
+            return ResponseEntity.ok(company);
+        } catch (ResourceNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
     }
 
 }
