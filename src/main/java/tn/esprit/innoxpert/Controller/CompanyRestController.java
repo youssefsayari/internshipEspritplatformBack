@@ -1,16 +1,27 @@
 package tn.esprit.innoxpert.Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.innoxpert.Entity.Company;
+import tn.esprit.innoxpert.Entity.Image;
 import tn.esprit.innoxpert.Entity.User;
+import tn.esprit.innoxpert.Service.CloudinaryService;
 import tn.esprit.innoxpert.Service.CompanyService;
+import tn.esprit.innoxpert.Service.ImageService;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Tag(name = "Company Management", description = "Endpoints for managing companies")
 @RestController
@@ -19,6 +30,10 @@ import java.util.List;
 public class CompanyRestController {
 
     private final CompanyService companyService;
+    private final CloudinaryService cloudinaryService;
+    private final ImageService imageService;
+
+
 
     @GetMapping("/getAllCompanies")
     public ResponseEntity<List<Company>> getAllCompanies() {
@@ -31,11 +46,30 @@ public class CompanyRestController {
         return company != null ? ResponseEntity.ok(company) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/addCompany")
-    public ResponseEntity<Company> addCompanyAndAssignUser(@RequestBody Company company) {
-        Company createdCompany = companyService.addCompanyAndAffectToNewUser(company);
+    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addCompany(
+            @RequestPart("company") String companyJson,
+            @RequestPart("file") MultipartFile file) throws IOException {
+
+        // Convertir le JSON en objet Company
+        ObjectMapper objectMapper = new ObjectMapper();
+        Company company = objectMapper.readValue(companyJson, Company.class);
+
+        // Vérifier si la validation échoue
+        Set<ConstraintViolation<Company>> violations = Validation.buildDefaultValidatorFactory()
+                .getValidator().validate(company);
+
+        if (!violations.isEmpty()) {
+            List<String> errors = violations.stream()
+                    .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
+                    .toList();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+        }
+
+        Company createdCompany = companyService.addCompanyAndAffectToNewUser(company, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCompany);
     }
+
 
     @Transactional
     @DeleteMapping("/deleteCompany/{companyId}")
@@ -91,4 +125,5 @@ public class CompanyRestController {
     public Boolean IsCompany( @PathVariable Long userId) {
         return companyService.IsCompany(userId);
     }
+
 }

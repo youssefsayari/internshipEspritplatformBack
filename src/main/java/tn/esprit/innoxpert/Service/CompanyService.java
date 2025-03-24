@@ -1,23 +1,37 @@
 package tn.esprit.innoxpert.Service;
 
+import java.io.IOException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.innoxpert.Entity.Company;
+import tn.esprit.innoxpert.Entity.Image;
 import tn.esprit.innoxpert.Entity.TypeUser;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Repository.CompanyRepository;
+import tn.esprit.innoxpert.Repository.ImageRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
 public class CompanyService implements CompanyServiceInterface {
+    @Autowired
 
     private final CompanyRepository companyRepository;
+    @Autowired
+
     private final UserRepository userRepository;
+    @Autowired
+
+    private final CloudinaryService cloudinaryService;
+
+    @Autowired
+    private ImageRepository imageRepository;
 
     @Override
     public List<Company> getAllCompanies() {
@@ -31,14 +45,16 @@ public class CompanyService implements CompanyServiceInterface {
 
     @Override
     @Transactional
-    public Company addCompanyAndAffectToNewUser(Company c) {
+    public Company addCompanyAndAffectToNewUser(Company c, MultipartFile file) throws IOException {
         // Création automatique du User
         User user = new User();
         user.setFirstName(c.getName());
-        user.setLastName("Admin"); // Peut être modifié selon les besoins
+        user.setLastName("(Company)"); // Peut être modifié selon les besoins
         user.setIdentifiant(c.getEmail()); // Identifiant = email de la company
         user.setTypeUser(TypeUser.Company); // Type d'utilisateur = Company
         user.setEmail(c.getEmail());
+
+
         user.setTelephone(c.getPhone());
 
         // Génération du mot de passe sans encodage
@@ -51,10 +67,24 @@ public class CompanyService implements CompanyServiceInterface {
         // Associer le User à la Company
         c.setOwner(user);
 
+        // 1. Upload de l'image vers Cloudinary
+        Map<String, String> uploadResult = cloudinaryService.upload(file);
+
+        // 2. Création de l'entité Image
+        Image image = new Image();
+        image.setName(uploadResult.get("original_filename"));
+        image.setImageUrl(uploadResult.get("url"));
+        image.setImageId(uploadResult.get("public_id"));
+
+        // 3. Sauvegarde de l'image dans la base de données
+        image = imageRepository.save(image); // Assurez-vous que l'image a un ID généré
+
+        // Associer l'image à l'entreprise
+        c.setImage(image);
+
         // Sauvegarde de la Company
         return companyRepository.save(c);
     }
-
     @Override
     @Transactional
     public void removeCompanyByIdAndUserAffected(Long companyId) {
@@ -165,6 +195,12 @@ public class CompanyService implements CompanyServiceInterface {
             return true;
         }
         return false; // or throw an exception if company not found
+    }
+    public Company updateCompanyImage(Long companyId, Image image) {
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+        company.setImage(image);
+        return companyRepository.save(company);
     }
 
 
