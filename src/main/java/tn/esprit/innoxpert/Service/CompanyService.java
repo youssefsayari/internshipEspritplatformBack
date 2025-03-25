@@ -157,6 +157,12 @@ public class CompanyService implements CompanyServiceInterface {
                 .orElseThrow(() -> new RuntimeException("Company not found"));
         return company.getFollowers();
     }
+    @Override
+    public List<Company> getCompaniesFollowedByUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return user.getFollowedCompanies();
+    }
 
 
 

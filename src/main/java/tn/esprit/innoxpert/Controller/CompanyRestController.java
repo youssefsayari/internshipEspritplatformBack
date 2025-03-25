@@ -115,6 +115,15 @@ public class CompanyRestController {
     public ResponseEntity<List<User>> getCompanyFollowers(@PathVariable Long companyId) {
         return ResponseEntity.ok(companyService.getCompanyFollowers(companyId));
     }
+    @GetMapping("/getCompaniesFollowedByUser/{userId}")
+    public ResponseEntity<List<Company>> getCompaniesFollowedByUser(@PathVariable Long userId) {
+        try {
+            List<Company> followedCompanies = companyService.getCompaniesFollowedByUser(userId);
+            return ResponseEntity.ok(followedCompanies);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 
     @PutMapping("/{companyId}/follow/{userId}")
     public ResponseEntity<String> followCompany(@PathVariable Long userId, @PathVariable Long companyId) {

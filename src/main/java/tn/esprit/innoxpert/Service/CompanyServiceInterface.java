@@ -19,5 +19,5 @@ public interface CompanyServiceInterface {
     void followCompany(Long userId, Long companyId) ;
     void unfollowCompany(Long userId, Long companyId) ;
      boolean isUserFollowingCompany(Long userId, Long companyId);
-
+    List<Company> getCompaniesFollowedByUser(Long userId);
     }
