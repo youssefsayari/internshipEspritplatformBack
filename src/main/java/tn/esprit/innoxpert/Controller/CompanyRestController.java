@@ -1,6 +1,7 @@
 package tn.esprit.innoxpert.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -42,9 +43,16 @@ public class CompanyRestController {
     }
 
     @GetMapping("/getCompanyById/{companyId}")
+    @Operation(summary = "Get company by ID", description = "Returns a single company by its ID")
     public ResponseEntity<Company> getCompanyById(@PathVariable Long companyId) {
+        if (companyId == null || companyId <= 0) {
+            return ResponseEntity.badRequest().build();
+        }
+
         Company company = companyService.getCompanyById(companyId);
-        return company != null ? ResponseEntity.ok(company) : ResponseEntity.notFound().build();
+        return company != null
+                ? ResponseEntity.ok(company)
+                : ResponseEntity.notFound().build();
     }
 
     @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -126,6 +134,13 @@ public class CompanyRestController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+    @GetMapping("/isFollowing/{companyId}/{userId}")
+    public ResponseEntity<Boolean> isFollowingCompany(
+            @PathVariable Long userId,
+            @PathVariable Long companyId) {
+        boolean isFollowing = companyService.isUserFollowingCompany(userId, companyId);
+        return ResponseEntity.ok(isFollowing);
     }
 
     @GetMapping("/getCompanyIdByUserId/company/{userId}")

@@ -3,6 +3,7 @@ package tn.esprit.innoxpert.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -88,6 +89,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "company_id")
     )
+    @JsonIgnoreProperties({"followers", "owner"}) // Ajoutez cette annotation
     private List<Company> followedCompanies = new ArrayList<>();
 
 

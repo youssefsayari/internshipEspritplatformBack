@@ -41,9 +41,12 @@ public class CompanyService implements CompanyServiceInterface {
 
     @Override
     public Company getCompanyById(Long companyId) {
-        return companyRepository.findById(companyId).orElse(null);
+        if (companyId == null || companyId <= 0) {
+            throw new IllegalArgumentException("Invalid company ID");
+        }
+        return companyRepository.findById(companyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found with id: " + companyId));
     }
-
     @Override
     @Transactional
     public Company addCompanyAndAffectToNewUser(Company c, MultipartFile file) throws IOException {
@@ -193,6 +196,15 @@ public class CompanyService implements CompanyServiceInterface {
         } else {
             throw new RuntimeException("User is not following this company");
         }
+    }
+    @Override
+    public boolean isUserFollowingCompany(Long userId, Long companyId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+        return user.getFollowedCompanies().contains(company);
     }
 
     @Override
