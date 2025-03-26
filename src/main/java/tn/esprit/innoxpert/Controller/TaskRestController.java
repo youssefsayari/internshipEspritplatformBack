@@ -60,9 +60,14 @@ public class TaskRestController {
     }
 
 
+    @GetMapping("getTasksByUserId")
+    public List<Task> getTasksByUserId(Long idUser)
+    {
+        return taskService.getTasksByUserId(idUser);
+    }
 
 
 
 
 
-}
+    }

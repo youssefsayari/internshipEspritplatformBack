@@ -69,5 +69,13 @@ public class TaskService implements TaskServiceInterface {
         return taskRepository.save(task);
     }
 
+    @Override
+    public List<Task> getTasksByUserId(Long idUser) {
+        User user = userRepository.findById(idUser)
+                .orElseThrow(() -> new NotFoundException("User with ID: " + idUser + " not found"));
+
+        return taskRepository.findByStudent(user);
+    }
+
 
 }
