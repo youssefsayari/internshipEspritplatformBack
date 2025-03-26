@@ -33,6 +33,8 @@ public class CompanyService implements CompanyServiceInterface {
 
     @Autowired
     private ImageRepository imageRepository;
+    @Autowired
+    private UserService userService;
 
     @Override
     public List<Company> getAllCompanies() {
@@ -146,6 +148,13 @@ public class CompanyService implements CompanyServiceInterface {
         existingCompany.setLabelDate(updatedData.getLabelDate());
         existingCompany.setWebsite(updatedData.getWebsite());
         existingCompany.setFounders(updatedData.getFounders());
+        User user=userService.getUserById(existingCompany.getOwner().getIdUser());
+        user.setEmail(updatedData.getEmail());
+        user.setFirstName(updatedData.getName());
+        user.setIdentifiant(updatedData.getEmail());
+        user.setTelephone(updatedData.getPhone());
+        userRepository.save(user);
+
 
         // On ne touche pas aux relations : posts, owner, followers
         return companyRepository.save(existingCompany);
