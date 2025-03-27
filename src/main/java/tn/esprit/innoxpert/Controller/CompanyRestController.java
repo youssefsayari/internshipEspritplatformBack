@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.*;
+import tn.esprit.innoxpert.Entity.Company;
+import tn.esprit.innoxpert.Entity.TypeSector;
+import tn.esprit.innoxpert.Util.CompanyDataEnricher;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Tag(name = "Company Management", description = "Endpoints for managing companies")
 @RestController
@@ -34,6 +44,8 @@ public class CompanyRestController {
     private final CompanyService companyService;
     private final CloudinaryService cloudinaryService;
     private final ImageService imageService;
+    private final CompanyDataEnricher companyDataEnricher;
+
 
 
 
@@ -171,5 +183,24 @@ public class CompanyRestController {
                     .body(null);
         }
     }
+    /*------------------------api auto form add company completion---------------------------------------------*/
+    @Value("${pdl.api.key}")
+    private String pdlApiKey;
+    @GetMapping("/api/autocomplete/enrich")
+    public ResponseEntity<?> enrichCompany(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String website) {
+
+        try {
+            Company company = companyDataEnricher.enrichCompanyData(name, website);
+            return ResponseEntity.ok(company);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .body("Erreur lors de l'enrichissement: " + e.getMessage());
+        }
+    }
+    /*----------------------------------------------------------------------*/
 
 }

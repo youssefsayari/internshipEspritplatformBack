@@ -4,5 +4,6 @@ public enum TypeSector {
     TECHNOLOGY,
     FINANCE,
     HEALTHCARE,
-    EDUCATION
+    EDUCATION,
+    OTHER
 }
