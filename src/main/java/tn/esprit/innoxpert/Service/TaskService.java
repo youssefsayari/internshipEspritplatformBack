@@ -59,6 +59,19 @@ public class TaskService implements TaskServiceInterface {
 
         newTask.setStudent(student);
         return taskRepository.save(newTask);    }
+    @Override
+    public Task updateAndaffectTaskToStudent(Long idUser, Task task) {
+        User student = userRepository.findById(idUser)
+                .orElseThrow(() -> new RuntimeException("Student not found with ID: " + idUser));
+
+        Task existingTask = taskRepository.findById(task.getIdTask())
+                .orElseThrow(() -> new RuntimeException("Task not found with ID: " + task.getIdTask()));
+
+        existingTask.setDescription(task.getDescription());
+        existingTask.setStatus(task.getStatus());
+        existingTask.setStudent(student);
+
+        return taskRepository.save(existingTask);   }
 
     @Override
     public Task ChangeTaskStatus(Long idTask, TypeStatus typeStatus) {

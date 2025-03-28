@@ -53,7 +53,10 @@ public class TaskRestController {
     public Task addTaskAndAssignToStudent(@RequestBody Task task, @PathVariable("idUser") Long idUser) {
         return taskService.addAndaffectTaskToStudent(idUser, task);
     }
-
+    @PutMapping("/updateAndAssignTaskToStudent/{idUser}")
+    public Task updateAndAssignTaskToStudent( @RequestBody Task task,@PathVariable Long idUser) {
+        return taskService.updateAndaffectTaskToStudent(idUser, task);
+    }
     @PutMapping("/changeTaskStatus/{idTask}/{typeStatus}")
     public Task changeTaskStatus(@PathVariable("idTask") Long idTask, @PathVariable("typeStatus") TypeStatus typeStatus) {
         return taskService.ChangeTaskStatus(idTask, typeStatus);

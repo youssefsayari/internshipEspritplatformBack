@@ -13,6 +13,7 @@ public interface TaskServiceInterface {
     public void removeTaskById(Long TaskId);
     public Task updateTask (Task b );
     public Task addAndaffectTaskToStudent(Long idUser,Task newTask);
+    public Task updateAndaffectTaskToStudent(Long idUser, Task task);
     public Task ChangeTaskStatus(Long idTask, TypeStatus typeStatus);
     public List<Task> getTasksByUserId(Long idUser);
 
