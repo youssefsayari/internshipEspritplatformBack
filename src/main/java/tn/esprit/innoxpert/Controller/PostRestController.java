@@ -1,5 +1,11 @@
 package tn.esprit.innoxpert.Controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +17,8 @@ import tn.esprit.innoxpert.DTO.PostAdminResponse;
 import tn.esprit.innoxpert.Entity.Post;
 import tn.esprit.innoxpert.Service.PostServiceInterface;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,7 +28,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.validation.ObjectError;
+import org.springframework.http.CacheControl;
+import tn.esprit.innoxpert.Util.MistralAIService;
 
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Tag(name = "Post Management")
 @RestController
@@ -62,7 +74,7 @@ public class PostRestController {
     @PostMapping("/addPostAndAffectToCompany/{companyId}")
     public ResponseEntity<?> addPostAndAffectToCompany(
             @PathVariable Long companyId,
-            @RequestBody  Post post,
+            @RequestBody Post post,
             BindingResult result) {
 
         // Vérification des erreurs de validation
@@ -95,4 +107,37 @@ public class PostRestController {
     public List<Post> getHomeFeed(@PathVariable("userId") Long userId) {
         return postService.getHomeFeed(userId);
     }
+
+    /* -------------- APII META FACEBOOK --------------*/
+    private final MistralAIService mistralAIService;
+    @GetMapping("/analyze")
+    public ResponseEntity<?> analyzeInternshipOffer(
+            @RequestParam("content") String encodedContent) { // Utilisez RequestParam
+
+        try {
+            String decodedContent = URLDecoder.decode(encodedContent, StandardCharsets.UTF_8);
+
+            // Nettoyage final
+            decodedContent = decodedContent
+                    .replaceAll("[\\\\/]", " ")
+                    .replaceAll("[^\\p{Print}]", "")
+                    .trim();
+
+            Map<String, String> qna = mistralAIService.generateEducationalQuestions(decodedContent);
+
+            return ResponseEntity.ok()
+                    .cacheControl(CacheControl.noCache())
+                    .body(qna);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of(
+                            "error", "Invalid request",
+                            "details", e.getMessage()
+                    ));
+        }
+    }
+    /* -------------- END APII META FACEBOOK --------------*/
+
+
 }
