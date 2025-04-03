@@ -5,6 +5,7 @@ import tn.esprit.innoxpert.Entity.TypeStatus;
 import tn.esprit.innoxpert.Entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TaskServiceInterface {
     public List<Task> getAllTasks();
@@ -17,6 +18,10 @@ public interface TaskServiceInterface {
     public Task ChangeTaskStatus(Long idTask, TypeStatus typeStatus);
     public List<Task> getTasksByUserId(Long idUser);
     public  User findStudentWithMostDoneTasks();
+    public List<User> getStudentsByTutor(User tutor);
+    public int countDoneTasksByStudent(Long studentId);
+
+
 
 
 }

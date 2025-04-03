@@ -14,4 +14,10 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
     @Query("SELECT t.student, COUNT(t) FROM Task t WHERE t.status = 'DONE' GROUP BY t.student ORDER BY COUNT(t) DESC LIMIT 1")
     User findStudentWithMostDoneTasks();
 
+    @Query("SELECT COUNT(t) FROM Task t WHERE t.student = :student AND t.status = tn.esprit.innoxpert.Entity.TypeStatus.DONE")
+    int countDoneTasksByStudent(User student);
+
+
+
+
 }

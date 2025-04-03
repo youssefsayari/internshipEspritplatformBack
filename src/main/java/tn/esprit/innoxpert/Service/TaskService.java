@@ -9,7 +9,9 @@ import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.TaskRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TaskService implements TaskServiceInterface {
@@ -93,6 +95,19 @@ public class TaskService implements TaskServiceInterface {
     @Override
     public User findStudentWithMostDoneTasks() {
         return this.taskRepository.findStudentWithMostDoneTasks();
+    }
+
+    @Override
+    public List<User> getStudentsByTutor(User tutor) {
+            return userRepository.findByTutor(tutor);
+
+
+    }
+
+    @Override
+    public int countDoneTasksByStudent(Long studentId) {
+        User student = userRepository.findById(studentId).get();
+        return taskRepository.countDoneTasksByStudent(student);
     }
 
 

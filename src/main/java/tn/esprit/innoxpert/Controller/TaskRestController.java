@@ -3,13 +3,17 @@ package tn.esprit.innoxpert.Controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.innoxpert.Entity.Task;
 import tn.esprit.innoxpert.Entity.TypeStatus;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Service.TaskServiceInterface;
 
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "Task Management")
 @RestController
@@ -74,7 +78,14 @@ public class TaskRestController {
     public User findStudentWithMostDoneTasks(){return taskService.findStudentWithMostDoneTasks();}
 
 
-
-
-
+    @GetMapping("/done-tasks-count/{studentId}")
+    public ResponseEntity<Integer> countDoneTasksByStudent(@PathVariable Long studentId) {
+        int doneCount = taskService.countDoneTasksByStudent(studentId);
+        return ResponseEntity.ok(doneCount);
     }
+
+
+
+
+
+}
