@@ -90,5 +90,10 @@ public class TaskService implements TaskServiceInterface {
         return taskRepository.findByStudent(user);
     }
 
+    @Override
+    public User findStudentWithMostDoneTasks() {
+        return this.taskRepository.findStudentWithMostDoneTasks();
+    }
+
 
 }

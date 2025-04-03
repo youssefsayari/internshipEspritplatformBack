@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.Entity.Task;
 import tn.esprit.innoxpert.Entity.TypeStatus;
+import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Service.TaskServiceInterface;
 
 import java.util.List;
@@ -68,6 +69,9 @@ public class TaskRestController {
     {
         return taskService.getTasksByUserId(idUser);
     }
+
+    @GetMapping("findStudentWithMostDoneTasks")
+    public User findStudentWithMostDoneTasks(){return taskService.findStudentWithMostDoneTasks();}
 
 
 

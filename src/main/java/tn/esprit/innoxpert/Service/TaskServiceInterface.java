@@ -16,6 +16,7 @@ public interface TaskServiceInterface {
     public Task updateAndaffectTaskToStudent(Long idUser, Task task);
     public Task ChangeTaskStatus(Long idTask, TypeStatus typeStatus);
     public List<Task> getTasksByUserId(Long idUser);
+    public  User findStudentWithMostDoneTasks();
 
 
 }
