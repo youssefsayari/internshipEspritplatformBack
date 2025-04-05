@@ -1,6 +1,7 @@
 package tn.esprit.innoxpert.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.Entity.Task;
 import tn.esprit.innoxpert.Entity.TypeStatus;
@@ -130,6 +131,8 @@ public class TaskService implements TaskServiceInterface {
     }
 
 
+    @Override
+    @Async
     public void sendHelpRequest(Long taskId, String messageContent) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new NotFoundException("Task with ID: " + taskId + " not found"));
