@@ -20,6 +20,7 @@ public interface TaskServiceInterface {
     public  User findStudentWithMostDoneTasks();
     public List<User> getStudentsByTutor(User tutor);
     public int countDoneTasksByStudent(Long studentId);
+    Task rateTask(Long taskId, Integer mark);
 
 
 

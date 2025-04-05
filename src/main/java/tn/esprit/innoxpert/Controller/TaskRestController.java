@@ -51,9 +51,9 @@ public class TaskRestController {
     {
         return taskService.updateTask(Task);
     }
-    
-    
-    
+
+
+
     @PostMapping("/addTaskAndAssignToStudent/{idUser}")
     public Task addTaskAndAssignToStudent(@RequestBody Task task, @PathVariable("idUser") Long idUser) {
         return taskService.addAndaffectTaskToStudent(idUser, task);
@@ -83,6 +83,13 @@ public class TaskRestController {
         int doneCount = taskService.countDoneTasksByStudent(studentId);
         return ResponseEntity.ok(doneCount);
     }
+
+
+    @PutMapping("/rateTask/{taskId}/{mark}")
+    public Task rateTask(@PathVariable Long taskId, @PathVariable Integer mark) {
+        return taskService.rateTask(taskId, mark);
+    }
+
 
 
 

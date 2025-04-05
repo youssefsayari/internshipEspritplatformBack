@@ -20,6 +20,8 @@ public class TaskService implements TaskServiceInterface {
     @Autowired
     UserRepository userRepository;
 
+
+
     @Override
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
@@ -109,6 +111,20 @@ public class TaskService implements TaskServiceInterface {
         User student = userRepository.findById(studentId).get();
         return taskRepository.countDoneTasksByStudent(student);
     }
+
+    @Override
+    public Task rateTask(Long taskId, Integer mark) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new NotFoundException("Task with ID: " + taskId + " not found"));
+
+        if (task.getStatus() != TypeStatus.DONE) {
+            throw new IllegalStateException("Only DONE tasks can be rated.");
+        }
+
+        task.setMark(mark);
+        return taskRepository.save(task);
+    }
+
 
 
 }
