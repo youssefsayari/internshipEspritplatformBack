@@ -8,6 +8,7 @@ import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.TaskRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
+import tn.esprit.innoxpert.Util.EmailClass;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,9 @@ public class TaskService implements TaskServiceInterface {
     TaskRepository taskRepository;
     @Autowired
     UserRepository userRepository;
+
+    private final EmailClass emailClass = new EmailClass();
+
 
 
 
@@ -125,6 +129,36 @@ public class TaskService implements TaskServiceInterface {
         return taskRepository.save(task);
     }
 
+
+    public void sendHelpRequest(Long taskId, String messageContent) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new NotFoundException("Task with ID: " + taskId + " not found"));
+
+        User student = task.getStudent();
+        User tutor = student.getTutor();
+
+        if (tutor == null || tutor.getEmail() == null) {
+            throw new NotFoundException("Tutor for student " + student.getFirstName() + " not found or doesn't have an email.");
+        }
+
+        String subject = "🆘 Help Request for a Task";
+
+        String body = String.format(
+                "Hello %s,\n\n" +
+                        "The student %s %s has requested help regarding the following task:\n\n" +
+                        "📄 Task Description:\n%s\n\n" +
+                        "📝 Student's Message:\n%s\n\n" +
+                        "Please respond to assist them.\n\n" +
+                        "Best regards,\nInternship Platform",
+                tutor.getFirstName(),
+                student.getFirstName(),
+                student.getLastName(),
+                task.getDescription(),
+                messageContent
+        );
+
+        emailClass.sendEmail(tutor.getEmail(), body, subject);
+    }
 
 
 }

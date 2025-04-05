@@ -90,6 +90,23 @@ public class TaskRestController {
         return taskService.rateTask(taskId, mark);
     }
 
+    @PostMapping("/help-request/{taskId}")
+    public ResponseEntity<String> sendHelpRequest(@PathVariable Long taskId, @RequestBody Map<String, String> body) {
+        try {
+            String messageContent = body.get("message");
+            if (messageContent == null || messageContent.trim().isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Message content is required.");
+            }
+
+            taskService.sendHelpRequest(taskId, messageContent);
+            return ResponseEntity.ok("Help request sent to tutor successfully.");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to send help request: " + e.getMessage());
+        }
+    }
+
+
+
 
 
 
