@@ -207,7 +207,8 @@ public class TaskService implements TaskServiceInterface {
 
         try {
             ResponseEntity<Object[]> response = restTemplate.postForEntity(
-                    "https://api-inference.huggingface.co/models/bigcode/starcoder",
+                    "https://api-inference.huggingface.co/models/HuggingFaceH4/zephyr-7b-beta"
+                    ,
                     request,
                     Object[].class
             );
