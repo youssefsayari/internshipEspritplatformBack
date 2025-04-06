@@ -195,7 +195,7 @@ public class TaskService implements TaskServiceInterface {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("temperature", 0.7);
-        parameters.put("max_new_tokens", 250);
+        parameters.put("max_new_tokens", 500);
         parameters.put("do_sample", true);
         parameters.put("top_p", 0.95);
         parameters.put("top_k", 40);
