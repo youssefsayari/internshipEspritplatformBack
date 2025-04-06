@@ -106,8 +106,9 @@ public class TaskRestController {
     }
 
     @PostMapping("/ai-suggestion/{taskId}")
-    public ResponseEntity<String> getAISuggestion(@PathVariable Long taskId,@RequestBody String message) {
+    public ResponseEntity<String> getAISuggestion(@PathVariable Long taskId, @RequestBody Map<String, String> body) {
         try {
+            String message = body.get("message");
             if (message == null || message.trim().isEmpty()) {
                 return ResponseEntity.badRequest().body("Message is required.");
             }
@@ -119,6 +120,7 @@ public class TaskRestController {
                     .body("AI Suggestion failed: " + e.getMessage());
         }
     }
+
 
 
 

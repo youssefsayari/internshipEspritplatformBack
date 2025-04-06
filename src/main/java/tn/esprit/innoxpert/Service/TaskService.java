@@ -179,9 +179,11 @@ public class TaskService implements TaskServiceInterface {
                 .orElseThrow(() -> new NotFoundException("Task with ID: " + taskId + " not found"));
 
         String taskDescription = task.getDescription();
-        String prompt = "You are an assistant. Please provide clear and numbered steps to complete the following task.\n" +
-                "Task: " + taskDescription + "\n" +
-                "Student Request: " + studentMessage;
+
+        String prompt = "You are an expert coding tutor. Please explain in detailed, clear, and numbered steps how to complete this programming task:\n\n" +
+                "### Task:\n" + taskDescription + "\n\n" +
+                "### Student Request:\n" + studentMessage + "\n\n" +
+                "### Step-by-step Instructions:";
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -191,12 +193,22 @@ public class TaskService implements TaskServiceInterface {
         HashMap<String, Object> requestBody = new HashMap<>();
         requestBody.put("inputs", prompt);
 
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("temperature", 0.7);
+        parameters.put("max_new_tokens", 250);
+        parameters.put("do_sample", true);
+        parameters.put("top_p", 0.95);
+        parameters.put("top_k", 40);
+        parameters.put("return_full_text", false); // 👈 Removes the echoed prompt
+
+        requestBody.put("parameters", parameters);
+
         HttpEntity<HashMap<String, Object>> request = new HttpEntity<>(requestBody, headers);
 
         try {
             ResponseEntity<Object[]> response = restTemplate.postForEntity(
-                    "https://api-inference.huggingface.co/models/mrm8488/t5-base-finetuned-common_gen"
-                    ,request,
+                    "https://api-inference.huggingface.co/models/bigcode/starcoder",
+                    request,
                     Object[].class
             );
 
@@ -211,8 +223,6 @@ public class TaskService implements TaskServiceInterface {
             return "⚠️ Error while contacting AI copilot: " + e.getMessage();
         }
     }
-
-
 
 
 }
