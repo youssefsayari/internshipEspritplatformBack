@@ -105,6 +105,20 @@ public class TaskRestController {
         }
     }
 
+    @PostMapping("/ai-suggestion/{taskId}")
+    public ResponseEntity<String> getAISuggestion(@PathVariable Long taskId,@RequestBody String message) {
+        try {
+            if (message == null || message.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Message is required.");
+            }
+
+            String aiResponse = taskService.getAISuggestion(taskId, message);
+            return ResponseEntity.ok(aiResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("AI Suggestion failed: " + e.getMessage());
+        }
+    }
 
 
 

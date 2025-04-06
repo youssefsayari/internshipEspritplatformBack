@@ -10,6 +10,10 @@ import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.TaskRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
 import tn.esprit.innoxpert.Util.EmailClass;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
+import java.util.HashMap;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +27,12 @@ public class TaskService implements TaskServiceInterface {
     UserRepository userRepository;
 
     private final EmailClass emailClass = new EmailClass();
+
+    @Value("${huggingface.token}")
+    private String huggingFaceToken;
+
+
+
 
 
 
@@ -162,6 +172,47 @@ public class TaskService implements TaskServiceInterface {
 
         emailClass.sendEmail(tutor.getEmail(), body, subject);
     }
+
+    @Override
+    public String getAISuggestion(Long taskId, String studentMessage) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new NotFoundException("Task with ID: " + taskId + " not found"));
+
+        String taskDescription = task.getDescription();
+        String prompt = "You are an assistant. Please provide clear and numbered steps to complete the following task.\n" +
+                "Task: " + taskDescription + "\n" +
+                "Student Request: " + studentMessage;
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(huggingFaceToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HashMap<String, Object> requestBody = new HashMap<>();
+        requestBody.put("inputs", prompt);
+
+        HttpEntity<HashMap<String, Object>> request = new HttpEntity<>(requestBody, headers);
+
+        try {
+            ResponseEntity<Object[]> response = restTemplate.postForEntity(
+                    "https://api-inference.huggingface.co/models/mrm8488/t5-base-finetuned-common_gen"
+                    ,request,
+                    Object[].class
+            );
+
+            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null && response.getBody().length > 0) {
+                Map result = (Map) response.getBody()[0];
+                return result.get("generated_text").toString();
+            } else {
+                return "No suggestion available at the moment.";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "⚠️ Error while contacting AI copilot: " + e.getMessage();
+        }
+    }
+
+
 
 
 }
