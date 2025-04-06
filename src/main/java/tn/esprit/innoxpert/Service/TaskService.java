@@ -180,10 +180,10 @@ public class TaskService implements TaskServiceInterface {
 
         String taskDescription = task.getDescription();
 
-        String prompt = "You are an expert coding tutor. Please explain in detailed, clear, and numbered steps how to complete this programming task:\n\n" +
+        String prompt = "You are an expert coding tutor. Please explain this task:\n\n" +
                 "### Task:\n" + taskDescription + "\n\n" +
-                "### Student Request:\n" + studentMessage + "\n\n" +
-                "### Step-by-step Instructions:";
+                "### Student Request:\n" + studentMessage + "\n\n" ;
+                //"### Step-by-step Instructions:";
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
