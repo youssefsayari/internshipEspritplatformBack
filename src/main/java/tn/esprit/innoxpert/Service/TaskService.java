@@ -199,7 +199,7 @@ public class TaskService implements TaskServiceInterface {
         parameters.put("do_sample", true);
         parameters.put("top_p", 0.95);
         parameters.put("top_k", 40);
-        parameters.put("return_full_text", false); // 👈 Removes the echoed prompt
+        parameters.put("return_full_text", false);
 
         requestBody.put("parameters", parameters);
 
