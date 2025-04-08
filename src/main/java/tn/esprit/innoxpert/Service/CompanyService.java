@@ -1,20 +1,22 @@
 package tn.esprit.innoxpert.Service;
 
 import java.io.IOException;
+
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
-import tn.esprit.innoxpert.Entity.Company;
-import tn.esprit.innoxpert.Entity.Image;
-import tn.esprit.innoxpert.Entity.TypeUser;
-import tn.esprit.innoxpert.Entity.User;
+import tn.esprit.innoxpert.Entity.*;
+import tn.esprit.innoxpert.Exceptions.ImageProcessingException;
 import tn.esprit.innoxpert.Exceptions.ResourceNotFoundException;
 import tn.esprit.innoxpert.Repository.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -102,55 +104,57 @@ public class CompanyService implements CompanyServiceInterface {
     @Transactional
     public void removeCompanyByIdAndUserAffected(Long companyId) {
         Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new RuntimeException("Company not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Company not found with id: " + companyId));
 
-        try {
+        // Delete all posts and their dependencies in bulk
+        if (!CollectionUtils.isEmpty(company.getPosts())) {
+            List<Post> posts = company.getPosts();
 
-            // 1. First delete all posts and their dependencies
-            if (company.getPosts() != null && !company.getPosts().isEmpty()) {
-                // Delete internships first
-                company.getPosts().forEach(post -> {
-                    if (post.getInternships() != null) {
-                        internshipRepository.deleteAll(post.getInternships());
-                    }
-                    if (post.getComments() != null) {
-                        commentRepository.deleteAll(post.getComments());
-                    }
-                    if (post.getRatings() != null) {
-                        ratingRepository.deleteAll(post.getRatings());
-                    }
-                });
-                postRepository.deleteAll(company.getPosts());
-            }
+            // Collect all related entities for bulk deletion
+            List<Internship> internships = posts.stream()
+                    .flatMap(post -> post.getInternships().stream())
+                    .collect(Collectors.toList());
 
-            // 2. Supprimer l'image
-            if (company.getImage() != null) {
+            List<Comment> comments = posts.stream()
+                    .flatMap(post -> post.getComments().stream())
+                    .collect(Collectors.toList());
+
+            List<Rating> ratings = posts.stream()
+                    .flatMap(post -> post.getRatings().stream())
+                    .collect(Collectors.toList());
+
+            if (!internships.isEmpty()) internshipRepository.deleteAllInBatch(internships);
+            if (!comments.isEmpty()) commentRepository.deleteAllInBatch(comments);
+            if (!ratings.isEmpty()) ratingRepository.deleteAllInBatch(ratings);
+
+            postRepository.deleteAllInBatch(posts);
+        }
+
+        // Handle image
+        if (company.getImage() != null) {
+            try {
                 cloudinaryService.delete(company.getImage().getImageId());
                 imageRepository.delete(company.getImage());
+            } catch (IOException e) {
+                throw new ImageProcessingException("Failed to delete company image", e);
             }
-
-            // 3. Gérer les followers
-            company.getFollowers().forEach(follower -> {
-                follower.getFollowedCompanies().remove(company);
-                userRepository.save(follower);
-            });
-
-
-            // 4. Supprimer le user owner et ses dépendances
-            if(company.getOwner() != null) {
-                // Supprimer les ratings associés au user
-                ratingRepository.deleteByUser(company.getOwner());
-
-
-                userRepository.delete(company.getOwner());
-            }
-
-            // 5. Supprimer la company
-            companyRepository.delete(company);
-
-        } catch (IOException e) {
-            throw new RuntimeException("Error deleting company", e);
         }
+
+        // Handle followers
+        if (!CollectionUtils.isEmpty(company.getFollowers())) {
+            company.getFollowers().forEach(follower ->
+                    follower.getFollowedCompanies().remove(company));
+            userRepository.saveAll(company.getFollowers());
+        }
+
+        // Handle owner
+        if (company.getOwner() != null) {
+            ratingRepository.deleteByUserInBatch(company.getOwner());
+            userRepository.delete(company.getOwner());
+        }
+
+        // Delete company
+        companyRepository.delete(company);
     }
 
     @Override

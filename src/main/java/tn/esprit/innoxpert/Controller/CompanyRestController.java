@@ -3,6 +3,7 @@ package tn.esprit.innoxpert.Controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tn.esprit.innoxpert.Entity.Company;
 import tn.esprit.innoxpert.Entity.Image;
 import tn.esprit.innoxpert.Entity.User;
+import tn.esprit.innoxpert.Exceptions.ImageProcessingException;
 import tn.esprit.innoxpert.Exceptions.ResourceNotFoundException;
 import tn.esprit.innoxpert.Service.CloudinaryService;
 import tn.esprit.innoxpert.Service.CompanyService;
@@ -91,8 +93,6 @@ public class CompanyRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCompany);
     }
 
-
-    @Transactional
     @DeleteMapping("/deleteCompany/{companyId}")
     public ResponseEntity<?> deleteCompany(@PathVariable Long companyId) {
         try {
@@ -101,7 +101,19 @@ public class CompanyRestController {
                     "success", true,
                     "message", "Company deleted successfully"
             ));
-        } catch (RuntimeException e) {
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of(
+                            "success", false,
+                            "message", e.getMessage()
+                    ));
+        } catch (ImageProcessingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of(
+                            "success", false,
+                            "message", "Error processing company image: " + e.getMessage()
+                    ));
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of(
                             "success", false,
@@ -109,6 +121,7 @@ public class CompanyRestController {
                     ));
         }
     }
+
 
     @PutMapping("/updateCompany/{companyId}")
     public ResponseEntity<Company> updateCompany(
