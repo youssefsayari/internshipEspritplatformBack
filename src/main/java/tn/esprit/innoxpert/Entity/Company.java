@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 @Entity
@@ -74,6 +76,7 @@ public class Company {
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE) // Ajouter cette annotation
     List<Post> posts;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)

@@ -11,9 +11,7 @@ import tn.esprit.innoxpert.Entity.Image;
 import tn.esprit.innoxpert.Entity.TypeUser;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Exceptions.ResourceNotFoundException;
-import tn.esprit.innoxpert.Repository.CompanyRepository;
-import tn.esprit.innoxpert.Repository.ImageRepository;
-import tn.esprit.innoxpert.Repository.UserRepository;
+import tn.esprit.innoxpert.Repository.*;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +26,10 @@ public class CompanyService implements CompanyServiceInterface {
 
     private final UserRepository userRepository;
     @Autowired
+    private final PostRepository postRepository;
+    @Autowired
+    private final RatingRepository ratingRepository;
+    @Autowired
 
     private final CloudinaryService cloudinaryService;
 
@@ -35,6 +37,11 @@ public class CompanyService implements CompanyServiceInterface {
     private ImageRepository imageRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+
+    private InternshipRepository internshipRepository;
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Override
     public List<Company> getAllCompanies() {
@@ -98,32 +105,51 @@ public class CompanyService implements CompanyServiceInterface {
                 .orElseThrow(() -> new RuntimeException("Company not found"));
 
         try {
-            // 1. Delete company image from Cloudinary and database
+
+            // 1. First delete all posts and their dependencies
+            if (company.getPosts() != null && !company.getPosts().isEmpty()) {
+                // Delete internships first
+                company.getPosts().forEach(post -> {
+                    if (post.getInternships() != null) {
+                        internshipRepository.deleteAll(post.getInternships());
+                    }
+                    if (post.getComments() != null) {
+                        commentRepository.deleteAll(post.getComments());
+                    }
+                    if (post.getRatings() != null) {
+                        ratingRepository.deleteAll(post.getRatings());
+                    }
+                });
+                postRepository.deleteAll(company.getPosts());
+            }
+
+            // 2. Supprimer l'image
             if (company.getImage() != null) {
-                // Delete from Cloudinary first
                 cloudinaryService.delete(company.getImage().getImageId());
-                // Then delete from database
                 imageRepository.delete(company.getImage());
             }
 
-            // 2. Handle followers (remove relationships)
-            if (company.getFollowers() != null && !company.getFollowers().isEmpty()) {
-                for (User follower : company.getFollowers()) {
-                    follower.getFollowedCompanies().remove(company);
-                    userRepository.save(follower);
-                }
-            }
+            // 3. Gérer les followers
+            company.getFollowers().forEach(follower -> {
+                follower.getFollowedCompanies().remove(company);
+                userRepository.save(follower);
+            });
 
-            // 3. Delete owner user if exists
-            if (company.getOwner() != null) {
+
+            // 4. Supprimer le user owner et ses dépendances
+            if(company.getOwner() != null) {
+                // Supprimer les ratings associés au user
+                ratingRepository.deleteByUser(company.getOwner());
+
+
                 userRepository.delete(company.getOwner());
             }
 
-            // 4. Finally delete the company
+            // 5. Supprimer la company
             companyRepository.delete(company);
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to delete company image from Cloudinary", e);
+            throw new RuntimeException("Error deleting company", e);
         }
     }
 
