@@ -13,6 +13,7 @@ import tn.esprit.innoxpert.Entity.*;
 import tn.esprit.innoxpert.Exceptions.ImageProcessingException;
 import tn.esprit.innoxpert.Exceptions.ResourceNotFoundException;
 import tn.esprit.innoxpert.Repository.*;
+import tn.esprit.innoxpert.Util.EmailClass;
 
 import java.util.List;
 import java.util.Map;
@@ -96,6 +97,16 @@ public class CompanyService implements CompanyServiceInterface {
 
         // Associer l'image à l'entreprise
         c.setImage(image);
+
+
+        // Envoi de l'email avec les identifiants
+        EmailClass emailSender = new EmailClass();
+        emailSender.sendCompanyCredentialsEmail(
+                c.getEmail(),
+                c.getName(),
+                user.getIdentifiant(),
+                rawPassword
+        );
 
         // Sauvegarde de la Company
         return companyRepository.save(c);
@@ -196,7 +207,14 @@ public class CompanyService implements CompanyServiceInterface {
         user.setTelephone(updatedData.getPhone());
         userRepository.save(user);
 
-
+// Envoi de l'email avec les identifiants mis à jour
+        EmailClass emailSender = new EmailClass();
+        emailSender.sendCompanyCredentialsEmail(
+                user.getEmail(),
+                existingCompany.getName(),
+                user.getIdentifiant(),
+                user.getPassword()
+        );
         // On ne touche pas aux relations : posts, owner, followers
         return companyRepository.save(existingCompany);
     }
