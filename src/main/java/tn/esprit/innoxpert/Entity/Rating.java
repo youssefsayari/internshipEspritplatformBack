@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -33,9 +35,10 @@ public class Rating {
 
 
 
-    @ManyToOne
-    @JoinColumn(name = "idUser", nullable = false) // Ajout d'une relation avec User
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idUser", nullable = false)
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE) // Ajouter cette annotation
     private User user;
 
     @Column(nullable = false, updatable = false)
