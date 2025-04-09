@@ -2,6 +2,7 @@ package tn.esprit.innoxpert.Service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,11 +18,13 @@ import java.util.Objects;
 public class CloudinaryService {
     Cloudinary cloudinary;
 
-    public CloudinaryService() {
+    public CloudinaryService(@Value("${cloudinary.api_secret}") String apiSecret) {
+
+
         Map<String, String> valuesMap = new HashMap<>();
         valuesMap.put("cloud_name", "do8loxtzn");
         valuesMap.put("api_key", "684341824167926");
-        valuesMap.put("api_secret", "-JbYUK45CEdhno17Dff64FtEOEg");
+        valuesMap.put("api_secret", apiSecret);
         cloudinary = new Cloudinary(valuesMap);
     }
 
