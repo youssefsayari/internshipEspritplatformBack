@@ -27,7 +27,6 @@ public class Post {
     private String title;
 
     @NotBlank(message = "Le contenu est obligatoire")
-    @Size(min = 10, max = 255, message = "Le content doit contenir entre 10 et 255 caractères")
     @Column(columnDefinition = "TEXT")
     private String content;
 
