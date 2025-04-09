@@ -54,15 +54,18 @@ public class TimeLineService implements TimeLineServiceInterface {
         );
 
         List<TimeLine> timeLines = new ArrayList<>();
+        int z = 5;
         for (int i = 0; i < 6; i++) {
             TimeLine timeLine = new TimeLine();
             timeLine.setTitle(titles.get(i));
             timeLine.setDescription(titles.get(i));
-            timeLine.setDateLimite(timelineDates.get(i));
+            timeLine.setDateLimite(timelineDates.get(z));
             timeLine.setStudent(student);
             timeLine.setDocument(null);
             timeLines.add(timeLine);
+            z--;
         }
+
 
         timeLineRepository.saveAll(timeLines);
     }
@@ -88,18 +91,19 @@ public class TimeLineService implements TimeLineServiceInterface {
 
     private List<Date> calculateTimelineDates(Date startDate, Date endDate) {
         List<Date> dates = new ArrayList<>();
-
-        // On veut 6 dates : 5 étapes + rapport final à la fin (donc 6 au total)
         long duration = endDate.getTime() - startDate.getTime();
-        long interval = duration / 5; // 5 intervalles = 6 points
-
-        for (int i = 0; i < 6; i++) {
+        long interval = duration / 5;
+        for (int i = 0; i <= 5; i++) {
             long currentDateTime = startDate.getTime() + (i * interval);
             dates.add(new Date(currentDateTime));
         }
-
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endDate);
+        calendar.add(Calendar.DATE, -10);
+        dates.add(calendar.getTime());
         return dates;
     }
+
 
 
 
