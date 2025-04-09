@@ -61,5 +61,27 @@ public class AgreementContrroller {
         }
     }
 
+    @PostMapping("/approveAgreement/{AgreementId}")
+    public ResponseEntity<String> approveAgreement(@PathVariable Long AgreementId) {
+        try {
+            agreementService.approveAgreement(AgreementId);
+            return ResponseEntity.ok("Agreement accepted successfully!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Error: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/rejectAgreement/{AgreementId}")
+    public ResponseEntity<String> rejectAgreement(@PathVariable Long AgreementId) {
+        try {
+            agreementService.rejectAgreement(AgreementId);
+            return ResponseEntity.ok("Agreement application denied!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Error: " + e.getMessage());
+        }
+    }
+
 
 }

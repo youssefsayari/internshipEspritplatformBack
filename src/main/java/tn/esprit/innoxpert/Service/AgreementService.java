@@ -97,5 +97,30 @@ public class AgreementService implements AgreementServiceInterface {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void approveAgreement(Long AgreementId) {
+        Agreement agreement = agreementRepository.findById(AgreementId)
+                .orElseThrow(() -> new RuntimeException("Agreement not found"));
+        if (!agreement.getAgreementState().equals(TypeAgreement.PENDING)) {
+            throw new RuntimeException("Agreement is not in a state that can be approved.");
+        }
+        agreement.setAgreementState(TypeAgreement.ACCEPTED);
+        agreementRepository.save(agreement);
+    }
+
+
+    @Override
+    public void rejectAgreement(Long AgreementId) {
+
+        Agreement agreement = agreementRepository.findById(AgreementId)
+                .orElseThrow(() -> new RuntimeException("Agreement not found"));
+        if (!agreement.getAgreementState().equals(TypeAgreement.PENDING)) {
+            throw new RuntimeException("Agreement is not in a state that can be rejected.");
+        }
+        agreement.setAgreementState(TypeAgreement.REJECTED);
+        agreementRepository.save(agreement);
+    }
+
+
 
 }

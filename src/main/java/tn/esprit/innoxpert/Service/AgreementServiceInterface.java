@@ -13,6 +13,8 @@ public interface AgreementServiceInterface {
     void addAgreement(AgreementRequestDTO agreementRequestDTO);
     boolean hasApprovedInternship(Long studentId);
     List<InternshipDetailsDTO> getInternshipsForStudent(Long studentId);
+    void rejectAgreement(Long AgreementId);
+    void approveAgreement(Long AgreementId);
 
 
 }
