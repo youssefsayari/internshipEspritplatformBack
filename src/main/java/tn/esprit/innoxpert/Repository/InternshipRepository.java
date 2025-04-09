@@ -19,6 +19,10 @@ public interface InternshipRepository extends JpaRepository<Internship,Long> {
     @Query("SELECT COUNT(i) > 0 FROM Internship i JOIN i.users u WHERE u.idUser = :studentId AND i.internshipState = :state")
     boolean existsByStudentIdAndState(@Param("studentId") Long studentId, @Param("state") InternshipState state);
 
+    @Query("SELECT i FROM Internship i JOIN i.users u WHERE u.idUser = :studentId AND i.internshipState = :state")
+    List<Internship> findInternshipsByStudentIdAndState(@Param("studentId") Long studentId, @Param("state") InternshipState state);
+
+
 
 
 }

@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import tn.esprit.innoxpert.DTO.AddInternship;
+import tn.esprit.innoxpert.DTO.AgreementDTO;
+import tn.esprit.innoxpert.DTO.AgreementRequestDTO;
+import tn.esprit.innoxpert.DTO.InternshipDetailsDTO;
 import tn.esprit.innoxpert.Entity.Agreement;
 import tn.esprit.innoxpert.Entity.Internship;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
@@ -28,6 +32,10 @@ public class AgreementContrroller {
         return agreementService.hasApprovedInternship(studentId);
     }
 
+    @GetMapping("/getInternshipsForStudent/{studentId}")
+    public List<InternshipDetailsDTO> getInternshipsForStudent(@PathVariable Long studentId) {
+        return agreementService.getInternshipsForStudent(studentId);
+    }
     @GetMapping("/getAllAgreements")
     public List<Agreement> getAllAgreements()
     {
@@ -35,22 +43,23 @@ public class AgreementContrroller {
     }
 
     @PostMapping("/addAgreement")
-    public ResponseEntity<String> addAgreement (@RequestBody Long idUser)
-    {
+    public ResponseEntity<String> addAgreement(@RequestBody AgreementRequestDTO agreementRequestDTO) {
         try {
-            agreementService.addAgreement(idUser);
+            agreementService.addAgreement(agreementRequestDTO);
             return ResponseEntity.ok("Internship request submitted successfully!");
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
         }
     }
     @GetMapping("/getAgreementById")
-    public Agreement getAgreementById(@RequestParam Long StudentId )
-    {
-        return agreementService.getAgreementById(StudentId);
+    public AgreementDTO getAgreementById(@RequestParam Long studentId) {
+        AgreementDTO agreementDTO = agreementService.getAgreementById(studentId);
+        if (agreementDTO != null) {
+            return agreementDTO;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Agreement not found for studentId: " + studentId);
+        }
     }
+
+
 }
