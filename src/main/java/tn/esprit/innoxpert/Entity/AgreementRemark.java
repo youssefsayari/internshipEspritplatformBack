@@ -19,6 +19,7 @@ public class AgreementRemark {
 
     @OneToOne(orphanRemoval = true)
     @JoinColumn(name = "agreement_id")
+    @JsonIgnore
     private Agreement agreement;
 
 }

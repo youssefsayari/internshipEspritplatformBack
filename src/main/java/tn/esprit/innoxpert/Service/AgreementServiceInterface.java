@@ -15,6 +15,8 @@ public interface AgreementServiceInterface {
     List<InternshipDetailsDTO> getInternshipsForStudent(Long studentId);
     void rejectAgreement(Long AgreementId);
     void approveAgreement(Long AgreementId);
-
+    void acceptAgreement(Long AgreementId);
+    public void removeAgreement(Long id);
+    void GeneretePDF(Long AgreementId);
 
 }

@@ -45,8 +45,8 @@ public class AgreementRemarkRestController {
     }
 
     @GetMapping("/getByAgreementId/{agreementId}")
-    public ResponseEntity<List<AgreementRemark>> getAgreementRemarksByAgreementId(@PathVariable Long AgreementId) {
-        List<AgreementRemark> remarks = agreementRemarkService.getAgreementRemarksByAgreementId(AgreementId);
+    public ResponseEntity<List<AgreementRemark>> getAgreementRemarksByAgreementId(@PathVariable Long agreementId) {
+        List<AgreementRemark> remarks = agreementRemarkService.getAgreementRemarksByAgreementId(agreementId);
         if (remarks != null && !remarks.isEmpty()) {
             return ResponseEntity.ok(remarks);
         } else {

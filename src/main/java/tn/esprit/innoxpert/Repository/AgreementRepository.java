@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface AgreementRepository extends JpaRepository<Agreement,Long> {
     Optional<Agreement> findByStudent_IdUser(Long studentId);
 
+
 }

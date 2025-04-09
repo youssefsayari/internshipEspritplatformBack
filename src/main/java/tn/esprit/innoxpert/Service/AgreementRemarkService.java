@@ -47,4 +47,9 @@ public class AgreementRemarkService implements AgreementRemarkServiceInterface {
     public List<AgreementRemark> getAllAgreementRemarks() {
         return agreementRemarkRepository.findAll();
     }
+
+    @Override
+    public void removeAgreementRemarkByAgreemntID(Long agreementId) {
+        agreementRemarkRepository.deleteByAgreementId(agreementId);
+    }
 }

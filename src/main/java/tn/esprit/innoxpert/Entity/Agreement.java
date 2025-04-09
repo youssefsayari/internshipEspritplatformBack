@@ -28,7 +28,7 @@ public class Agreement {
     @NotNull(message = "L'état du agreement est obligatoire.")
     TypeAgreement agreementState;
 
-    @OneToOne(orphanRemoval = true)
+    @OneToOne
     @JoinColumn(name = "student_id_user")
     private User student;
 

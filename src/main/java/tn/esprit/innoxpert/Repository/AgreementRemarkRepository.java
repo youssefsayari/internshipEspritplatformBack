@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface AgreementRemarkRepository extends JpaRepository<AgreementRemark,Long> {
     List<AgreementRemark> findByAgreement_Id(Long idAgreement);
+    void deleteByAgreementId(Long agreementId);
 }

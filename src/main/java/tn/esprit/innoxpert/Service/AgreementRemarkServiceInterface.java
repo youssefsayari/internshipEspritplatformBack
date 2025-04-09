@@ -10,4 +10,5 @@ public interface AgreementRemarkServiceInterface {
     public void deleteAgreementRemark(Long id);
     public List<AgreementRemark> getAgreementRemarksByAgreementId(Long internshipId);
     public List<AgreementRemark> getAllAgreementRemarks();
+    public void removeAgreementRemarkByAgreemntID(Long id);
 }
