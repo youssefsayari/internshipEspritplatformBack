@@ -152,7 +152,8 @@ public class UserRestController {
                 classe = user.getClasse();
             }
             Long id= user.getIdUser();
-            UserRole userRole = new UserRole(role, classe, id);
+            String email = user.getEmail();
+            UserRole userRole = new UserRole(role, classe, id, email);
             return ResponseEntity.ok(userRole);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token: " + e.getMessage());
