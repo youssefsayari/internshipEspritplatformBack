@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import tn.esprit.innoxpert.Entity.Post;
 import tn.esprit.innoxpert.Entity.Rating;
 import tn.esprit.innoxpert.Entity.User;
 
@@ -24,10 +25,16 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
     @Query("SELECT r FROM Rating r WHERE r.post.id = :postId AND r.user.idUser = :userId")
     Rating findByPostIdAndUserId(@Param("postId") Long postId, @Param("userId") Long userId);
 
-    void deleteByUser(User owner);
 
     @Modifying
     @Query("DELETE FROM Rating r WHERE r.user = :user")
     void deleteByUserInBatch(@Param("user") User user);
+
+    @Modifying
+    @Query("DELETE FROM Rating r WHERE r.post IN :posts")
+    void deleteAllByPostIn(List<Post> posts);
+    @Modifying
+    @Query("DELETE FROM Rating r WHERE r.user = :user")
+    void deleteByUser(User user);
 }
 

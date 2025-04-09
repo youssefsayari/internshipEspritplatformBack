@@ -107,17 +107,15 @@ public class CompanyRestController {
                             "success", false,
                             "message", e.getMessage()
                     ));
-        } catch (ImageProcessingException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of(
-                            "success", false,
-                            "message", "Error processing company image: " + e.getMessage()
-                    ));
         } catch (Exception e) {
+            String errorMessage = "Failed to delete company: " + e.getMessage();
+            System.err.println(errorMessage);
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of(
                             "success", false,
-                            "message", "Failed to delete company: " + e.getMessage()
+                            "message", errorMessage,
+                            "errorDetails", e.getClass().getSimpleName()
                     ));
         }
     }
@@ -128,11 +126,17 @@ public class CompanyRestController {
             @PathVariable Long companyId,
             @RequestBody Company updatedCompany) {
 
+        System.out.println("Received update for company " + companyId + ": " + updatedCompany);
+
         try {
             Company result = companyService.updateCompany(companyId, updatedCompany);
             return ResponseEntity.ok(result);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            System.err.println("Update failed: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
         }
     }
 

@@ -106,55 +106,66 @@ public class CompanyService implements CompanyServiceInterface {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new EntityNotFoundException("Company not found with id: " + companyId));
 
-        // Delete all posts and their dependencies in bulk
-        if (!CollectionUtils.isEmpty(company.getPosts())) {
-            List<Post> posts = company.getPosts();
-
-            // Collect all related entities for bulk deletion
-            List<Internship> internships = posts.stream()
-                    .flatMap(post -> post.getInternships().stream())
-                    .collect(Collectors.toList());
-
-            List<Comment> comments = posts.stream()
-                    .flatMap(post -> post.getComments().stream())
-                    .collect(Collectors.toList());
-
-            List<Rating> ratings = posts.stream()
-                    .flatMap(post -> post.getRatings().stream())
-                    .collect(Collectors.toList());
-
-            if (!internships.isEmpty()) internshipRepository.deleteAllInBatch(internships);
-            if (!comments.isEmpty()) commentRepository.deleteAllInBatch(comments);
-            if (!ratings.isEmpty()) ratingRepository.deleteAllInBatch(ratings);
-
-            postRepository.deleteAllInBatch(posts);
-        }
-
-        // Handle image
-        if (company.getImage() != null) {
-            try {
-                cloudinaryService.delete(company.getImage().getImageId());
-                imageRepository.delete(company.getImage());
-            } catch (IOException e) {
-                throw new ImageProcessingException("Failed to delete company image", e);
+        try {
+            // 1. Handle quizzes first (added based on your entity model)
+            if (!CollectionUtils.isEmpty(company.getQuizzes())) {
+                company.getQuizzes().forEach(quiz -> {
+                    if (!CollectionUtils.isEmpty(quiz.getQuestions())) {
+                        quiz.getQuestions().clear();
+                    }
+                });
+                company.getQuizzes().clear();
+                companyRepository.save(company); // Save to clear relationships
             }
-        }
 
-        // Handle followers
-        if (!CollectionUtils.isEmpty(company.getFollowers())) {
-            company.getFollowers().forEach(follower ->
-                    follower.getFollowedCompanies().remove(company));
-            userRepository.saveAll(company.getFollowers());
-        }
+            // 2. Handle posts and their dependencies
+            if (!CollectionUtils.isEmpty(company.getPosts())) {
+                // Delete comments first
+                commentRepository.deleteAllByPostIn(company.getPosts());
+                // Delete ratings
+                ratingRepository.deleteAllByPostIn(company.getPosts());
+                // Delete internships
+                internshipRepository.deleteAllByPostIn(company.getPosts());
+                // Finally delete posts
+                postRepository.deleteAll(company.getPosts());
+                company.getPosts().clear();
+            }
 
-        // Handle owner
-        if (company.getOwner() != null) {
-            ratingRepository.deleteByUserInBatch(company.getOwner());
-            userRepository.delete(company.getOwner());
-        }
+            // 3. Handle followers
+            if (!CollectionUtils.isEmpty(company.getFollowers())) {
+                company.getFollowers().forEach(follower ->
+                        follower.getFollowedCompanies().remove(company));
+                userRepository.saveAll(company.getFollowers());
+                company.getFollowers().clear();
+            }
 
-        // Delete company
-        companyRepository.delete(company);
+            // 4. Handle image
+            if (company.getImage() != null) {
+                try {
+                    cloudinaryService.delete(company.getImage().getImageId());
+                    imageRepository.delete(company.getImage());
+                } catch (IOException e) {
+                    // Log but don't fail if image deletion fails
+                    System.err.println("Warning: Failed to delete company image: " + e.getMessage());
+                }
+            }
+
+            // 5. Handle owner
+            if (company.getOwner() != null) {
+                // Delete ratings by this user
+                ratingRepository.deleteByUser(company.getOwner());
+                // Delete the user
+                userRepository.delete(company.getOwner());
+            }
+
+            // 6. Finally delete the company
+            companyRepository.delete(company);
+
+        } catch (Exception e) {
+            System.err.println("Error during company deletion: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to delete company: " + e.getMessage(), e);
+        }
     }
 
     @Override
