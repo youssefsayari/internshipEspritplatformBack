@@ -7,6 +7,8 @@ import org.springframework.web.client.RestTemplate;
 import tn.esprit.innoxpert.Entity.Company;
 import tn.esprit.innoxpert.Entity.TypeSector;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 @Component  // Ajoutez cette annotation
@@ -89,13 +91,23 @@ public class CompanyDataEnricher {
 
         // Autres champs
         company.setAbbreviation(generateAbbreviation(pdlCompany.name));
-        company.setFoundingYear(pdlCompany.founded != null ?
-                new Date(pdlCompany.founded * 1000L) : new Date());
+        company.setFoundingYear(parseFoundedDate(pdlCompany.founded));
         company.setFounders(formatFounders(pdlCompany));
         company.setLabelDate(new Date());
         company.setSecretKey(generateRandomSecretKey());
 
         return company;
+    }
+    private Date parseFoundedDate(Integer foundedYear) {
+        if (foundedYear == null || foundedYear < 1900 || foundedYear > LocalDate.now().getYear()) {
+            return null;
+        }
+
+        return Date.from(
+                LocalDate.of(foundedYear, 1, 1)
+                        .atStartOfDay(ZoneId.systemDefault())
+                        .toInstant()
+        );
     }
 
     private String formatWebsiteUrl(String website) {
