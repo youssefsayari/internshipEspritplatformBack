@@ -43,7 +43,7 @@ public class Comment {
     LocalDateTime createdAt = LocalDateTime.now(); // Ajout de la date de création
 
     @ManyToOne
-    @JoinColumn(name = "idUser", nullable = false) // Ajout d'une relation avec User
-    private User user;
+    @JoinColumn(name = "idUser", nullable = false)
+    private User user;  // Déjà présent dans votre code
 
 }

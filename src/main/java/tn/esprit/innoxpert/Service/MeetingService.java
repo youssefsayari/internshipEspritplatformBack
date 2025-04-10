@@ -254,7 +254,7 @@ public class MeetingService implements MeetingServiceInterface {
 
 
     @Override
-    @Scheduled(fixedRate = 10000)
+    //@Scheduled(fixedRate = 10000)
     @Transactional
     public void notifyUsersOneDayBeforeMeeting() {
         LocalDate tomorrow = LocalDate.now().plusDays(1);

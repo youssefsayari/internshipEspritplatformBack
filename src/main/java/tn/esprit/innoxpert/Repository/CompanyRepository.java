@@ -18,4 +18,7 @@ public interface CompanyRepository extends JpaRepository<Company,Long> {
     default String generatePassword(Company company) {
         return company.getName() + "_" + company.getSecretKey();
     }
+
+
+
 }

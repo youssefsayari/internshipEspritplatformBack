@@ -30,4 +30,6 @@ public class Task {
     @JsonIgnore
     @NotNull(message = "Un étudiant doit être assigné à cette tâche")
     User student;
+    @Column
+    Integer mark;
 }
