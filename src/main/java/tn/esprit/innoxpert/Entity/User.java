@@ -66,6 +66,7 @@ public class User implements UserDetails {
     List<Document> documents = new ArrayList<>();
 
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     Defense defense;
 
 
@@ -76,6 +77,7 @@ public class User implements UserDetails {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "document_id")
+    @JsonIgnore
     private Document document;
 
     /*----------------start l5edmet sayari--------------------*/
@@ -100,6 +102,7 @@ public class User implements UserDetails {
 
 
     @ManyToMany(mappedBy = "users")
+    @JsonIgnore
     private List<Internship> internships = new ArrayList<>();
 
     @ManyToMany

@@ -85,6 +85,7 @@ public class Company {
 
 
     @ManyToMany(mappedBy = "followedCompanies", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @JsonIgnore
     private List<User> followers;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
