@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import tn.esprit.innoxpert.DTO.DefenseRequest;
 import tn.esprit.innoxpert.Entity.Defense;
 import tn.esprit.innoxpert.Entity.TypeUser;
 import tn.esprit.innoxpert.Entity.User;
@@ -13,7 +14,11 @@ import tn.esprit.innoxpert.Repository.DefenseRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -27,7 +32,7 @@ public class DefenseService implements DefenseServiceInterface {
 
     @Override
     public List<Defense> getAllDefenses() {
-        return defenseRepository.findAll();
+        return defenseRepository.findAllWithStudentsAndTutors();
     }
 
     @Override
@@ -60,40 +65,48 @@ public class DefenseService implements DefenseServiceInterface {
 
 
     @Override
-    public Defense addDefense(Defense d) {
-        if (!d.isReportSubmitted() || !d.isInternshipCompleted()) {
-            throw new IllegalArgumentException("Cannot add defense. Report must be submitted and internship must be completed.");
-        }
+    public Defense addDefense(Long studentId, DefenseRequest defenseRequest) {
+        // 1. First check if student exists in DB
+        User student = userRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalArgumentException("Student with ID " + studentId + " not found"));
 
-        // Ensure the student exists and has the correct type
-        User student = userRepository.findById(d.getStudent().getIdUser())
-                .orElseThrow(() -> new NotFoundException("Student with ID: " + d.getStudent().getIdUser() + " was not found."));
-
+        // 2. Verify it's actually a student
         if (student.getTypeUser() != TypeUser.Student) {
-            throw new IllegalArgumentException("Assigned user must be a student.");
+            throw new IllegalArgumentException("User with ID " + studentId + " is not a student");
         }
 
-            // Ensure the student does not already have a defense
-            if (defenseRepository.existsByStudent(student)) {
-                throw new IllegalArgumentException("This student already has a defense.");
+        // 3. Create new Defense object
+        Defense defense = new Defense();
+        defense.setStudent(student);
+        defense.setDefenseDate(defenseRequest.getDefenseDate());
+        defense.setDefenseTime(defenseRequest.getDefenseTime());
+        defense.setClassroom(defenseRequest.getClassroom());
+        defense.setReportSubmitted(defenseRequest.isReportSubmitted());
+        defense.setInternshipCompleted(defenseRequest.isInternshipCompleted());
+        defense.setDefenseDegree(defenseRequest.getDefenseDegree());
+
+        // 4. Validate and set tutors
+        Set<Long> tutorIds = defenseRequest.getTutorIds();
+        if (tutorIds == null || tutorIds.size() != 3) {
+            throw new IllegalArgumentException("Exactly 3 tutor IDs must be specified");
+        }
+
+        List<User> tutors = userRepository.findAllById(tutorIds);
+        if (tutors.size() != 3) {
+            throw new IllegalArgumentException("One or more tutors not found");
+        }
+
+        // Verify all are tutors
+        for (User tutor : tutors) {
+            if (tutor.getTypeUser() != TypeUser.Tutor) {
+                throw new IllegalArgumentException("User with ID " + tutor.getIdUser() + " is not a tutor");
             }
-
-        // Ensure exactly 3 tutors are assigned
-        if (d.getTutors().size() != 3) {
-            throw new IllegalArgumentException("A defense must have exactly 3 tutors.");
         }
 
-        // Ensure all tutors are of type Tutor
-        for (User tutor : d.getTutors()) {
-            User foundTutor = userRepository.findById(tutor.getIdUser())
-                    .orElseThrow(() -> new NotFoundException("Tutor with ID: " + tutor.getIdUser() + " was not found."));
+        defense.setTutors(new HashSet<>(tutors));
 
-            if (foundTutor.getTypeUser() != TypeUser.Tutor) {
-                throw new IllegalArgumentException("Only users of type 'Tutor' can be assigned as tutors.");
-            }
-        }
-
-        return defenseRepository.save(d);
+        // 5. Save the defense
+        return defenseRepository.save(defense);
     }
 
     @Override
@@ -117,13 +130,6 @@ public class DefenseService implements DefenseServiceInterface {
         // Step 5: Delete the defense entity itself
         defenseRepository.delete(defense);  // Delete the defense entity
     }
-
-
-
-
-
-
-
 
     @Override
     public Defense updateDefense(Defense d) {

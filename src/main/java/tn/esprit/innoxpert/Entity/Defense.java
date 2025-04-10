@@ -1,6 +1,9 @@
 package tn.esprit.innoxpert.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -29,7 +32,8 @@ public class Defense {
 
     @OneToOne
     @JoinColumn(name = "student_id", unique = true)
-    @JsonIgnore  // Prevent infinite loop
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idUser")
+    @JsonIdentityReference(alwaysAsId = false)
     User student;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
@@ -38,7 +42,8 @@ public class Defense {
             joinColumns = @JoinColumn(name = "defense_id"),
             inverseJoinColumns = @JoinColumn(name = "tutor_id")
     )
-    @JsonIgnore  // Prevent infinite loop
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idUser")
+    @JsonIdentityReference(alwaysAsId = false)
     Set<User> tutors;
 
 
