@@ -2,15 +2,18 @@ package tn.esprit.innoxpert.Controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.DTO.DefenseRequest;
 import tn.esprit.innoxpert.Entity.Defense;
+import tn.esprit.innoxpert.Exceptions.SchedulingConflictException;
 import tn.esprit.innoxpert.Service.DefenseServiceInterface;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "Defense Management")
 @RestController
@@ -18,8 +21,7 @@ import java.util.List;
 @RequestMapping("/defense")
 public class DefenseRestController {
 
-    @Autowired
-    DefenseServiceInterface defenseService;
+    private final DefenseServiceInterface defenseService;
 
     @GetMapping("/getAllDefenses")
     public List<Defense> getAllDefenses() {
@@ -32,12 +34,18 @@ public class DefenseRestController {
     }
 
     @PostMapping("/defense/{studentId}/defenses")
-    public Defense createDefense(
+    public ResponseEntity<?> createDefense(
             @PathVariable Long studentId,
             @RequestBody DefenseRequest defenseRequest) {
-        return defenseService.addDefense(studentId, defenseRequest);
+        try {
+            Defense defense = defenseService.addDefense(studentId, defenseRequest);
+            return ResponseEntity.ok(defense);
+        } catch (SchedulingConflictException e) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("error", "Scheduling conflict", "message", e.getMessage())
+            );
+        }
     }
-
 
     @DeleteMapping("/deleteDefense/{idDefense}")
     public void deleteDefenseById(@PathVariable("idDefense") Long idDefense) {
@@ -45,7 +53,24 @@ public class DefenseRestController {
     }
 
     @PutMapping("/updateDefense")
-    public Defense updateDefense(@RequestBody Defense defense) {
-        return defenseService.updateDefense(defense);
+    public ResponseEntity<?> updateDefense(@RequestBody Defense defense) {
+        try {
+            Defense updatedDefense = defenseService.updateDefense(defense);
+            return ResponseEntity.ok(updatedDefense);
+        } catch (SchedulingConflictException e) {
+            return ResponseEntity.badRequest().body(
+                    Map.of("error", "Scheduling conflict", "message", e.getMessage())
+            );
+        }
+    }
+
+    @GetMapping("/check-availability")
+    public ResponseEntity<?> checkAvailability(
+            @RequestParam String classroom,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime time) {
+
+        boolean isAvailable = defenseService.isDefenseSlotAvailable(classroom, date, time);
+        return ResponseEntity.ok(Map.of("available", isAvailable));
     }
 }

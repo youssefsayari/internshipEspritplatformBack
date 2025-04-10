@@ -2,8 +2,6 @@ package tn.esprit.innoxpert.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.DTO.DefenseRequest;
 import tn.esprit.innoxpert.Entity.Defense;
@@ -13,22 +11,19 @@ import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.DefenseRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
 
-import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class DefenseService implements DefenseServiceInterface {
 
-    @Autowired
     private final DefenseRepository defenseRepository;
-
-    @Autowired
     private final UserRepository userRepository;
+    private final DefenseConflictChecker conflictChecker;
 
     @Override
     public List<Defense> getAllDefenses() {
@@ -41,29 +36,6 @@ public class DefenseService implements DefenseServiceInterface {
                 .orElseThrow(() -> new NotFoundException("Defense with ID: " + idDefense + " was not found."));
     }
 
-    /*private DefenseDTO convertToDefenseDTO(Defense defense) {
-        DefenseDTO dto = new DefenseDTO();
-        dto.setIdDefense(defense.getIdDefense());
-        dto.setDefenseDate(defense.getDefenseDate());
-        dto.setDefenseTime(defense.getDefenseTime());
-        dto.setClassroom(defense.getClassroom());
-        dto.setReportSubmitted(defense.isReportSubmitted());
-        dto.setInternshipCompleted(defense.isInternshipCompleted());
-        dto.setDefenseDegree(defense.getDefenseDegree());
-
-        // Convert the student to a UserDTO
-        dto.setStudent(new UserDTO(defense.getStudent()));
-
-        // Convert the tutors to UserDTOs
-        List<UserDTO> tutors = defense.getTutors().stream()
-                .map(UserDTO::new)
-                .collect(Collectors.toList());
-        dto.setTutors(tutors);
-
-        return dto;
-    }*/
-
-
     @Override
     public Defense addDefense(Long studentId, DefenseRequest defenseRequest) {
         // 1. First check if student exists in DB
@@ -75,17 +47,7 @@ public class DefenseService implements DefenseServiceInterface {
             throw new IllegalArgumentException("User with ID " + studentId + " is not a student");
         }
 
-        // 3. Create new Defense object
-        Defense defense = new Defense();
-        defense.setStudent(student);
-        defense.setDefenseDate(defenseRequest.getDefenseDate());
-        defense.setDefenseTime(defenseRequest.getDefenseTime());
-        defense.setClassroom(defenseRequest.getClassroom());
-        defense.setReportSubmitted(defenseRequest.isReportSubmitted());
-        defense.setInternshipCompleted(defenseRequest.isInternshipCompleted());
-        defense.setDefenseDegree(defenseRequest.getDefenseDegree());
-
-        // 4. Validate and set tutors
+        // 3. Validate and set tutors
         Set<Long> tutorIds = defenseRequest.getTutorIds();
         if (tutorIds == null || tutorIds.size() != 3) {
             throw new IllegalArgumentException("Exactly 3 tutor IDs must be specified");
@@ -103,6 +65,23 @@ public class DefenseService implements DefenseServiceInterface {
             }
         }
 
+        // Check for scheduling conflicts
+        conflictChecker.checkDefenseConflicts(
+                defenseRequest.getClassroom(),
+                defenseRequest.getDefenseDate(),
+                defenseRequest.getDefenseTime(),
+                new HashSet<>(tutors)
+        );
+
+        // 4. Create new Defense object
+        Defense defense = new Defense();
+        defense.setStudent(student);
+        defense.setDefenseDate(defenseRequest.getDefenseDate());
+        defense.setDefenseTime(defenseRequest.getDefenseTime());
+        defense.setClassroom(defenseRequest.getClassroom());
+        defense.setReportSubmitted(defenseRequest.isReportSubmitted());
+        defense.setInternshipCompleted(defenseRequest.isInternshipCompleted());
+        defense.setDefenseDegree(defenseRequest.getDefenseDegree());
         defense.setTutors(new HashSet<>(tutors));
 
         // 5. Save the defense
@@ -112,32 +91,41 @@ public class DefenseService implements DefenseServiceInterface {
     @Override
     @Transactional
     public void removeDefenseById(Long idDefense) {
-        // Step 1: Fetch the defense entity
         Defense defense = defenseRepository.findById(idDefense)
                 .orElseThrow(() -> new NotFoundException("Defense with ID: " + idDefense + " was not found."));
 
-        // Step 2: Remove the defense-tutor relationship from the tutors' side
         for (User tutor : defense.getTutors()) {
-            tutor.getDefenses().remove(defense);  // Remove the relationship from the tutor's side
+            tutor.getDefenses().remove(defense);
         }
 
-        // Step 3: Clear the tutors collection in the defense
-        defense.getTutors().clear();  // Clear the tutors collection in the defense
-
-        // Step 4: Ensure the changes to the join table are persisted
-        defenseRepository.save(defense);  // This will update the join table
-
-        // Step 5: Delete the defense entity itself
-        defenseRepository.delete(defense);  // Delete the defense entity
+        defense.getTutors().clear();
+        defenseRepository.save(defense);
+        defenseRepository.delete(defense);
     }
 
     @Override
     public Defense updateDefense(Defense d) {
-        if (!defenseRepository.existsById(d.getIdDefense())) {
-            throw new NotFoundException("Defense with ID: " + d.getIdDefense() + " was not found. Cannot update.");
+        Defense existing = defenseRepository.findById(d.getIdDefense())
+                .orElseThrow(() -> new NotFoundException("Defense with ID: " + d.getIdDefense() + " was not found."));
+
+        // Skip conflict check if date/time/classroom didn't change
+        if (!existing.getDefenseDate().equals(d.getDefenseDate()) ||
+                !existing.getDefenseTime().equals(d.getDefenseTime()) ||
+                !existing.getClassroom().equals(d.getClassroom())) {
+
+            conflictChecker.checkDefenseConflicts(
+                    d.getClassroom(),
+                    d.getDefenseDate(),
+                    d.getDefenseTime(),
+                    d.getTutors()
+            );
         }
+
         return defenseRepository.save(d);
     }
 
-
+    @Override
+    public boolean isDefenseSlotAvailable(String classroom, LocalDate date, LocalTime time) {
+        return conflictChecker.isClassroomAvailable(classroom, date, time);
+    }
 }
