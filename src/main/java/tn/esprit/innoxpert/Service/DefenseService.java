@@ -128,4 +128,17 @@ public class DefenseService implements DefenseServiceInterface {
     public boolean isDefenseSlotAvailable(String classroom, LocalDate date, LocalTime time) {
         return conflictChecker.isClassroomAvailable(classroom, date, time);
     }
+    @Override
+    public List<Defense> getDefensesByTutorId(Long tutorId) {
+        // First verify the tutor exists
+        User tutor = userRepository.findById(tutorId)
+                .orElseThrow(() -> new NotFoundException("Tutor with ID: " + tutorId + " was not found."));
+
+        // Verify it's actually a tutor
+        if (tutor.getTypeUser() != TypeUser.Tutor) {
+            throw new IllegalArgumentException("User with ID " + tutorId + " is not a tutor");
+        }
+
+        return defenseRepository.findDefensesByTutorId(tutorId);
+    }
 }

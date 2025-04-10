@@ -73,4 +73,14 @@ public class DefenseRestController {
         boolean isAvailable = defenseService.isDefenseSlotAvailable(classroom, date, time);
         return ResponseEntity.ok(Map.of("available", isAvailable));
     }
+    @GetMapping("/getDefensesByTutor/{tutorId}")
+    public List<Defense> getDefensesByTutorId(@PathVariable("tutorId") Long tutorId) {
+        return defenseService.getDefensesByTutorId(tutorId);
+    }
+
+    // Or for static tutor ID = 2 (if you really want it hardcoded)
+    @GetMapping("/getDefensesForTutor2")
+    public List<Defense> getDefensesForStaticTutor() {
+        return defenseService.getDefensesByTutorId(2L);
+    }
 }

@@ -16,6 +16,8 @@ public interface DefenseServiceInterface {
     public void removeDefenseById(Long idDefense);
     public Defense updateDefense (Defense d );
     boolean isDefenseSlotAvailable(String classroom, LocalDate date, LocalTime time);
+    List<Defense> getDefensesByTutorId(Long tutorId); // Add this new method
+
 
 
 

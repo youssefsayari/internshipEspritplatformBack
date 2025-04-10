@@ -29,4 +29,7 @@ public interface DefenseRepository extends JpaRepository<Defense, Long> {
     List<Defense> findByTutorsContainingAndDefenseDate(
             @Param("tutor") User tutor,
             @Param("date") LocalDate date);
+
+    @Query("SELECT DISTINCT d FROM Defense d JOIN FETCH d.tutors t WHERE t.idUser = :tutorId")
+    List<Defense> findDefensesByTutorId(@Param("tutorId") Long tutorId);
 }

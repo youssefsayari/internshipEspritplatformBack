@@ -9,6 +9,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,7 +29,7 @@ public class Defense {
     String classroom;
     boolean reportSubmitted;
     boolean internshipCompleted;
-    double defenseDegree;
+    Double defenseDegree;
 
     @OneToOne
     @JoinColumn(name = "student_id", unique = true)
@@ -45,6 +46,10 @@ public class Defense {
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idUser")
     @JsonIdentityReference(alwaysAsId = false)
     Set<User> tutors;
+
+    @OneToMany(mappedBy = "defense", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    Set<TutorEvaluation> evaluations = new HashSet<>();
 
 
 }

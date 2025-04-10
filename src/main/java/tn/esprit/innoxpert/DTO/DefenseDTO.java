@@ -16,6 +16,5 @@ public class DefenseDTO {
     private String classroom;
     private boolean reportSubmitted;
     private boolean internshipCompleted;
-    private double defenseDegree;
     private Set<Long> tutorIds;
 }
