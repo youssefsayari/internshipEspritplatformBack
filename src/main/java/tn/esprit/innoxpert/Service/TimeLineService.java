@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.DTO.TimeLineResponse;
 import tn.esprit.innoxpert.Entity.Agreement;
 import tn.esprit.innoxpert.Entity.TimeLine;
+import tn.esprit.innoxpert.Entity.TypeAgreement;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Repository.AgreementRemarkRepository;
 import tn.esprit.innoxpert.Repository.AgreementRepository;
@@ -54,16 +55,14 @@ public class TimeLineService implements TimeLineServiceInterface {
         );
 
         List<TimeLine> timeLines = new ArrayList<>();
-        int z = 5;
         for (int i = 0; i < 6; i++) {
             TimeLine timeLine = new TimeLine();
             timeLine.setTitle(titles.get(i));
             timeLine.setDescription(titles.get(i));
-            timeLine.setDateLimite(timelineDates.get(z));
+            timeLine.setDateLimite(timelineDates.get(i));
             timeLine.setStudent(student);
             timeLine.setDocument(null);
             timeLines.add(timeLine);
-            z--;
         }
 
 
@@ -103,6 +102,25 @@ public class TimeLineService implements TimeLineServiceInterface {
         dates.add(calendar.getTime());
         return dates;
     }
+
+    @Override
+    public void acceptStep(String title, Long userId) {
+        TimeLine timeLine = timeLineRepository.findByTitleAndStudent_IdUser(title, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Step not found for this user"));
+
+        timeLine.setTimeLaneState(TypeAgreement.ACCEPTED);
+        timeLineRepository.save(timeLine);
+    }
+
+    @Override
+    public void rejectStep(String title, Long userId) {
+        TimeLine timeLine = timeLineRepository.findByTitleAndStudent_IdUser(title, userId)
+                .orElseThrow(() -> new IllegalArgumentException("Step not found for this user"));
+
+        timeLine.setTimeLaneState(TypeAgreement.REJECTED);
+        timeLineRepository.save(timeLine);
+    }
+
 
 
 
