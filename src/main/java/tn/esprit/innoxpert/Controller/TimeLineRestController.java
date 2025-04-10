@@ -32,5 +32,18 @@ public class TimeLineRestController {
         return timeLineService.getTimeLinesByUserId(userId);
     }
 
+    @PutMapping("/accept-step")
+    public ResponseEntity<String> acceptStep(@RequestParam String title, @RequestParam Long userId) {
+        timeLineService.acceptStep(title, userId);
+        return ResponseEntity.ok("Step accepted successfully.");
+    }
+
+    @PutMapping("/reject-step")
+    public ResponseEntity<String> rejectStep(@RequestParam String title, @RequestParam Long userId) {
+        timeLineService.rejectStep(title, userId);
+        return ResponseEntity.ok("Step rejected successfully.");
+    }
+
+
 
 }

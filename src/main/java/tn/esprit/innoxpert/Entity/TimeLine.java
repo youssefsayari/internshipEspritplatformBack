@@ -27,6 +27,10 @@ public class TimeLine {
     @NotNull(message = "dateLimite est obligatoire.")
     Date dateLimite;
 
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "L'état du timeline est obligatoire.")
+    TypeAgreement TimeLaneState = TypeAgreement.PENDING;
+
     @ManyToOne
     @JoinColumn(name = "student_id_user")
     @JsonIgnore
