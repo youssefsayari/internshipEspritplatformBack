@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import tn.esprit.innoxpert.Entity.Task;
 import tn.esprit.innoxpert.Entity.User;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -17,6 +18,7 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
     @Query("SELECT COUNT(t) FROM Task t WHERE t.student = :student AND t.status = tn.esprit.innoxpert.Entity.TypeStatus.DONE")
     int countDoneTasksByStudent(User student);
 
+    List<Task> findByDeadlineAndNotifiedFalse(LocalDate date);
 
 
 

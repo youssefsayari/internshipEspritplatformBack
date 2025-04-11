@@ -6,6 +6,8 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -32,4 +34,9 @@ public class Task {
     User student;
     @Column
     Integer mark;
+
+    @FutureOrPresent(message = "La date doit être dans le présent ou le futur")
+    LocalDate deadline;
+
+    boolean notified = false;
 }

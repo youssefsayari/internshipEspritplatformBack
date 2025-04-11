@@ -1,5 +1,6 @@
 package tn.esprit.innoxpert.Service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ import tn.esprit.innoxpert.Util.EmailClass;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDate;
 import java.util.HashMap;
 
 import java.util.HashMap;
@@ -225,5 +228,47 @@ public class TaskService implements TaskServiceInterface {
         }
     }
 
+    @Override
+    //@Scheduled(fixedRate = 10000)
+    @Transactional
+    public void notifyUsersOneDayBeforeTask()
+    {
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+
+        List<Task> tasks = taskRepository.findByDeadlineAndNotifiedFalse(tomorrow);
+        if (tasks.isEmpty()) {
+            System.out.println("✅ Aucun task à notifier.");
+            return;
+        }
+        for (Task task : tasks)
+        {
+            String mail = task.getStudent().getEmail();
+            System.out.println("student email is "+ mail);
+            String subject = "📅 Rappel : Tache prévue demain à " + task.getDeadline();
+            String message = "<html><body>"
+                    + "<h3>🔔 Rappel de votre Tache a faire</h3>"
+                    + "<p>Bonjour ,</p>"
+                    + "<p>Votre deadline est prévue demain :</p>"
+                    + "<ul>"
+                    + "<li>\uD83D\uDCCB <b>description de la tache  :</b> " + task.getDescription()+ "</li>"
+                    + "<li>⏰ <b>Deadline :</b> " + task.getDeadline()+ "</li>"
+
+                    + "</ul>"
+                    + "<p>Merci de faire la tache avant le deadline prévue.</p>"
+                    + "<p>Cordialement,<br>Departement Stage.</p>"
+                    + "</body></html>";
+            emailClass.sendHtmlEmail(mail, subject, message);
+            task.setNotified(true);
+            taskRepository.save(task);
+            System.out.println("email envoye a "+ mail);
+
+
+
+
+        }
+
+
+
+    }
 
 }

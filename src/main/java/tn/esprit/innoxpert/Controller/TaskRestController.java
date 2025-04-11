@@ -121,6 +121,11 @@ public class TaskRestController {
         }
     }
 
+    @PostMapping("/mailing")
+    public void sendNotifTask()
+    {
+        taskService.notifyUsersOneDayBeforeTask();
+    }
 
 
 

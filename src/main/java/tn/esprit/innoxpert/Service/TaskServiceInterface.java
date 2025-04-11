@@ -23,6 +23,7 @@ public interface TaskServiceInterface {
     Task rateTask(Long taskId, Integer mark);
     public void sendHelpRequest(Long taskId, String messageContent) ;
     public String getAISuggestion(Long taskId, String studentMessage);
+    public void notifyUsersOneDayBeforeTask();
 
 
 
