@@ -68,16 +68,18 @@ public class EvaluationService {
         List<TutorEvaluation> evaluations = evaluationRepository.findByDefense_IdDefense(defense.getIdDefense());
 
         // Only calculate if all 3 evaluations are submitted
+        // Only calculate if all 3 evaluations are submitted
         if (evaluations.size() == 3 && evaluations.stream().allMatch(e -> e.getStatus() == EvaluationStatus.SUBMITTED)) {
             double average = evaluations.stream()
                     .mapToDouble(TutorEvaluation::getGrade)
                     .average()
                     .orElse(0.0);
 
-            // Convert from 20 to 100 scale
-            defense.setDefenseDegree(average * 5);
+            // Set the defense degree based on the average of the grades, on a 20-point scale
+            defense.setDefenseDegree(average); // No need to multiply by 5
             defenseRepository.save(defense);
         }
+
     }
 
     public List<EvaluationResponse> getEvaluationsForDefense(Long defenseId) {

@@ -33,5 +33,8 @@ public interface DefenseRepository extends JpaRepository<Defense, Long> {
     @Query("SELECT DISTINCT d FROM Defense d JOIN FETCH d.tutors t WHERE t.idUser = :tutorId")
     List<Defense> findDefensesByTutorId(@Param("tutorId") Long tutorId);
 
+    @Query("SELECT DISTINCT d FROM Defense d JOIN FETCH d.student s WHERE s.idUser = :studentId")
+    List<Defense> findDefensesByStudentId(@Param("studentId") Long studentId);
+
 
 }

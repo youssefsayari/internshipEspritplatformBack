@@ -16,9 +16,7 @@ import tn.esprit.innoxpert.Repository.UserRepository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -187,5 +185,41 @@ public class DefenseService implements DefenseServiceInterface {
             return dto;
         }).collect(Collectors.toList());
     }
+
+    @Override
+    public List<Defense> getDefensesByStudentId(Long studentId) {
+        return defenseRepository.findDefensesByStudentId(studentId);
+    }
+
+    public Map<String, List<Defense>> getDefenseStats(List<Defense> defenses) {
+        // Initialize the categories
+        List<Defense> excellentStudents = new ArrayList<>();
+        List<Defense> averageStudents = new ArrayList<>();
+        List<Defense> badStudents = new ArrayList<>();
+
+        // Classify each defense based on the defense degree
+        for (Defense defense : defenses) {
+            double defenseDegree = defense.getDefenseDegree();
+
+            if (defenseDegree >= 15) {
+                excellentStudents.add(defense);
+            } else if (defenseDegree >= 10) {
+                averageStudents.add(defense);
+            } else if (defenseDegree >= 0) {
+                badStudents.add(defense);
+            }
+        }
+
+        // Prepare the result map with categorized students
+        Map<String, List<Defense>> result = new HashMap<>();
+        result.put("Excellent", excellentStudents);
+        result.put("Average", averageStudents);
+        result.put("Bad", badStudents);
+
+        return result;
+    }
+
+
+
 
 }

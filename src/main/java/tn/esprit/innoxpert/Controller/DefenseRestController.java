@@ -86,12 +86,27 @@ public class DefenseRestController {
         return ResponseEntity.ok(defenses);
     }
 
+    @GetMapping("/getDefensesByStudent/{studentId}")
+    public ResponseEntity<List<Defense>> getDefensesByStudentId(@PathVariable("studentId") Long studentId) {
+        List<Defense> defenses = defenseService.getDefensesByStudentId(studentId);
+        return ResponseEntity.ok(defenses);
+    }
 
-    // Or for static tutor ID = 2 (if you really want it hardcoded)
+    @GetMapping("/stats")
+    public ResponseEntity<Map<String, List<Defense>>> getDefenseStats() {
+        List<Defense> allDefenses = defenseService.getAllDefenses(); // Fetch all defenses from the service
+        Map<String, List<Defense>> stats = defenseService.getDefenseStats(allDefenses);
+        return ResponseEntity.ok(stats); // Return the categorized stats
+    }
+
+
+
     @GetMapping("/getDefensesForTutor2")
     public List<Defense> getDefensesForStaticTutor() {
         return defenseService.getDefensesByTutorId(2L);
     }
+
+
 
 
 }
