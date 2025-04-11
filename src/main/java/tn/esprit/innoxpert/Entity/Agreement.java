@@ -28,6 +28,12 @@ public class Agreement {
     @NotNull(message = "L'état du agreement est obligatoire.")
     TypeAgreement agreementState;
 
+    @NotNull(message = "postId est obligatoire.")
+    Long postId;
+
+    @NotNull(message = "creationDate est obligatoire.")
+    Date creationDate;
+
     @OneToOne
     @JoinColumn(name = "student_id_user")
     private User student;

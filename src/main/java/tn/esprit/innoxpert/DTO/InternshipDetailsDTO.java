@@ -7,6 +7,7 @@ public class InternshipDetailsDTO {
     private String companyRepresentativeFullName;
     private Long companyId;
     private Long componyPhone;
+    private Long postId;
 
     public String getInternshipTitle() {
         return internshipTitle;
@@ -54,5 +55,13 @@ public class InternshipDetailsDTO {
 
     public void setComponyPhone(Long componyPhone) {
         this.componyPhone = componyPhone;
+    }
+
+    public Long getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 }

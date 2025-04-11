@@ -51,6 +51,8 @@ public class AgreementService implements AgreementServiceInterface {
 
         if (agreementOpt.isPresent()) {
             Agreement agreement = agreementOpt.get();
+            Internship internship = internshipRepository.findById(agreement.getPostId()).orElse(null);
+            String nomValidateur = internship.getValidator().getFirstName() + " " + internship.getValidator().getLastName();
             String companyName = agreement.getCompany().getName();
             String companyRepresentative = agreement.getCompany().getOwner().getFirstName() + " " + agreement.getCompany().getOwner().getLastName();
 
@@ -60,7 +62,9 @@ public class AgreementService implements AgreementServiceInterface {
                     agreement.getEndDate(),
                     companyName,
                     companyRepresentative,
-                    agreement.getAgreementState()
+                    agreement.getAgreementState(),
+                    agreement.getCreationDate(),
+                    nomValidateur
             );
         }
         return null;
@@ -98,8 +102,10 @@ public class AgreementService implements AgreementServiceInterface {
         agreement.setStartDate(agreementRequestDTO.getStartDate());
         agreement.setEndDate(agreementRequestDTO.getEndDate());
         agreement.setAgreementState(TypeAgreement.PENDING);
+        agreement.setCreationDate(new Date());
         agreement.setStudent(student);
         agreement.setCompany(company);
+        agreement.setPostId(agreementRequestDTO.getPostId());
 
         agreementRepository.save(agreement);
     }
@@ -123,6 +129,7 @@ public class AgreementService implements AgreementServiceInterface {
                         dto.setCompanyAddress(internship.getPost().getCompany().getAddress());
                         dto.setCompanyId(internship.getPost().getCompany().getId());
                         dto.setComponyPhone(internship.getPost().getCompany().getPhone());
+                        dto.setPostId(internship.getId());
 
                         if (internship.getPost().getCompany().getOwner() != null) {
                             String fullName = internship.getPost().getCompany().getOwner().getFirstName() + " " + internship.getPost().getCompany().getOwner().getLastName();

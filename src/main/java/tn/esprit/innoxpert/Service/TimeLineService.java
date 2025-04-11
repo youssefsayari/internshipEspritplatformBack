@@ -46,27 +46,51 @@ public class TimeLineService implements TimeLineServiceInterface {
         List<Date> timelineDates = calculateTimelineDates(startDate, endDate);
 
         List<String> titles = Arrays.asList(
-                "Depot Journal de bord",
-                "Depot Bilan Version 1",
-                "Lancement Visite Mi Parcours",
+                "Demande Convention",
+                "Remise Plan de Travail",
                 "Validation Technique",
-                "Depot Rapport Version 1",
-                "Depot Rapport Final"
+                "Depot Rapport"
         );
 
+        List<String> descriptions = Arrays.asList(
+                "Les détails de la convention.",
+                "Remplissez tous les détails demandés dans le document joint après l'avoir téléchargé sur votre PC.",
+                "Les données concernant la validation technique.",
+                "Déposez votre rapport de stage."
+        );
+        Date validationTechniqueDate = timelineDates.get(2);
+        validationTechniqueDate = adjustWeekendDate(validationTechniqueDate);
+
+        timelineDates.set(2, validationTechniqueDate);
+
         List<TimeLine> timeLines = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 4; i++) {
             TimeLine timeLine = new TimeLine();
             timeLine.setTitle(titles.get(i));
-            timeLine.setDescription(titles.get(i));
+            timeLine.setDescription(descriptions.get(i));
             timeLine.setDateLimite(timelineDates.get(i));
             timeLine.setStudent(student);
             timeLine.setDocument(null);
+            if ("Demande Convention".equals(titles.get(i))) {
+                timeLine.setTimeLaneState(TypeAgreement.ACCEPTED);
+            }
             timeLines.add(timeLine);
         }
 
 
         timeLineRepository.saveAll(timeLines);
+    }
+
+    private Date adjustWeekendDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+            calendar.add(Calendar.DATE, -1);
+        }
+        else if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            calendar.add(Calendar.DATE, 1);
+        }
+        return calendar.getTime();
     }
 
     @Override
@@ -81,9 +105,10 @@ public class TimeLineService implements TimeLineServiceInterface {
         response.setId(timeline.getId());
         response.setTitle(timeline.getTitle());
         response.setDescription(timeline.getDescription());
-        response.setDateLimite(timeline.getDateLimite().toString()); // Ou formater selon besoin
+        response.setDateLimite(timeline.getDateLimite().toString());
         response.setStudentId(timeline.getStudent() != null ? timeline.getStudent().getIdUser() : null);
         response.setDocumentId(timeline.getDocument() != null ? timeline.getDocument().getId() : null);
+        response.setTimeLaneState(timeline.getTimeLaneState());
         return response;
     }
 
@@ -91,8 +116,8 @@ public class TimeLineService implements TimeLineServiceInterface {
     private List<Date> calculateTimelineDates(Date startDate, Date endDate) {
         List<Date> dates = new ArrayList<>();
         long duration = endDate.getTime() - startDate.getTime();
-        long interval = duration / 5;
-        for (int i = 0; i <= 5; i++) {
+        long interval = duration / 3;
+        for (int i = 0; i <= 3; i++) {
             long currentDateTime = startDate.getTime() + (i * interval);
             dates.add(new Date(currentDateTime));
         }

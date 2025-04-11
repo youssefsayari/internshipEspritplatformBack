@@ -8,6 +8,7 @@ import java.util.Date;
 public class AgreementRequestDTO {
     private Long studentId;
     private Long companyId;
+    private Long postId;
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date startDate;
     @JsonFormat(pattern="yyyy-MM-dd")
@@ -29,6 +30,14 @@ public class AgreementRequestDTO {
         this.companyId = companyId;
     }
 
+    public Long getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Long postId) {
+        this.postId = postId;
+    }
+
     public Date getStartDate() {
         return startDate;
     }
@@ -44,5 +53,4 @@ public class AgreementRequestDTO {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-
 }
