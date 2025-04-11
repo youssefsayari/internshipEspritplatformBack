@@ -41,7 +41,8 @@ public class DocumentRestController {
             "lettre_affectation.pdf",
             "demande_de_stage.pdf",
             "journal.pdf",
-            "convention_de_stage.pdf"
+            "convention_de_stage.pdf","Plan de Travail.pdf"
+
     );
 
     // ✅ Get All Documents

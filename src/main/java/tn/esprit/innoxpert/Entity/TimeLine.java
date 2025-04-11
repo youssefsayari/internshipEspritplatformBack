@@ -26,7 +26,7 @@ public class TimeLine {
 
     @NotNull(message = "dateLimite est obligatoire.")
     Date dateLimite;
-    
+
     Integer note;
 
     @Enumerated(EnumType.STRING)
