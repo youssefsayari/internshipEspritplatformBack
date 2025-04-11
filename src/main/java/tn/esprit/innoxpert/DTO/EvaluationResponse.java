@@ -2,7 +2,6 @@ package tn.esprit.innoxpert.DTO;
 
 import lombok.Data;
 import tn.esprit.innoxpert.Entity.EvaluationStatus;
-
 @Data
 public class EvaluationResponse {
     private Long id;

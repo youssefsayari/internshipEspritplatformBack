@@ -2,6 +2,7 @@ package tn.esprit.innoxpert.Service;
 
 import org.springframework.http.ResponseEntity;
 import tn.esprit.innoxpert.DTO.DefenseRequest;
+import tn.esprit.innoxpert.DTO.DefenseWithEvaluationsDTO;
 import tn.esprit.innoxpert.Entity.Defense;
 
 import java.io.IOException;
@@ -17,8 +18,10 @@ public interface DefenseServiceInterface {
     public Defense updateDefense (Defense d );
     boolean isDefenseSlotAvailable(String classroom, LocalDate date, LocalTime time);
     List<Defense> getDefensesByTutorId(Long tutorId); // Add this new method
+    public List<DefenseWithEvaluationsDTO> getDefensesWithEvaluationsByTutor(Long tutorId) ;
 
 
 
 
-}
+
+    }

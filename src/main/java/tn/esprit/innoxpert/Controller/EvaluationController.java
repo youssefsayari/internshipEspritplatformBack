@@ -32,4 +32,12 @@ public class EvaluationController {
     public ResponseEntity<EvaluationResponse> getEvaluation(@PathVariable Long evaluationId) {
         return ResponseEntity.ok(evaluationService.getEvaluation(evaluationId));
     }
+    @GetMapping("/evaluations/defense/{defenseId}/tutor/{tutorId}")
+    public ResponseEntity<EvaluationResponse> getEvaluationByDefenseAndTutor(
+            @PathVariable Long defenseId,
+            @PathVariable Long tutorId) {
+        return ResponseEntity.ok(evaluationService.getEvaluationByDefenseAndTutor(defenseId, tutorId));
+    }
+
+
 }

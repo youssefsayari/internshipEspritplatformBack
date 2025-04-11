@@ -6,9 +6,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.DTO.DefenseRequest;
+import tn.esprit.innoxpert.DTO.DefenseWithEvaluationsDTO;
 import tn.esprit.innoxpert.Entity.Defense;
+import tn.esprit.innoxpert.Entity.TutorEvaluation;
 import tn.esprit.innoxpert.Exceptions.SchedulingConflictException;
 import tn.esprit.innoxpert.Service.DefenseServiceInterface;
+import tn.esprit.innoxpert.Service.EvaluationService;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,16 +25,19 @@ import java.util.Map;
 public class DefenseRestController {
 
     private final DefenseServiceInterface defenseService;
+    private final EvaluationService evaluationService;
 
     @GetMapping("/getAllDefenses")
     public List<Defense> getAllDefenses() {
         return defenseService.getAllDefenses();
     }
 
-    @GetMapping("/getDefenseById/{idDefense}")
-    public Defense getDefenseById(@PathVariable("idDefense") Long idDefense) {
-        return defenseService.getDfenseById(idDefense);
+    @GetMapping("/getDefenseById/{defenseId}")
+    public ResponseEntity<Defense> getDefenseById(@PathVariable Long defenseId) {
+        Defense defense = defenseService.getDfenseById(defenseId); // Ensure this returns a valid Defense object
+        return ResponseEntity.ok(defense);
     }
+
 
     @PostMapping("/defense/{studentId}/defenses")
     public ResponseEntity<?> createDefense(
@@ -74,13 +80,18 @@ public class DefenseRestController {
         return ResponseEntity.ok(Map.of("available", isAvailable));
     }
     @GetMapping("/getDefensesByTutor/{tutorId}")
-    public List<Defense> getDefensesByTutorId(@PathVariable("tutorId") Long tutorId) {
-        return defenseService.getDefensesByTutorId(tutorId);
+    public ResponseEntity<List<DefenseWithEvaluationsDTO>> getDefensesWithEvaluationsByTutor(
+            @PathVariable("tutorId") Long tutorId) {
+        List<DefenseWithEvaluationsDTO> defenses = defenseService.getDefensesWithEvaluationsByTutor(tutorId);
+        return ResponseEntity.ok(defenses);
     }
+
 
     // Or for static tutor ID = 2 (if you really want it hardcoded)
     @GetMapping("/getDefensesForTutor2")
     public List<Defense> getDefensesForStaticTutor() {
         return defenseService.getDefensesByTutorId(2L);
     }
+
+
 }

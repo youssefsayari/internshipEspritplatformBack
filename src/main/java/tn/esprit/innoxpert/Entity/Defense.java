@@ -1,8 +1,9 @@
 package tn.esprit.innoxpert.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,13 +44,17 @@ public class Defense {
             joinColumns = @JoinColumn(name = "defense_id"),
             inverseJoinColumns = @JoinColumn(name = "tutor_id")
     )
+    @JsonManagedReference  // Manages tutors in the defense entity
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idUser")
     @JsonIdentityReference(alwaysAsId = false)
     Set<User> tutors;
 
     @OneToMany(mappedBy = "defense", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
+    @JsonBackReference  // Prevents circular reference with TutorEvaluation
     Set<TutorEvaluation> evaluations = new HashSet<>();
 
-
+    public boolean areAllEvaluationsSubmitted() {
+        return evaluations != null && evaluations.size() == 3 &&
+                evaluations.stream().allMatch(evaluation -> evaluation.getStatus() == EvaluationStatus.SUBMITTED);
+    }
 }

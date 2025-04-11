@@ -23,11 +23,9 @@ public class EvaluationService {
 
     @Transactional
     public EvaluationResponse submitEvaluation(EvaluationRequest request) {
-        // Validate defense exists
         Defense defense = defenseRepository.findById(request.getDefenseId())
                 .orElseThrow(() -> new NotFoundException("Defense not found"));
 
-        // Validate tutor exists and is actually a tutor
         User tutor = userRepository.findById(request.getTutorId())
                 .orElseThrow(() -> new NotFoundException("Tutor not found"));
 
@@ -35,35 +33,35 @@ public class EvaluationService {
             throw new IllegalArgumentException("User is not a tutor");
         }
 
-        // Validate grade is between 0 and 20
         if (request.getGrade() == null || request.getGrade() < 0 || request.getGrade() > 20) {
             throw new IllegalArgumentException("Grade must be between 0 and 20");
         }
 
-        // Check if tutor is assigned to this defense
         if (!defense.getTutors().contains(tutor)) {
             throw new IllegalArgumentException("Tutor is not assigned to this defense");
         }
 
-        // Check if evaluation already exists - UPDATED METHOD CALL
-        TutorEvaluation evaluation = evaluationRepository.findByDefense_IdDefenseAndTutor_IdUser(
-                request.getDefenseId(),
-                request.getTutorId()
-        ).orElse(new TutorEvaluation());
+        TutorEvaluation evaluation = evaluationRepository
+                .findByDefense_IdDefenseAndTutor_IdUser(request.getDefenseId(), request.getTutorId())
+                .orElse(null);
 
-        evaluation.setDefense(defense);
-        evaluation.setTutor(tutor);
+        if (evaluation == null) {
+            evaluation = new TutorEvaluation();
+            evaluation.setDefense(defense);
+            evaluation.setTutor(tutor);
+        }
+
         evaluation.setGrade(request.getGrade());
         evaluation.setRemarks(request.getRemarks());
         evaluation.setStatus(EvaluationStatus.SUBMITTED);
 
         TutorEvaluation savedEvaluation = evaluationRepository.save(evaluation);
 
-        // Update defense degree if all evaluations are submitted
         updateDefenseDegree(defense);
 
         return mapToResponse(savedEvaluation);
     }
+
 
     private void updateDefenseDegree(Defense defense) {
         // UPDATED METHOD CALL
@@ -104,5 +102,14 @@ public class EvaluationService {
         response.setRemarks(evaluation.getRemarks());
         response.setStatus(evaluation.getStatus());
         return response;
+
     }
+    public EvaluationResponse getEvaluationByDefenseAndTutor(Long defenseId, Long tutorId) {
+        return evaluationRepository.findByDefense_IdDefenseAndTutor_IdUser(defenseId, tutorId)
+                .map(this::mapToResponse)
+                .orElseThrow(() -> new NotFoundException("Evaluation not found"));
+    }
+
+
+
 }

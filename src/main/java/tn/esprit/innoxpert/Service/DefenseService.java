@@ -4,6 +4,9 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.DTO.DefenseRequest;
+import tn.esprit.innoxpert.DTO.DefenseWithEvaluationsDTO;
+import tn.esprit.innoxpert.DTO.TutorEvaluationDTO;
+import tn.esprit.innoxpert.DTO.UserDTO;
 import tn.esprit.innoxpert.Entity.Defense;
 import tn.esprit.innoxpert.Entity.TypeUser;
 import tn.esprit.innoxpert.Entity.User;
@@ -16,6 +19,7 @@ import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -141,4 +145,47 @@ public class DefenseService implements DefenseServiceInterface {
 
         return defenseRepository.findDefensesByTutorId(tutorId);
     }
+
+    public List<DefenseWithEvaluationsDTO> getDefensesWithEvaluationsByTutor(Long tutorId) {
+        List<Defense> defenses = defenseRepository.findDefensesByTutorId(tutorId);
+
+        return defenses.stream().map(defense -> {
+            DefenseWithEvaluationsDTO dto = new DefenseWithEvaluationsDTO();
+            dto.setIdDefense(defense.getIdDefense());
+            dto.setClassroom(defense.getClassroom());
+            dto.setDefenseDate(defense.getDefenseDate());
+            dto.setDefenseTime(defense.getDefenseTime());
+            dto.setReportSubmitted(defense.isReportSubmitted());
+            dto.setInternshipCompleted(defense.isInternshipCompleted());
+            dto.setDefenseDegree(defense.getDefenseDegree());
+
+            // Convert student
+            User student = defense.getStudent();
+            UserDTO studentDTO = new UserDTO();
+            studentDTO.setIdUser(student.getIdUser());
+            studentDTO.setFirstName(student.getFirstName());
+            studentDTO.setLastName(student.getLastName());
+            dto.setStudent(studentDTO);
+
+            List<Long> tutorIds = defense.getTutors().stream()
+                    .map(User::getIdUser)
+                    .collect(Collectors.toList());
+            dto.setTutors(tutorIds);
+
+            // Convert evaluations
+            List<TutorEvaluationDTO> evalDTOs = defense.getEvaluations().stream().map(eval -> {
+                TutorEvaluationDTO evalDTO = new TutorEvaluationDTO();
+                evalDTO.setId(eval.getId());
+                evalDTO.setTutorId(eval.getTutor().getIdUser());
+                evalDTO.setGrade(eval.getGrade());
+                evalDTO.setRemarks(eval.getRemarks());
+                evalDTO.setStatus(eval.getStatus().name());
+                return evalDTO;
+            }).collect(Collectors.toList());
+
+            dto.setEvaluations(evalDTOs);
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
 }
