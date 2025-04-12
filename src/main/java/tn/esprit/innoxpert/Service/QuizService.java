@@ -23,8 +23,10 @@ public class QuizService implements QuizServiceInterface {
     @Autowired
     private QuizRepository quizRepository;
     private SocieteRepository societeRepository;
-    private UserRepository userRepository;
     private CompanyRepository companyRepository;
+    private NotificationService notificationService;
+
+    private UserRepository userRepository;
     @Override
 
 
@@ -43,17 +45,33 @@ public class QuizService implements QuizServiceInterface {
 
 
 
-   @Override
+    @Override
     public Quiz updateQuiz(Quiz quiz) {
-        Company s=quizRepository.findCompanyByQuizId(quiz.getIdQuiz());
-        if ( !quizRepository.existsById(quiz.getIdQuiz())) {
+        Company s = quizRepository.findCompanyByQuizId(quiz.getIdQuiz());
+
+        if (!quizRepository.existsById(quiz.getIdQuiz())) {
             throw new NotFoundException("Quiz with ID: " + quiz.getIdQuiz() + " was not found. Cannot update.");
         }
-       System.out.println("aaaa" +s.getId());
-       System.out.println(quiz.getCompany());
-       quiz.setCompany(s);
-        return quizRepository.save(quiz);
+
+        System.out.println("aaaa" + s.getId());
+        System.out.println(quiz.getCompany());
+        quiz.setCompany(s);
+
+        Quiz updatedQuiz = quizRepository.save(quiz);
+
+        // ✅ Notifier tous les utilisateurs de la modification de date de passage
+        List<User> users = userRepository.findByTypeUser(TypeUser.Student);
+        for (User user : users) {
+            notificationService.notifyUser(
+                    user,
+                    "Le quiz \"" + updatedQuiz.getTitre() + "\" a été modifié. Vérifiez les modifications.",
+                    updatedQuiz
+            );
+        }
+
+        return updatedQuiz;
     }
+
     @Override
     public void deleteQuiz(Long id) {
         quizRepository.deleteById(id);
@@ -61,8 +79,22 @@ public class QuizService implements QuizServiceInterface {
     @Override
     public Quiz addAndaffectQuizToSociete(Long idSociete, Quiz newQuiz) {
         Company company = companyRepository.findByOwnerId(idSociete);
-
         newQuiz.setCompany(company);
-        return quizRepository.save(newQuiz);    }
+
+        Quiz savedQuiz = quizRepository.save(newQuiz);
+
+        // ✅ Notifier tous les utilisateurs qu’un nouveau quiz est disponible
+        List<User> users = userRepository.findByTypeUser(TypeUser.Student);
+        for (User user : users) {
+            notificationService.notifyUser(
+                    user,
+                    "Un nouveau quiz a été ajouté : \"" + savedQuiz.getTitre() + "\". veuillez le consulter! !",
+                    savedQuiz
+            );
+        }
+
+        return savedQuiz;
+    }
+
 
 }
