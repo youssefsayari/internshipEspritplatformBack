@@ -40,7 +40,8 @@ public class SecurityConfiguration {
                         .requestMatchers(new AntPathRequestMatcher("/user/send-otp", "POST")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/user/change-password", "POST")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/user/verify-otp", "POST")).permitAll()
-                        .anyRequest().permitAll()//bch titbaddel l .authentificated()
+                        .requestMatchers(new AntPathRequestMatcher("/user/decode-token-Role", "POST")).permitAll()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
