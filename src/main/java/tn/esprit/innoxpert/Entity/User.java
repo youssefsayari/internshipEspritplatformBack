@@ -69,8 +69,10 @@ public class User implements UserDetails {
     Defense defense;
 
 
+    // In User.java
     @ManyToMany(mappedBy = "tutors", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    @JsonIgnore  // Prevent infinite loop
+    @JsonIgnoreProperties({"defenses", "tutors"})  // Add this
+    @JsonIgnore
     Set<Defense> defenses;
 
 

@@ -45,8 +45,6 @@ public class Defense {
             inverseJoinColumns = @JoinColumn(name = "tutor_id")
     )
     @JsonManagedReference  // Manages tutors in the defense entity
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idUser")
-    @JsonIdentityReference(alwaysAsId = false)
     Set<User> tutors;
 
     @OneToMany(mappedBy = "defense", cascade = CascadeType.ALL, orphanRemoval = true)

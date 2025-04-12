@@ -17,9 +17,11 @@ public interface DefenseRepository extends JpaRepository<Defense, Long> {
     @Query(value = "DELETE FROM defense_tutors WHERE defense_id = :defenseId", nativeQuery = true)
     void deleteDefenseTutorsByDefenseId(@Param("defenseId") Long defenseId);
 
-    @Query("SELECT d FROM Defense d LEFT JOIN FETCH d.student LEFT JOIN FETCH d.tutors")
+    @Query("SELECT DISTINCT d FROM Defense d " +
+            "LEFT JOIN FETCH d.student " +
+            "LEFT JOIN FETCH d.tutors t " +
+            "LEFT JOIN FETCH t.defenses")  // Add this join
     List<Defense> findAllWithStudentsAndTutors();
-
     @Query("SELECT d FROM Defense d WHERE d.classroom = :classroom AND d.defenseDate = :date")
     List<Defense> findByClassroomAndDefenseDate(
             @Param("classroom") String classroom,
