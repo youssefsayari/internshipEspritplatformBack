@@ -129,19 +129,19 @@ public class TimeLineService implements TimeLineServiceInterface {
     }
 
     @Override
-    public void acceptStep(String title, Long userId) {
+    public void acceptStep(String title, Long userId, Integer note) {
         TimeLine timeLine = timeLineRepository.findByTitleAndStudent_IdUser(title, userId)
                 .orElseThrow(() -> new IllegalArgumentException("Step not found for this user"));
-
+        timeLine.setNote(note);
         timeLine.setTimeLaneState(TypeAgreement.ACCEPTED);
         timeLineRepository.save(timeLine);
     }
 
     @Override
-    public void rejectStep(String title, Long userId) {
+    public void rejectStep(String title, Long userId, Integer note) {
         TimeLine timeLine = timeLineRepository.findByTitleAndStudent_IdUser(title, userId)
                 .orElseThrow(() -> new IllegalArgumentException("Step not found for this user"));
-
+        timeLine.setNote(note);
         timeLine.setTimeLaneState(TypeAgreement.REJECTED);
         timeLineRepository.save(timeLine);
     }

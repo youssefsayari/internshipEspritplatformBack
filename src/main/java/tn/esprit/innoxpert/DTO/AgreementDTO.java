@@ -16,9 +16,10 @@ public class AgreementDTO {
     private TypeAgreement agreementState;
     private Date creationDate;
     private String validatorName;
+    private Long validateurId;
 
 
-    public AgreementDTO(Long id, Date startDate, Date endDate, String companyName, String companyRepresentative, TypeAgreement agreementState, Date creationDate, String validatorName) {
+    public AgreementDTO(Long id, Date startDate, Date endDate, String companyName, String companyRepresentative, TypeAgreement agreementState, Date creationDate, String validatorName, Long validateurId) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -27,5 +28,6 @@ public class AgreementDTO {
         this.agreementState = agreementState;
         this.creationDate = creationDate;
         this.validatorName = validatorName;
+        this.validateurId = validateurId;
     }
 }

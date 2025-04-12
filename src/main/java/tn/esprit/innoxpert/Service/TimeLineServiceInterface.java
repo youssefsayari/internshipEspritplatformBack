@@ -8,7 +8,7 @@ import java.util.List;
 public interface TimeLineServiceInterface {
     void addTimeLine(Long userId, Long agreementId);
     List<TimeLineResponse> getTimeLinesByUserId(Long userId);
-    void acceptStep(String title, Long userId);
-    void rejectStep(String title, Long userId);
+    void acceptStep(String title, Long userId, Integer note);
+    void rejectStep(String title, Long userId, Integer note);
 
 }

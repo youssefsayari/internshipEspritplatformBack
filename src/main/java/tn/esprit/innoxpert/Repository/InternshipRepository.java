@@ -28,5 +28,8 @@ public interface InternshipRepository extends JpaRepository<Internship,Long> {
     @Query("DELETE FROM Internship i WHERE i.post IN :posts")
     void deleteAllByPostIn(List<Post> posts);
 
+    List<Internship> findByValidator_IdUser(Long idUser);
+
+
 
 }

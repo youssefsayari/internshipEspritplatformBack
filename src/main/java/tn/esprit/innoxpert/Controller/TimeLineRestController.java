@@ -33,14 +33,14 @@ public class TimeLineRestController {
     }
 
     @PutMapping("/accept-step")
-    public ResponseEntity<String> acceptStep(@RequestParam String title, @RequestParam Long userId) {
-        timeLineService.acceptStep(title, userId);
+    public ResponseEntity<String> acceptStep(@RequestParam String title, @RequestParam Long userId,@RequestParam Integer note) {
+        timeLineService.acceptStep(title, userId,note);
         return ResponseEntity.ok("Step accepted successfully.");
     }
 
     @PutMapping("/reject-step")
-    public ResponseEntity<String> rejectStep(@RequestParam String title, @RequestParam Long userId) {
-        timeLineService.rejectStep(title, userId);
+    public ResponseEntity<String> rejectStep(@RequestParam String title, @RequestParam Long userId, @RequestParam Integer note) {
+        timeLineService.rejectStep(title, userId, note);
         return ResponseEntity.ok("Step rejected successfully.");
     }
 

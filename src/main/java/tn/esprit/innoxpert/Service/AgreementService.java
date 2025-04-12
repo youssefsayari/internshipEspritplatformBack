@@ -53,6 +53,7 @@ public class AgreementService implements AgreementServiceInterface {
             Agreement agreement = agreementOpt.get();
             Internship internship = internshipRepository.findById(agreement.getPostId()).orElse(null);
             String nomValidateur = internship.getValidator().getFirstName() + " " + internship.getValidator().getLastName();
+            Long validateurId = internship.getValidator().getIdUser();
             String companyName = agreement.getCompany().getName();
             String companyRepresentative = agreement.getCompany().getOwner().getFirstName() + " " + agreement.getCompany().getOwner().getLastName();
 
@@ -64,7 +65,7 @@ public class AgreementService implements AgreementServiceInterface {
                     companyRepresentative,
                     agreement.getAgreementState(),
                     agreement.getCreationDate(),
-                    nomValidateur
+                    nomValidateur,validateurId
             );
         }
         return null;
