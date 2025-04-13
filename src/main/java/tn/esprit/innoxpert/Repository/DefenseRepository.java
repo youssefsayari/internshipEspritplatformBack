@@ -9,6 +9,7 @@ import tn.esprit.innoxpert.Entity.User;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface DefenseRepository extends JpaRepository<Defense, Long> {
     boolean existsByStudent(User student);
@@ -37,6 +38,9 @@ public interface DefenseRepository extends JpaRepository<Defense, Long> {
 
     @Query("SELECT DISTINCT d FROM Defense d JOIN FETCH d.student s WHERE s.idUser = :studentId")
     List<Defense> findDefensesByStudentId(@Param("studentId") Long studentId);
+
+    @Query("SELECT d FROM Defense d WHERE d.student.idUser = :studentId")
+    Optional<Defense> findDefenseByStudentId(@Param("studentId") Long studentId);
 
 
 }

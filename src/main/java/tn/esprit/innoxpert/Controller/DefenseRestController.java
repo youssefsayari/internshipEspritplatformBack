@@ -3,6 +3,8 @@ package tn.esprit.innoxpert.Controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.DTO.DefenseRequest;
@@ -44,31 +46,46 @@ public class DefenseRestController {
             @PathVariable Long studentId,
             @RequestBody DefenseRequest defenseRequest) {
         try {
+            // Call the service to add the defense
             Defense defense = defenseService.addDefense(studentId, defenseRequest);
             return ResponseEntity.ok(defense);
+        } catch (IllegalArgumentException e) {
+            // Handle IllegalArgumentException (e.g., student already has a defense)
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (SchedulingConflictException e) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("error", "Scheduling conflict", "message", e.getMessage())
-            );
+            // Handle scheduling conflict errors
+            return ResponseEntity.badRequest().body(Map.of("error", "Scheduling conflict", "message", e.getMessage()));
+        } catch (Exception e) {
+            // Handle any other exceptions
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "An unexpected error occurred"));
         }
     }
+
 
     @DeleteMapping("/deleteDefense/{idDefense}")
     public void deleteDefenseById(@PathVariable("idDefense") Long idDefense) {
         defenseService.removeDefenseById(idDefense);
     }
 
-    @PutMapping("/updateDefense")
-    public ResponseEntity<?> updateDefense(@RequestBody Defense defense) {
+    @PutMapping(value = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateDefense(
+            @PathVariable("id") Long defenseId,
+            @RequestBody DefenseRequest defenseRequest
+    ) {
         try {
-            Defense updatedDefense = defenseService.updateDefense(defense);
+            Defense updatedDefense = defenseService.updateDefense(defenseId, defenseRequest);
             return ResponseEntity.ok(updatedDefense);
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (SchedulingConflictException e) {
-            return ResponseEntity.badRequest().body(
-                    Map.of("error", "Scheduling conflict", "message", e.getMessage())
-            );
+            return ResponseEntity.badRequest().body(Map.of("error", "Scheduling conflict", "message", e.getMessage()));
         }
     }
+
+
+
+
+
 
     @GetMapping("/check-availability")
     public ResponseEntity<?> checkAvailability(

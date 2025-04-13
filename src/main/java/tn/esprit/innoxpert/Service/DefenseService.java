@@ -40,16 +40,21 @@ public class DefenseService implements DefenseServiceInterface {
 
     @Override
     public Defense addDefense(Long studentId, DefenseRequest defenseRequest) {
-        // 1. First check if student exists in DB
+        // 1. Validate the student
         User student = userRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("Student with ID " + studentId + " not found"));
 
-        // 2. Verify it's actually a student
         if (student.getTypeUser() != TypeUser.Student) {
             throw new IllegalArgumentException("User with ID " + studentId + " is not a student");
         }
 
-        // 3. Validate and set tutors
+        // 2. Check if the student already has a defense
+        Optional<Defense> existingDefense = defenseRepository.findDefenseByStudentId(studentId);
+        if (existingDefense.isPresent()) {
+            throw new IllegalArgumentException("This student already has a scheduled defense.");
+        }
+
+        // 3. Validate the tutors (exactly 3 tutors)
         Set<Long> tutorIds = defenseRequest.getTutorIds();
         if (tutorIds == null || tutorIds.size() != 3) {
             throw new IllegalArgumentException("Exactly 3 tutor IDs must be specified");
@@ -60,14 +65,13 @@ public class DefenseService implements DefenseServiceInterface {
             throw new IllegalArgumentException("One or more tutors not found");
         }
 
-        // Verify all are tutors
         for (User tutor : tutors) {
             if (tutor.getTypeUser() != TypeUser.Tutor) {
                 throw new IllegalArgumentException("User with ID " + tutor.getIdUser() + " is not a tutor");
             }
         }
 
-        // Check for scheduling conflicts
+        // 4. Check for scheduling conflicts
         conflictChecker.checkDefenseConflicts(
                 defenseRequest.getClassroom(),
                 defenseRequest.getDefenseDate(),
@@ -75,7 +79,17 @@ public class DefenseService implements DefenseServiceInterface {
                 new HashSet<>(tutors)
         );
 
-        // 4. Create new Defense object
+        // 5. Validate date and time constraints
+        if (defenseRequest.getDefenseDate().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Defense date must be today or in the future.");
+        }
+
+        if (defenseRequest.getDefenseTime().isBefore(LocalTime.parse("08:00")) ||
+                defenseRequest.getDefenseTime().isAfter(LocalTime.parse("18:00"))) {
+            throw new IllegalArgumentException("Defense time must be between 08:00 and 18:00.");
+        }
+
+        // 6. Create and save the defense
         Defense defense = new Defense();
         defense.setStudent(student);
         defense.setDefenseDate(defenseRequest.getDefenseDate());
@@ -83,12 +97,18 @@ public class DefenseService implements DefenseServiceInterface {
         defense.setClassroom(defenseRequest.getClassroom());
         defense.setReportSubmitted(defenseRequest.isReportSubmitted());
         defense.setInternshipCompleted(defenseRequest.isInternshipCompleted());
-        defense.setDefenseDegree(defenseRequest.getDefenseDegree());
         defense.setTutors(new HashSet<>(tutors));
 
-        // 5. Save the defense
+        // 7. Check if defense degree is null and set it to 0
+        if (defense.getDefenseDegree() == null) {
+            defense.setDefenseDegree(0.0); // Set to 0 if null
+        }
+
+        // Save and return the defense
         return defenseRepository.save(defense);
     }
+
+
 
     @Override
     @Transactional
@@ -106,25 +126,41 @@ public class DefenseService implements DefenseServiceInterface {
     }
 
     @Override
-    public Defense updateDefense(Defense d) {
-        Defense existing = defenseRepository.findById(d.getIdDefense())
-                .orElseThrow(() -> new NotFoundException("Defense with ID: " + d.getIdDefense() + " was not found."));
+    @Transactional
+    public Defense updateDefense(Long defenseId, DefenseRequest request) {
+        Defense defense = defenseRepository.findById(defenseId)
+                .orElseThrow(() -> new NotFoundException("Defense with ID: " + defenseId + " was not found."));
 
-        // Skip conflict check if date/time/classroom didn't change
-        if (!existing.getDefenseDate().equals(d.getDefenseDate()) ||
-                !existing.getDefenseTime().equals(d.getDefenseTime()) ||
-                !existing.getClassroom().equals(d.getClassroom())) {
-
-            conflictChecker.checkDefenseConflicts(
-                    d.getClassroom(),
-                    d.getDefenseDate(),
-                    d.getDefenseTime(),
-                    d.getTutors()
-            );
+        // Prevent update if degree is not 0.0 (i.e., already evaluated)
+        if (defense.getDefenseDegree() != 0.0) {
+            throw new IllegalStateException("This defense has already been evaluated and cannot be updated.");
         }
 
-        return defenseRepository.save(d);
+
+        // Validate date
+        if (defense.getDefenseDate().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Defense date must be today or in the future.");
+        }
+
+        // Validate time
+        if (defense.getDefenseTime().isBefore(LocalTime.parse("08:00")) ||
+                defense.getDefenseTime().isAfter(LocalTime.parse("18:00"))) {
+            throw new IllegalArgumentException("Defense time must be between 08:00 and 18:00.");
+        }
+
+        // Apply new values
+        defense.setDefenseDate(request.getDefenseDate());
+        defense.setDefenseTime(request.getDefenseTime());
+        defense.setClassroom(request.getClassroom());
+
+        // Preserve original data
+        defense.setTutors(defense.getTutors());
+        defense.setStudent(defense.getStudent());
+        defense.setDefenseDegree(defense.getDefenseDegree());
+
+        return defenseRepository.save(defense);
     }
+
 
     @Override
     public boolean isDefenseSlotAvailable(String classroom, LocalDate date, LocalTime time) {
@@ -196,16 +232,19 @@ public class DefenseService implements DefenseServiceInterface {
         List<Defense> excellentStudents = new ArrayList<>();
         List<Defense> averageStudents = new ArrayList<>();
         List<Defense> badStudents = new ArrayList<>();
+        List<Defense> notEvaluated = new ArrayList<>();
 
         // Classify each defense based on the defense degree
         for (Defense defense : defenses) {
-            double defenseDegree = defense.getDefenseDegree();
+            Double defenseDegree = defense.getDefenseDegree(); // Assuming it's a Double, which can be null
 
-            if (defenseDegree >= 15) {
+            if (defenseDegree == null || defenseDegree == 0.0) {
+                notEvaluated.add(defense); // Add to "Not Evaluated" if defenseDegree is null or 0
+            } else if (defenseDegree >= 15) {
                 excellentStudents.add(defense);
             } else if (defenseDegree >= 10) {
                 averageStudents.add(defense);
-            } else if (defenseDegree >= 0) {
+            } else if (defenseDegree > 0) { // Degree > 0 is bad but not null or 0
                 badStudents.add(defense);
             }
         }
@@ -215,9 +254,12 @@ public class DefenseService implements DefenseServiceInterface {
         result.put("Excellent", excellentStudents);
         result.put("Average", averageStudents);
         result.put("Bad", badStudents);
+        result.put("Not Evaluated", notEvaluated); // Add "Not Evaluated" category
 
         return result;
     }
+
+
 
 
 
