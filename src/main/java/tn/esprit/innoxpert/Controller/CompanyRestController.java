@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tn.esprit.innoxpert.DTO.CompanyAnalyticsDto;
+import tn.esprit.innoxpert.DTO.PartnershipRequest;
 import tn.esprit.innoxpert.Entity.Company;
 import tn.esprit.innoxpert.Entity.Image;
 import tn.esprit.innoxpert.Entity.User;
@@ -219,5 +221,26 @@ public class CompanyRestController {
         }
     }
     /*----------------------------------------------------------------------*/
-
+// CompanyRestController.java
+    @GetMapping("/analytics")
+    public ResponseEntity<List<CompanyAnalyticsDto>> getCompaniesAnalytics() {
+        try {
+            List<CompanyAnalyticsDto> analytics = companyService.getAllCompaniesWithAnalytics();
+            return ResponseEntity.ok(analytics);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    // In CompanyRestController.java
+    @PostMapping("/sendPartnershipEmail")
+    public ResponseEntity<?> sendPartnershipEmail(@RequestBody PartnershipRequest request) {
+        System.out.println("Requête reçue : " + request.getEmail() + " | " + request.getMessage());
+        try {
+            companyService.sendPartnershipEmail(request.getEmail(), request.getMessage());
+            return ResponseEntity.ok().body(Map.of("success", true, "message", "Email sent successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("success", false, "message", "Failed to send email: " + e.getMessage()));
+        }
+    }
 }

@@ -3,10 +3,10 @@ package tn.esprit.innoxpert.Util;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 
 import java.util.Properties;
-
 public class EmailClass {
 
   private final String username = "esprit.stagedepartement@gmail.com";

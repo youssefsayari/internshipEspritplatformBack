@@ -1,6 +1,7 @@
 package tn.esprit.innoxpert.Service;
 
 import org.springframework.web.multipart.MultipartFile;
+import tn.esprit.innoxpert.DTO.CompanyAnalyticsDto;
 import tn.esprit.innoxpert.Entity.Company;
 import tn.esprit.innoxpert.Entity.User;
 
@@ -20,4 +21,6 @@ public interface CompanyServiceInterface {
     void unfollowCompany(Long userId, Long companyId) ;
      boolean isUserFollowingCompany(Long userId, Long companyId);
     List<Company> getCompaniesFollowedByUser(Long userId);
+    public List<CompanyAnalyticsDto> getAllCompaniesWithAnalytics();
+
     }

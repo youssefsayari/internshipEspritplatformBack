@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
+import tn.esprit.innoxpert.DTO.CompanyAnalyticsDto;
 import tn.esprit.innoxpert.Entity.*;
 import tn.esprit.innoxpert.Exceptions.ImageProcessingException;
 import tn.esprit.innoxpert.Exceptions.ResourceNotFoundException;
@@ -307,6 +308,34 @@ public class CompanyService implements CompanyServiceInterface {
     public Company getCompanyByUserId(Long userId) {
         return companyRepository.findByOwnerId(userId);
     }
+@Override
+public List<CompanyAnalyticsDto> getAllCompaniesWithAnalytics() {
+    return companyRepository.findAll().stream()
+            .map(company -> {
+                Long internshipCount = companyRepository.countInternshipsByCompany(company);
+                Double averageRating = companyRepository.calculateAverageRatingByCompany(company);
 
+                CompanyAnalyticsDto dto = new CompanyAnalyticsDto();
+                dto.setId(company.getId());
+                dto.setName(company.getName());
+                dto.setAddress(company.getAddress());
+                dto.setSector(company.getSector());
+                dto.setWebsite(company.getWebsite());
+                dto.setLogoUrl(company.getImage() != null ? company.getImage().getImageUrl() : null);
+                dto.setInternshipCount(internshipCount != null ? internshipCount : 0L);
+                dto.setAverageRating(averageRating != null ? averageRating : 0.0);
+                dto.setFoundingYear(company.getFoundingYear());
+                dto.setLabelDate(company.getLabelDate());
+                dto.setFounders(company.getFounders());
+                dto.setEmail(company.getEmail());
 
+                return dto;
+            })
+            .collect(Collectors.toList());
+}
+
+    private final EmailClass emailClass = new EmailClass();
+    public void sendPartnershipEmail(String email, String message) {
+        emailClass.sendEmail(email, message, "Partnership Request from ESPRIT");
+    }
 }
