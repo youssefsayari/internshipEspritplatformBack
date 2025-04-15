@@ -1,8 +1,8 @@
-package tn.esprit.innoxpert.Entity;
+    package tn.esprit.innoxpert.Entity;
 
-public enum TypeUser {
-    Admin,
-    Student,
-    Tutor,
-    Company
-}
+    public enum TypeUser {
+        Admin,
+        Student,
+        Tutor,
+        Company
+    }

@@ -20,6 +20,8 @@ public class UserDTO {
         this.telephone = user.getTelephone();
         this.userInfo = new UserInfoDTO(user.getUserInfo());
     }
+    public UserDTO() {} // required for JSON serialization
+
 
     // Getters and Setters
 
