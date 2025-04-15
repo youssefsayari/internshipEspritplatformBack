@@ -6,6 +6,8 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -30,4 +32,10 @@ public class Task {
     @JsonIgnore
     @NotNull(message = "Un étudiant doit être assigné à cette tâche")
     User student;
+    @Column
+    Integer mark;
+
+    LocalDate deadline;
+
+    boolean notified = false;
 }

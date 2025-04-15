@@ -66,6 +66,7 @@ public class User implements UserDetails {
 
     @JsonBackReference
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     Defense defense;
 
 
@@ -78,9 +79,13 @@ public class User implements UserDetails {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "document_id")
+    @JsonIgnore
     private Document document;
 
     /*----------------start l5edmet sayari--------------------*/
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Comment> comments = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -88,6 +93,7 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "company_id")
     )
+    @JsonIgnoreProperties({"followers", "owner"}) // Ajoutez cette annotation
     private List<Company> followedCompanies = new ArrayList<>();
 
 
@@ -98,6 +104,7 @@ public class User implements UserDetails {
 
 
     @ManyToMany(mappedBy = "users")
+    @JsonIgnore
     private List<Internship> internships = new ArrayList<>();
 
     @ManyToMany

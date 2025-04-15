@@ -13,9 +13,7 @@ import tn.esprit.innoxpert.Repository.InternshipRepository;
 import tn.esprit.innoxpert.Repository.PostRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -215,20 +213,23 @@ public class InternshipService implements InternshipServiceInterface {
 
     @Override
     public List<InternshipTutorResponse> getInternshipsForTutor(Long idUser) {
-        User tutor = userRepository.findById(idUser)
-                .orElseThrow(() -> new RuntimeException("Tutor not found"));
+        User user = userRepository.findById(idUser)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         List<User> students = userRepository.findByTutor_IdUser(idUser);
-        if (students.isEmpty()) {
-            throw new RuntimeException("Students not found");
-        }
+        List<Internship> internshipsAsTutor = new ArrayList<>();
 
-        List<Internship> allInternships = new ArrayList<>();
         for (User student : students) {
-            allInternships.addAll(student.getInternships());
+            internshipsAsTutor.addAll(student.getInternships());
         }
 
-        List<InternshipTutorResponse> responseList = allInternships.stream().map(internship -> {
+        List<Internship> internshipsAsValidator = internshipRepository.findByValidator_IdUser(idUser);
+
+        Set<Internship> allInternships = new HashSet<>();
+        allInternships.addAll(internshipsAsTutor);
+        allInternships.addAll(internshipsAsValidator);
+
+        return allInternships.stream().map(internship -> {
             InternshipTutorResponse response = new InternshipTutorResponse();
             response.setIdInternship(internship.getId());
 
@@ -236,6 +237,7 @@ public class InternshipService implements InternshipServiceInterface {
                 User student = internship.getUsers().get(0);
                 response.setStudentName(student.getFirstName() + " " + student.getLastName());
                 response.setClasse(student.getClasse());
+                response.setStudentId(student.getIdUser());
             }
 
             response.setInternshipState(internship.getInternshipState().name());
@@ -244,17 +246,21 @@ public class InternshipService implements InternshipServiceInterface {
             response.setContent(internship.getPost().getContent());
             response.setCompanyName(internship.getPost().getCompany().getName());
 
-            if (internship.getPost().getSkills() != null && !internship.getPost().getSkills().isEmpty()) {
+            if (internship.getPost().getSkills() != null) {
                 response.setSkills(new ArrayList<>(internship.getPost().getSkills()));
             } else {
                 response.setSkills(new ArrayList<>());
             }
 
+            response.setIsValidator(
+                    internship.getValidator() != null &&
+                            internship.getValidator().getIdUser().equals(idUser)
+            );
+
             return response;
         }).collect(Collectors.toList());
-
-        return responseList;
     }
+
 
 
     @Override

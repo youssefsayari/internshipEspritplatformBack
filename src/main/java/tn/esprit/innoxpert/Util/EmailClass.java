@@ -3,10 +3,10 @@ package tn.esprit.innoxpert.Util;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 
 import java.util.Properties;
-
 public class EmailClass {
 
   private final String username = "esprit.stagedepartement@gmail.com";
@@ -121,6 +121,67 @@ public class EmailClass {
       System.out.println("✔️ Email envoyé avec succès à " + recipient);
     } catch (MessagingException e) {
       System.err.println("❌ Erreur d'envoi de l'email à " + recipient + " : " + e.getMessage());
+    }
+  }
+  public void sendCompanyCredentialsEmail(String receiver, String companyName, String identifiant, String password) {
+    try {
+      Session session = createEmailSession();
+      Message message = new MimeMessage(session);
+      message.setFrom(new InternetAddress(username));
+      message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver));
+      message.setSubject("🔑 Your Company Portal Access - " + companyName);
+
+      String htmlContent = String.format(
+              "<!DOCTYPE html>" +
+                      "<html>" +
+                      "<head>" +
+                      "  <style>" +
+                      "    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');" +
+                      "    body { font-family: 'Poppins', sans-serif; color: #2d3436; margin: 0; padding: 20px; }" +
+                      "    .container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 15px; overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.1); }" +
+                      "    .header { background: linear-gradient(135deg, #6c5ce7 0%%, #a363d9 100%%); padding: 30px; text-align: center; color: white; }" +
+                      "    .content { padding: 30px; }" +
+                      "    .credentials { background: #f8f9fa; border-radius: 10px; padding: 20px; margin: 20px 0; }" +
+                      "    .badge { background: #6c5ce7; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }" +
+                      "    .footer { text-align: center; padding: 20px; color: #636e72; font-size: 0.9em; }" +
+                      "  </style>" +
+                      "</head>" +
+                      "<body>" +
+                      "  <div class='container'>" +
+                      "    <div class='header'>" +
+                      "      <h1>%s</h1>" +
+                      "      <h3>Welcome to Innoxpert</h3>" +
+                      "    </div>" +
+                      "    <div class='content'>" +
+                      "      <p>Dear Partner,</p>" +
+                      "      <p>Here are your credentials to access your company portal:</p>" +
+                      "      <div class='credentials'>" +
+                      "        <div style='margin-bottom: 15px;'>" +
+                      "          <span class='badge'>Username</span>" +
+                      "          <div style='margin-top: 10px; font-size: 1.1em;'>%s</div>" +
+                      "        </div>" +
+                      "        <div>" +
+                      "          <span class='badge'>Password</span>" +
+                      "          <div style='margin-top: 10px; font-size: 1.1em;'>%s</div>" +
+                      "        </div>" +
+                      "      </div>" +
+                      "      <p>Looking forward to seeing you on our platform!</p>" +
+                      "    </div>" +
+                      "    <div class='footer'>" +
+                      "      <p>© 2024 Innoxpert - All rights reserved</p>" +
+                      "      <p>This is an automated message, please do not reply</p>" +
+                      "    </div>" +
+                      "  </div>" +
+                      "</body>" +
+                      "</html>",
+              companyName, identifiant, password
+      );
+
+      message.setContent(htmlContent, "text/html; charset=utf-8");
+      Transport.send(message);
+      System.out.println("✔️ Credentials email sent to " + receiver);
+    } catch (MessagingException e) {
+      System.err.println("❌ Error sending credentials to " + receiver + " : " + e.getMessage());
     }
   }
 }

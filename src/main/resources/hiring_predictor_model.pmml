@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PMML xmlns="http://www.dmg.org/PMML-4_4" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.4">
+	<Header>
+		<Application name="SkLearn2PMML package" version="0.116.4"/>
+		<Timestamp>2025-04-15T16:11:04Z</Timestamp>
+	</Header>
+	<MiningBuildTask>
+		<Extension name="repr">PMMLPipeline(steps=[('preprocessor', ColumnTransformer(transformers=[('cat', OneHotEncoder(),
+                                 ['Option', 'Internship Subject', 'Company'])])),
+       ('classifier', LogisticRegression(max_iter=1000))])</Extension>
+	</MiningBuildTask>
+	<DataDictionary>
+		<DataField name="Accepted" optype="categorical" dataType="integer">
+			<Value value="0"/>
+			<Value value="1"/>
+		</DataField>
+		<DataField name="Option" optype="categorical" dataType="string">
+			<Value value="ARCTIC"/>
+			<Value value="BI"/>
+			<Value value="DS"/>
+			<Value value="INFINI"/>
+			<Value value="NIDS"/>
+			<Value value="SAE"/>
+			<Value value="TWIN"/>
+		</DataField>
+		<DataField name="Internship Subject" optype="categorical" dataType="string">
+			<Value value="Analyse de données"/>
+			<Value value="Blockchain"/>
+			<Value value="Computer Vision"/>
+			<Value value="Cybersécurité"/>
+			<Value value="Deep learning"/>
+			<Value value="DevOps"/>
+			<Value value="Déploiement cloud"/>
+			<Value value="Développement mobile"/>
+			<Value value="Développement web full stack"/>
+			<Value value="IA appliquée"/>
+			<Value value="IoT"/>
+			<Value value="Machine learning"/>
+			<Value value="NLP"/>
+			<Value value="Réseaux intelligents"/>
+		</DataField>
+		<DataField name="Company" optype="categorical" dataType="string">
+			<Value value="Airbus"/>
+			<Value value="Capgemini"/>
+			<Value value="DXC Technology"/>
+			<Value value="Docaposte"/>
+			<Value value="STMicroelectronics"/>
+			<Value value="Sopra Steria"/>
+			<Value value="Telnet"/>
+			<Value value="Thales"/>
+			<Value value="Tunisie Télécom"/>
+			<Value value="Vermeg"/>
+		</DataField>
+	</DataDictionary>
+	<RegressionModel functionName="classification" algorithmName="sklearn.linear_model._logistic.LogisticRegression" normalizationMethod="logit">
+		<MiningSchema>
+			<MiningField name="Accepted" usageType="target"/>
+			<MiningField name="Option"/>
+			<MiningField name="Internship Subject"/>
+			<MiningField name="Company"/>
+		</MiningSchema>
+		<Output>
+			<OutputField name="probability(0)" optype="continuous" dataType="double" feature="probability" value="0"/>
+			<OutputField name="probability(1)" optype="continuous" dataType="double" feature="probability" value="1"/>
+		</Output>
+		<RegressionTable intercept="-0.007900176042402934" targetCategory="1">
+			<CategoricalPredictor name="Option" value="ARCTIC" coefficient="-0.022007312804553297"/>
+			<CategoricalPredictor name="Option" value="BI" coefficient="-0.12260021902585032"/>
+			<CategoricalPredictor name="Option" value="DS" coefficient="0.11839202866974081"/>
+			<CategoricalPredictor name="Option" value="INFINI" coefficient="0.13378560884084228"/>
+			<CategoricalPredictor name="Option" value="NIDS" coefficient="0.00537993334117118"/>
+			<CategoricalPredictor name="Option" value="SAE" coefficient="4.77838415892553E-4"/>
+			<CategoricalPredictor name="Option" value="TWIN" coefficient="-0.1211161907794839"/>
+			<CategoricalPredictor name="Internship Subject" value="Analyse de données" coefficient="-0.046514135276206"/>
+			<CategoricalPredictor name="Internship Subject" value="Blockchain" coefficient="-0.22112238813960972"/>
+			<CategoricalPredictor name="Internship Subject" value="Computer Vision" coefficient="0.03521365295594022"/>
+			<CategoricalPredictor name="Internship Subject" value="Cybersécurité" coefficient="0.053846771051318576"/>
+			<CategoricalPredictor name="Internship Subject" value="Deep learning" coefficient="-0.20962051446239163"/>
+			<CategoricalPredictor name="Internship Subject" value="DevOps" coefficient="-0.03142915569914601"/>
+			<CategoricalPredictor name="Internship Subject" value="Déploiement cloud" coefficient="0.0393674043493978"/>
+			<CategoricalPredictor name="Internship Subject" value="Développement mobile" coefficient="0.061691432542476894"/>
+			<CategoricalPredictor name="Internship Subject" value="Développement web full stack" coefficient="0.013442146003282144"/>
+			<CategoricalPredictor name="Internship Subject" value="IA appliquée" coefficient="-0.006521863507778092"/>
+			<CategoricalPredictor name="Internship Subject" value="IoT" coefficient="-0.012408979047919804"/>
+			<CategoricalPredictor name="Internship Subject" value="Machine learning" coefficient="0.03302131835359444"/>
+			<CategoricalPredictor name="Internship Subject" value="NLP" coefficient="0.2757657557389267"/>
+			<CategoricalPredictor name="Internship Subject" value="Réseaux intelligents" coefficient="0.007580241795874089"/>
+			<CategoricalPredictor name="Company" value="Airbus" coefficient="0.0031266390878138895"/>
+			<CategoricalPredictor name="Company" value="Capgemini" coefficient="-0.09989170177118899"/>
+			<CategoricalPredictor name="Company" value="DXC Technology" coefficient="0.014334002210961976"/>
+			<CategoricalPredictor name="Company" value="Docaposte" coefficient="-0.04563043398940882"/>
+			<CategoricalPredictor name="Company" value="STMicroelectronics" coefficient="-0.10234017251661322"/>
+			<CategoricalPredictor name="Company" value="Sopra Steria" coefficient="0.04791704909332673"/>
+			<CategoricalPredictor name="Company" value="Telnet" coefficient="0.08042476348954607"/>
+			<CategoricalPredictor name="Company" value="Thales" coefficient="-0.028968751167160973"/>
+			<CategoricalPredictor name="Company" value="Tunisie Télécom" coefficient="0.09629225948674698"/>
+			<CategoricalPredictor name="Company" value="Vermeg" coefficient="0.027048032733735284"/>
+		</RegressionTable>
+		<RegressionTable intercept="0.0" targetCategory="0"/>
+	</RegressionModel>
+</PMML>

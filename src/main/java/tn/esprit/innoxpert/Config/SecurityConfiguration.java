@@ -36,8 +36,13 @@ public class SecurityConfiguration {
                 .csrf(csrfConfigurer -> csrfConfigurer.disable())
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(new AntPathRequestMatcher("/innoxpert/user/login", "POST")).permitAll()
-                        .anyRequest().permitAll())
+                        .requestMatchers(new AntPathRequestMatcher("/user/login", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/user/send-otp", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/user/change-password", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/user/verify-otp", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/user/decode-token-Role", "POST")).permitAll()
+                        .anyRequest().authenticated()
+                )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

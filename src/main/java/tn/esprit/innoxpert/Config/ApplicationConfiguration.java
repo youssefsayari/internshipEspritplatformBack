@@ -1,5 +1,6 @@
 package tn.esprit.innoxpert.Config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,8 +11,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 import tn.esprit.innoxpert.Repository.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import tn.esprit.innoxpert.Util.CompanyDataEnricher;
 
 @Configuration
 public class ApplicationConfiguration {
@@ -44,4 +47,16 @@ public class ApplicationConfiguration {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+    /*sayari : pour api auto form add company completion*/
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+    @Bean
+    public CompanyDataEnricher companyDataEnricher(
+            RestTemplate restTemplate,
+            @Value("${pdl.api.key}") String pdlApiKey) {
+        return new CompanyDataEnricher(restTemplate, pdlApiKey);
+    }
+    /* END sayari : pour api auto form add company completion*/
 }

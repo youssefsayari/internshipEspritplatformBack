@@ -22,4 +22,6 @@ public class InternshipTutorResponse {
     private String content;
     private String companyName;
     List<Skill> skills;
+    private Long studentId;
+    Boolean isValidator;
 }
