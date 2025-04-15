@@ -1,5 +1,6 @@
 package tn.esprit.innoxpert.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -23,22 +24,20 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
      Long idUser;
-
      String firstName;
      String lastName;
-
      String identifiant;
      String password;
      String email;
      Long telephone;
      String classe;
      String quiz;
-
      Long OTP;
 
 
@@ -65,13 +64,16 @@ public class User implements UserDetails {
     @JsonIgnore
     List<Document> documents = new ArrayList<>();
 
+    @JsonBackReference
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     Defense defense;
 
 
+    // In User.java
     @ManyToMany(mappedBy = "tutors", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    @JsonIgnore  // Prevent infinite loop
+    @JsonIgnoreProperties({"defenses", "tutors"})  // Add this
+    @JsonIgnore
     Set<Defense> defenses;
 
 
@@ -114,7 +116,7 @@ public class User implements UserDetails {
 
     @ManyToOne
     @JoinColumn(name = "tutor_id")
-    @JsonIgnore
+    @JsonBackReference
     private User tutor;
 
     @Override
