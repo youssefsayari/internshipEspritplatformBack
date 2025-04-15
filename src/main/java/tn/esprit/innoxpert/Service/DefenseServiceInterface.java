@@ -22,6 +22,8 @@ public interface DefenseServiceInterface {
     public List<DefenseWithEvaluationsDTO> getDefensesWithEvaluationsByTutor(Long tutorId) ;
     List<Defense> getDefensesByStudentId(Long studentId); // Add this new method
     public Map<String, List<Defense>> getDefenseStats(List<Defense> defenses) ;
+    public byte[] generateEvaluationGrid(Long defenseId) throws IOException;
+    public ResponseEntity<byte[]> downloadEvaluationGrid(Long defenseId) throws IOException;
 
 
 

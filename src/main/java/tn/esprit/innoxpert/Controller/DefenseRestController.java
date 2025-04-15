@@ -2,21 +2,28 @@ package tn.esprit.innoxpert.Controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.cloudinary.json.JSONObject;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.innoxpert.DTO.DefenseRequest;
 import tn.esprit.innoxpert.DTO.DefenseWithEvaluationsDTO;
+import tn.esprit.innoxpert.DTO.UserRole;
 import tn.esprit.innoxpert.Entity.Defense;
 import tn.esprit.innoxpert.Entity.TutorEvaluation;
+import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Exceptions.SchedulingConflictException;
 import tn.esprit.innoxpert.Service.DefenseServiceInterface;
 import tn.esprit.innoxpert.Service.EvaluationService;
+import tn.esprit.innoxpert.Service.UserService;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +35,7 @@ public class DefenseRestController {
 
     private final DefenseServiceInterface defenseService;
     private final EvaluationService evaluationService;
+    private final UserService userService;
 
     @GetMapping("/getAllDefenses")
     public List<Defense> getAllDefenses() {
@@ -83,10 +91,6 @@ public class DefenseRestController {
     }
 
 
-
-
-
-
     @GetMapping("/check-availability")
     public ResponseEntity<?> checkAvailability(
             @RequestParam String classroom,
@@ -96,6 +100,7 @@ public class DefenseRestController {
         boolean isAvailable = defenseService.isDefenseSlotAvailable(classroom, date, time);
         return ResponseEntity.ok(Map.of("available", isAvailable));
     }
+
     @GetMapping("/getDefensesByTutor/{tutorId}")
     public ResponseEntity<List<DefenseWithEvaluationsDTO>> getDefensesWithEvaluationsByTutor(
             @PathVariable("tutorId") Long tutorId) {
@@ -117,13 +122,43 @@ public class DefenseRestController {
     }
 
 
-
     @GetMapping("/getDefensesForTutor2")
     public List<Defense> getDefensesForStaticTutor() {
         return defenseService.getDefensesByTutorId(2L);
     }
 
+    @GetMapping("/generate-evaluation-grid/{defenseId}")
+    public ResponseEntity<byte[]> generateEvaluationGrid(
+            @PathVariable Long defenseId) throws IOException {
 
+        // Generate the evaluation grid as a byte array
+        byte[] pdfBytes = defenseService.generateEvaluationGrid(defenseId);
 
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
+    }
+
+    @GetMapping("/download-evaluation-grid/{defenseId}")
+    public ResponseEntity<byte[]> downloadEvaluationGrid(
+            @PathVariable Long defenseId) throws IOException {
+
+        // Generate the evaluation grid as a byte array
+        byte[] pdfBytes = defenseService.generateEvaluationGrid(defenseId);
+
+        // Fetch defense and student data to create a proper file name
+        Defense defense = defenseService.getDfenseById(defenseId); // Ensure this returns a valid Defense object
+        String studentName = defense.getStudent().getLastName() + "_" + defense.getStudent().getFirstName();
+        String fileName = "EvaluationGrid_" + studentName + ".pdf";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
+    }
 
 }
+    
+    
+
+

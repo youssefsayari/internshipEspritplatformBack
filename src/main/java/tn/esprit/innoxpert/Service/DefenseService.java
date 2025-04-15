@@ -1,21 +1,41 @@
 package tn.esprit.innoxpert.Service;
 
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.borders.Border;
+import com.itextpdf.layout.borders.SolidBorder;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Div;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.UnitValue;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.DTO.DefenseRequest;
 import tn.esprit.innoxpert.DTO.DefenseWithEvaluationsDTO;
 import tn.esprit.innoxpert.DTO.TutorEvaluationDTO;
 import tn.esprit.innoxpert.DTO.UserDTO;
 import tn.esprit.innoxpert.Entity.Defense;
+import tn.esprit.innoxpert.Entity.TypeDocument;
 import tn.esprit.innoxpert.Entity.TypeUser;
 import tn.esprit.innoxpert.Entity.User;
 import tn.esprit.innoxpert.Exceptions.NotFoundException;
 import tn.esprit.innoxpert.Repository.DefenseRepository;
 import tn.esprit.innoxpert.Repository.UserRepository;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -259,9 +279,228 @@ public class DefenseService implements DefenseServiceInterface {
         return result;
     }
 
+    private void addHeader(Document document, Defense defense, User student) throws IOException {
+        // Title
+        Paragraph title = new Paragraph("DEFENSE EVALUATION GRID")
+                .setFontSize(18)
+                .setBold()
+                .setTextAlignment(TextAlignment.CENTER)
+                .setFontColor(new DeviceRgb(0, 82, 155));
+        document.add(title);
+
+        // Subtitle
+        Paragraph subtitle = new Paragraph("Project Defense Assessment Form")
+                .setFontSize(14)
+                .setTextAlignment(TextAlignment.CENTER)
+                .setFontColor(new DeviceRgb(100, 100, 100));
+        document.add(subtitle);
+
+        document.add(new Paragraph("\n"));
+
+        // Student info table
+        float[] columnWidths = {2, 5};
+        Table infoTable = new Table(UnitValue.createPercentArray(columnWidths));
+
+        // Student name
+        infoTable.addCell(createInfoCell("Student:", true));
+        infoTable.addCell(createInfoCell(student.getFirstName() + " " + student.getLastName(), false));
+
+        // Defense date
+        infoTable.addCell(createInfoCell("Defense Date:", true));
+        infoTable.addCell(createInfoCell(
+                defense.getDefenseDate().format(DateTimeFormatter.ofPattern("dd MMMM yyyy")),
+                false));
+
+        // Defense time
+        infoTable.addCell(createInfoCell("Defense Time:", true));
+        infoTable.addCell(createInfoCell(defense.getDefenseTime().toString(), false));
+
+        // Classroom
+        infoTable.addCell(createInfoCell("Classroom:", true));
+        infoTable.addCell(createInfoCell(defense.getClassroom(), false));
+
+        document.add(infoTable);
+        document.add(new Paragraph("\n"));
+    }
+
+    private Cell createInfoCell(String text, boolean isHeader) {
+        Cell cell = new Cell().add(new Paragraph(text));
+        if (isHeader) {
+            cell.setBackgroundColor(new DeviceRgb(240, 240, 240))
+                    .setBold();
+        }
+        return cell;
+    }
+
+    private void addEvaluationTable(Document document) {
+        // Evaluation criteria table
+        float[] evalColumnWidths = {5, 2, 2, 3};
+        Table evalTable = new Table(UnitValue.createPercentArray(evalColumnWidths));
+
+        // Table header
+        evalTable.addHeaderCell(createHeaderCell("Evaluation Criteria"));
+        evalTable.addHeaderCell(createHeaderCell("Max Points"));
+        evalTable.addHeaderCell(createHeaderCell("Awarded"));
+        evalTable.addHeaderCell(createHeaderCell("Comments"));
+
+        // Evaluation items
+        addEvaluationItem(evalTable, "1. Oral Presentation", 4,
+                "Clarity, structure, time management, engagement");
+        addEvaluationItem(evalTable, "2. Technical Content", 6,
+                "Depth, accuracy, relevance, innovation");
+        addEvaluationItem(evalTable, "3. Methodology", 4,
+                "Appropriateness, rigor, documentation");
+        addEvaluationItem(evalTable, "4. Results & Analysis", 4,
+                "Quality, interpretation, validation");
+        addEvaluationItem(evalTable, "5. Professionalism", 2,
+                "Dress code, behavior, response to questions");
+
+        // Total row
+        Cell criteriaCell = new Cell(1, 1).add(new Paragraph("TOTAL").setBold());
+        Cell maxPointsCell = new Cell(1, 1).add(new Paragraph("20").setBold());
+        Cell awardedCell = new Cell(1, 1).add(new Paragraph("").setBold());
+        Cell commentsCell = new Cell(1, 1).add(new Paragraph("").setBold());
+
+        evalTable.addCell(criteriaCell);
+        evalTable.addCell(maxPointsCell);
+        evalTable.addCell(awardedCell);
+        evalTable.addCell(commentsCell);
+
+        document.add(evalTable);
+        document.add(new Paragraph("\n"));
+    }
+
+    private Cell createHeaderCell(String text) {
+        return new Cell()
+                .add(new Paragraph(text).setBold())
+                .setBackgroundColor(new DeviceRgb(0, 82, 155))
+                .setFontColor(ColorConstants.WHITE);
+    }
+
+    private void addEvaluationItem(Table table, String criteria, int points, String description) {
+        table.addCell(new Cell().add(new Paragraph(criteria + "\n" + description)
+                .setFontSize(10)));
+        table.addCell(new Cell().add(new Paragraph(String.valueOf(points))
+                .setTextAlignment(TextAlignment.CENTER)));
+        table.addCell(new Cell()); // Empty for tutor to fill
+        table.addCell(new Cell()); // Empty for tutor to fill
+    }
+
+    private void addCommentsSection(Document document) {
+        Paragraph commentsTitle = new Paragraph("Overall Comments:")
+                .setBold()
+                .setFontSize(12);
+        document.add(commentsTitle);
+
+        // Create a bordered area for comments
+        Div commentsBox = new Div()
+                .setHeight(100)
+                .setBorder(new SolidBorder(new DeviceRgb(200, 200, 200), 1))
+                .setPadding(5);
+        document.add(commentsBox);
+        document.add(new Paragraph("\n"));
+    }
+
+    public byte[] generateEvaluationGrid(Long defenseId) throws IOException {
+        // Fetch defense data
+        Defense defense = defenseRepository.findById(defenseId)
+                .orElseThrow(() -> new NotFoundException("Defense not found"));
+
+        User student = defense.getStudent();
+
+        // PDF generation
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PdfWriter writer = new PdfWriter(byteArrayOutputStream);
+        PdfDocument pdfDocument = new PdfDocument(writer);
+        Document document = new Document(pdfDocument);
+
+        // Set document margins
+        document.setMargins(30, 30, 30, 30);
+
+        // Add header with logo
+        addHeader(document, defense, student);
+
+        // Add evaluation criteria table
+        addEvaluationTable(document);
+
+        // Add comments section
+        addCommentsSection(document);
+
+        // Add generic signature section
+        addGenericSignatureSection(document);
+
+        // Add footer
+        addFooter(document);
+
+        document.close();
+
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    private void addGenericSignatureSection(Document document) {
+        float[] signatureWidths = {3, 1, 3};
+        Table signatureTable = new Table(UnitValue.createPercentArray(signatureWidths));
+
+        // Tutor name
+        signatureTable.addCell(new Cell().add(new Paragraph("Tutor:"))
+                .setBorderRight(Border.NO_BORDER));
+        signatureTable.addCell(new Cell().add(new Paragraph(""))
+                .setBorderLeft(Border.NO_BORDER)
+                .setBorderRight(Border.NO_BORDER));
+        signatureTable.addCell(new Cell().add(new Paragraph("_________________________"))
+                .setTextAlignment(TextAlignment.RIGHT)
+                .setBorderLeft(Border.NO_BORDER));
+
+        // Signature line
+        signatureTable.addCell(new Cell().add(new Paragraph("Signature:"))
+                .setBorderRight(Border.NO_BORDER)
+                .setBorderTop(Border.NO_BORDER));
+        signatureTable.addCell(new Cell().add(new Paragraph(""))
+                .setBorderLeft(Border.NO_BORDER)
+                .setBorderRight(Border.NO_BORDER)
+                .setBorderTop(Border.NO_BORDER));
+        signatureTable.addCell(new Cell().add(new Paragraph("_________________________"))
+                .setTextAlignment(TextAlignment.RIGHT)
+                .setBorderLeft(Border.NO_BORDER)
+                .setBorderTop(Border.NO_BORDER));
+
+        // Date
+        signatureTable.addCell(new Cell().add(new Paragraph("Date:"))
+                .setBorderRight(Border.NO_BORDER)
+                .setBorderTop(Border.NO_BORDER));
+        signatureTable.addCell(new Cell().add(new Paragraph(""))
+                .setBorderLeft(Border.NO_BORDER)
+                .setBorderRight(Border.NO_BORDER)
+                .setBorderTop(Border.NO_BORDER));
+        signatureTable.addCell(new Cell().add(new Paragraph("_________________________"))
+                .setTextAlignment(TextAlignment.RIGHT)
+                .setBorderLeft(Border.NO_BORDER)
+                .setBorderTop(Border.NO_BORDER));
+
+        document.add(signatureTable);
+    }
+
+    private void addFooter(Document document) {
+        Paragraph footer = new Paragraph("Confidential - For academic use only")
+                .setFontSize(8)
+                .setFontColor(new DeviceRgb(150, 150, 150))
+                .setTextAlignment(TextAlignment.CENTER);
+        document.add(footer);
+    }
 
 
+    public ResponseEntity<byte[]> downloadEvaluationGrid(Long defenseId) throws IOException {
+        byte[] pdfBytes = generateEvaluationGrid(defenseId);
 
+        Defense defense = defenseRepository.findById(defenseId).orElseThrow();
+        String studentName = defense.getStudent().getLastName() + "_" + defense.getStudent().getFirstName();
+        String fileName = "EvaluationGrid_" + studentName + ".pdf";
 
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdfBytes);
+    }
 
 }
+
