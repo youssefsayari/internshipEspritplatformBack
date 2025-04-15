@@ -39,6 +39,7 @@ public class User implements UserDetails {
      String classe;
      String quiz;
      Long OTP;
+     String option;
 
 
     @Enumerated(EnumType.STRING)
