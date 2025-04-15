@@ -14,16 +14,16 @@ public class PmmlPredictionService {
     private final ModelEvaluator<?> modelEvaluator;
 
     public PmmlPredictionService() throws Exception {
+        // Charger le fichier PMML
         PMML pmml = PMMLUtil.unmarshal(new FileInputStream("src/main/resources/hiring_predictor_model.pmml"));
 
-        // Initialize model evaluator
-        this.modelEvaluator = new ModelEvaluatorBuilder(pmml)
-                .build();
+        // Construire l'évaluateur
+        ModelEvaluatorBuilder builder = new ModelEvaluatorBuilder(pmml);
+        this.modelEvaluator = builder.build();
 
-        this.modelEvaluator.verify();
+        ((ModelEvaluator<?>) this.modelEvaluator).verify();
 
-        // Debug: Print model information
-        System.out.println("Model name: " + modelEvaluator.getModel().getModelName());
+        // Debug : afficher les champs
         System.out.println("Input fields:");
         for (InputField field : modelEvaluator.getInputFields()) {
             System.out.println(" - " + field.getName() + " (" + field.getDataType() + ")");
@@ -33,7 +33,6 @@ public class PmmlPredictionService {
     public double predict(String option, String sujet, String entreprise) {
         Map<FieldName, FieldValue> input = new LinkedHashMap<>();
 
-        // Prepare input values
         for (InputField inputField : modelEvaluator.getInputFields()) {
             FieldName fieldName = inputField.getName();
             String fieldNameStr = fieldName.getValue();
@@ -46,30 +45,28 @@ public class PmmlPredictionService {
             };
 
             if (value != null) {
-                input.put(fieldName, inputField.prepare(value));
+                FieldValue fieldValue = inputField.prepare(value);
+                input.put(fieldName, fieldValue);
             }
         }
 
-        // Perform the evaluation
         Map<FieldName, ?> results = modelEvaluator.evaluate(input);
 
-        // Extract the prediction
-        FieldName targetFieldName = modelEvaluator.getTargetFields().get(0).getName();
-        Object targetValue = results.get(targetFieldName);
+        // Récupère la probabilité de la classe 1 (Accepted = 1)
+        FieldName probFieldName = FieldName.create("probability(1)");
+        Object targetValue = results.get(probFieldName);
 
-        // Handle different result types
         if (targetValue instanceof Computable) {
             targetValue = ((Computable) targetValue).getResult();
         }
 
-        // Return numerical result or -1 for errors
         if (targetValue instanceof Number) {
-            return ((Number) targetValue).doubleValue();
+            return Math.max(0, Math.min(1, ((Number) targetValue).doubleValue()));
         } else if (targetValue instanceof String) {
             try {
-                return Double.parseDouble((String) targetValue);
+                return Math.max(0, Math.min(1, Double.parseDouble((String) targetValue)));
             } catch (NumberFormatException e) {
-                System.err.println("Error parsing prediction value: " + targetValue);
+                System.err.println("Erreur de parsing de la prédiction : " + targetValue);
             }
         }
 

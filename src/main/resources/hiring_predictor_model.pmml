@@ -2,7 +2,7 @@
 <PMML xmlns="http://www.dmg.org/PMML-4_4" xmlns:data="http://jpmml.org/jpmml-model/InlineTable" version="4.4">
 	<Header>
 		<Application name="SkLearn2PMML package" version="0.116.4"/>
-		<Timestamp>2025-04-15T16:11:04Z</Timestamp>
+		<Timestamp>2025-04-15T18:46:24Z</Timestamp>
 	</Header>
 	<MiningBuildTask>
 		<Extension name="repr">PMMLPipeline(steps=[('preprocessor', ColumnTransformer(transformers=[('cat', OneHotEncoder(),
@@ -24,20 +24,20 @@
 			<Value value="TWIN"/>
 		</DataField>
 		<DataField name="Internship Subject" optype="categorical" dataType="string">
-			<Value value="Analyse de données"/>
+			<Value value="AI Applied"/>
 			<Value value="Blockchain"/>
+			<Value value="Cloud"/>
 			<Value value="Computer Vision"/>
-			<Value value="Cybersécurité"/>
-			<Value value="Deep learning"/>
+			<Value value="Cybersecurity"/>
+			<Value value="Data Analysis"/>
+			<Value value="Deep Learning"/>
 			<Value value="DevOps"/>
-			<Value value="Déploiement cloud"/>
-			<Value value="Développement mobile"/>
-			<Value value="Développement web full stack"/>
-			<Value value="IA appliquée"/>
 			<Value value="IoT"/>
 			<Value value="Machine learning"/>
+			<Value value="Mobile Dev"/>
 			<Value value="NLP"/>
-			<Value value="Réseaux intelligents"/>
+			<Value value="Smart Networks"/>
+			<Value value="Web Dev"/>
 		</DataField>
 		<DataField name="Company" optype="categorical" dataType="string">
 			<Value value="Airbus"/>
@@ -63,38 +63,38 @@
 			<OutputField name="probability(0)" optype="continuous" dataType="double" feature="probability" value="0"/>
 			<OutputField name="probability(1)" optype="continuous" dataType="double" feature="probability" value="1"/>
 		</Output>
-		<RegressionTable intercept="-0.007900176042402934" targetCategory="1">
-			<CategoricalPredictor name="Option" value="ARCTIC" coefficient="-0.022007312804553297"/>
-			<CategoricalPredictor name="Option" value="BI" coefficient="-0.12260021902585032"/>
-			<CategoricalPredictor name="Option" value="DS" coefficient="0.11839202866974081"/>
-			<CategoricalPredictor name="Option" value="INFINI" coefficient="0.13378560884084228"/>
-			<CategoricalPredictor name="Option" value="NIDS" coefficient="0.00537993334117118"/>
-			<CategoricalPredictor name="Option" value="SAE" coefficient="4.77838415892553E-4"/>
-			<CategoricalPredictor name="Option" value="TWIN" coefficient="-0.1211161907794839"/>
-			<CategoricalPredictor name="Internship Subject" value="Analyse de données" coefficient="-0.046514135276206"/>
-			<CategoricalPredictor name="Internship Subject" value="Blockchain" coefficient="-0.22112238813960972"/>
-			<CategoricalPredictor name="Internship Subject" value="Computer Vision" coefficient="0.03521365295594022"/>
-			<CategoricalPredictor name="Internship Subject" value="Cybersécurité" coefficient="0.053846771051318576"/>
-			<CategoricalPredictor name="Internship Subject" value="Deep learning" coefficient="-0.20962051446239163"/>
-			<CategoricalPredictor name="Internship Subject" value="DevOps" coefficient="-0.03142915569914601"/>
-			<CategoricalPredictor name="Internship Subject" value="Déploiement cloud" coefficient="0.0393674043493978"/>
-			<CategoricalPredictor name="Internship Subject" value="Développement mobile" coefficient="0.061691432542476894"/>
-			<CategoricalPredictor name="Internship Subject" value="Développement web full stack" coefficient="0.013442146003282144"/>
-			<CategoricalPredictor name="Internship Subject" value="IA appliquée" coefficient="-0.006521863507778092"/>
-			<CategoricalPredictor name="Internship Subject" value="IoT" coefficient="-0.012408979047919804"/>
-			<CategoricalPredictor name="Internship Subject" value="Machine learning" coefficient="0.03302131835359444"/>
-			<CategoricalPredictor name="Internship Subject" value="NLP" coefficient="0.2757657557389267"/>
-			<CategoricalPredictor name="Internship Subject" value="Réseaux intelligents" coefficient="0.007580241795874089"/>
-			<CategoricalPredictor name="Company" value="Airbus" coefficient="0.0031266390878138895"/>
-			<CategoricalPredictor name="Company" value="Capgemini" coefficient="-0.09989170177118899"/>
-			<CategoricalPredictor name="Company" value="DXC Technology" coefficient="0.014334002210961976"/>
-			<CategoricalPredictor name="Company" value="Docaposte" coefficient="-0.04563043398940882"/>
-			<CategoricalPredictor name="Company" value="STMicroelectronics" coefficient="-0.10234017251661322"/>
-			<CategoricalPredictor name="Company" value="Sopra Steria" coefficient="0.04791704909332673"/>
-			<CategoricalPredictor name="Company" value="Telnet" coefficient="0.08042476348954607"/>
-			<CategoricalPredictor name="Company" value="Thales" coefficient="-0.028968751167160973"/>
-			<CategoricalPredictor name="Company" value="Tunisie Télécom" coefficient="0.09629225948674698"/>
-			<CategoricalPredictor name="Company" value="Vermeg" coefficient="0.027048032733735284"/>
+		<RegressionTable intercept="0.118435756054402" targetCategory="1">
+			<CategoricalPredictor name="Option" value="ARCTIC" coefficient="-0.24555291626380052"/>
+			<CategoricalPredictor name="Option" value="BI" coefficient="0.09090659476199416"/>
+			<CategoricalPredictor name="Option" value="DS" coefficient="0.3318095624392501"/>
+			<CategoricalPredictor name="Option" value="INFINI" coefficient="-0.13523976846339927"/>
+			<CategoricalPredictor name="Option" value="NIDS" coefficient="0.10999039438312286"/>
+			<CategoricalPredictor name="Option" value="SAE" coefficient="-0.0716888736291755"/>
+			<CategoricalPredictor name="Option" value="TWIN" coefficient="0.03413585298482882"/>
+			<CategoricalPredictor name="Internship Subject" value="AI Applied" coefficient="0.29024945238795863"/>
+			<CategoricalPredictor name="Internship Subject" value="Blockchain" coefficient="-0.29452466430136826"/>
+			<CategoricalPredictor name="Internship Subject" value="Cloud" coefficient="-0.1007393828081105"/>
+			<CategoricalPredictor name="Internship Subject" value="Computer Vision" coefficient="-0.056890937648136165"/>
+			<CategoricalPredictor name="Internship Subject" value="Cybersecurity" coefficient="-0.20194012903084907"/>
+			<CategoricalPredictor name="Internship Subject" value="Data Analysis" coefficient="0.40563685881797684"/>
+			<CategoricalPredictor name="Internship Subject" value="Deep Learning" coefficient="-0.1451053953194497"/>
+			<CategoricalPredictor name="Internship Subject" value="DevOps" coefficient="-0.017067507926320977"/>
+			<CategoricalPredictor name="Internship Subject" value="IoT" coefficient="-0.1148221127606811"/>
+			<CategoricalPredictor name="Internship Subject" value="Machine learning" coefficient="0.4193038695084353"/>
+			<CategoricalPredictor name="Internship Subject" value="Mobile Dev" coefficient="0.04838637927932242"/>
+			<CategoricalPredictor name="Internship Subject" value="NLP" coefficient="-0.04413758585173626"/>
+			<CategoricalPredictor name="Internship Subject" value="Smart Networks" coefficient="-0.0825095065745172"/>
+			<CategoricalPredictor name="Internship Subject" value="Web Dev" coefficient="0.008521508440294583"/>
+			<CategoricalPredictor name="Company" value="Airbus" coefficient="0.21837670558149802"/>
+			<CategoricalPredictor name="Company" value="Capgemini" coefficient="0.19184895862443052"/>
+			<CategoricalPredictor name="Company" value="DXC Technology" coefficient="-0.15058523308106103"/>
+			<CategoricalPredictor name="Company" value="Docaposte" coefficient="-0.1941756735417923"/>
+			<CategoricalPredictor name="Company" value="STMicroelectronics" coefficient="0.0532866230411292"/>
+			<CategoricalPredictor name="Company" value="Sopra Steria" coefficient="-0.12112070185692413"/>
+			<CategoricalPredictor name="Company" value="Telnet" coefficient="-0.07998299136570593"/>
+			<CategoricalPredictor name="Company" value="Thales" coefficient="0.31040104431552357"/>
+			<CategoricalPredictor name="Company" value="Tunisie Télécom" coefficient="-0.07720824720704612"/>
+			<CategoricalPredictor name="Company" value="Vermeg" coefficient="-0.03647963829723139"/>
 		</RegressionTable>
 		<RegressionTable intercept="0.0" targetCategory="0"/>
 	</RegressionModel>

@@ -7,7 +7,7 @@ from sklearn.pipeline import Pipeline
 from sklearn2pmml import PMMLPipeline, sklearn2pmml
 
 # 1. Charger le dataset (le fichier doit être dans le même dossier que ce script)
-df = pd.read_excel("internship_dataset_5000.xlsx")
+df = pd.read_excel("internship_dataset_realistic.xlsx")
 
 # 2. Sélectionner les colonnes utiles (on enlève 'Class')
 X = df[['Option', 'Internship Subject', 'Company']]
