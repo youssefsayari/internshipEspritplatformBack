@@ -35,7 +35,6 @@ public class Task {
     @Column
     Integer mark;
 
-    @FutureOrPresent(message = "La date doit être dans le présent ou le futur")
     LocalDate deadline;
 
     boolean notified = false;
