@@ -46,17 +46,17 @@ public class TimeLineService implements TimeLineServiceInterface {
         List<Date> timelineDates = calculateTimelineDates(startDate, endDate);
 
         List<String> titles = Arrays.asList(
-                "Demande Convention",
-                "Remise Plan de Travail",
-                "Validation Technique",
-                "Depot Rapport"
+                "Agreement Request",
+                "Work Plan Submission",
+                "Technical Validation",
+                "Report Submission"
         );
 
         List<String> descriptions = Arrays.asList(
-                "Les détails de la convention.",
-                "Remplissez tous les détails demandés dans le document joint après l'avoir téléchargé sur votre PC.",
-                "Les données concernant la validation technique.",
-                "Déposez votre rapport de stage."
+                "Details of the internship agreement.",
+                "Fill in all the required details in the attached document after downloading it to your PC.",
+                "Information regarding the technical validation.",
+                "Upload your internship report."
         );
         Date validationTechniqueDate = timelineDates.get(2);
         validationTechniqueDate = adjustWeekendDate(validationTechniqueDate);
@@ -71,7 +71,7 @@ public class TimeLineService implements TimeLineServiceInterface {
             timeLine.setDateLimite(timelineDates.get(i));
             timeLine.setStudent(student);
             timeLine.setDocument(null);
-            if ("Demande Convention".equals(titles.get(i))) {
+            if ("Agreement Request".equals(titles.get(i))) {
                 timeLine.setTimeLaneState(TypeAgreement.ACCEPTED);
             }
             timeLines.add(timeLine);
