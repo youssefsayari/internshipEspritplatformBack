@@ -31,6 +31,10 @@ public class PmmlPredictionService {
     }
 
     public double predict(String option, String sujet, String entreprise) {
+        option = option != null ? option.toUpperCase() : null;
+        sujet = sujet != null ? sujet.toUpperCase() : null;
+        entreprise = entreprise != null ? entreprise.toUpperCase() : null;
+
         Map<FieldName, FieldValue> input = new LinkedHashMap<>();
 
         for (InputField inputField : modelEvaluator.getInputFields()) {

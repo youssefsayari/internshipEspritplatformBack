@@ -56,7 +56,7 @@ public class Innoxpert {
 
 		try {
 			PmmlPredictionService predictor = new PmmlPredictionService();
-			double result = predictor.predict("NIDS", "Cloud", "Vermeg");
+			double result = predictor.predict("SAE", "Blockchain", "Vermeg");
 
 			// Afficher le pourcentage
 			if(result >= 0 && result <= 1) {
