@@ -22,20 +22,19 @@ public class ModelPredictionController {
             double percentage = result * 100;
 
             StringBuilder response = new StringBuilder();
-            response.append(String.format("✅ Pourcentage de chance d'embauche : %.2f%%\n", percentage));
-
+            response.append(String.format("📊 Hiring probability: %.2f%%", percentage));
             if (percentage >= 70) {
-                response.append("🌟 Très bonnes chances !");
+                response.append("🌟 High chances!");
             } else if (percentage >= 40) {
-                response.append("💡 Chances modérées");
+                response.append("💡 Moderate chances");
             } else {
-                response.append("⚠️ Besoin d'amélioration");
+                response.append("⚠️ Needs improvement");
             }
 
             return response.toString();
         } catch (Exception e) {
             e.printStackTrace();
-            return "❌ Erreur pendant la prédiction";
+            return "";
         }
     }
 }
