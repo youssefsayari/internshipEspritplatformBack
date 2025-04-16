@@ -151,5 +151,9 @@ public class User implements UserDetails {
     }
 
 
-
+/*START KHEDMET SKANDER*/
+@Column(nullable = true)
+@OneToMany
+private List<Reclamation> reclamationAfaire = new ArrayList<>();
+    /*END KHEDMET SKANDER*/
 }
