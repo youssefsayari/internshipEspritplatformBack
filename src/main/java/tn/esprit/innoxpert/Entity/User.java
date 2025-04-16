@@ -29,23 +29,23 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-     Long idUser;
-     String firstName;
-     String lastName;
-     String identifiant;
-     String password;
-     String email;
-     Long telephone;
-     String classe;
-     String quiz;
-     Long OTP;
-     String option;
+    Long idUser;
+    String firstName;
+    String lastName;
+    String identifiant;
+    String password;
+    String email;
+    Long telephone;
+    String classe;
+    String quiz;
+    Long OTP;
 
 
     @Enumerated(EnumType.STRING)
     TypeUser typeUser;
 
     @OneToOne
+    @JsonIgnore
     UserInfo userInfo;
 
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
@@ -151,9 +151,5 @@ public class User implements UserDetails {
     }
 
 
-/*START KHEDMET SKANDER*/
-@Column(nullable = true)
-@OneToMany
-private List<Reclamation> reclamationAfaire = new ArrayList<>();
-    /*END KHEDMET SKANDER*/
+
 }

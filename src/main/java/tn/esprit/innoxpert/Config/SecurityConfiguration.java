@@ -41,7 +41,10 @@ public class SecurityConfiguration {
                         .requestMatchers(new AntPathRequestMatcher("/user/change-password", "POST")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/user/verify-otp", "POST")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/user/decode-token-Role", "POST")).permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/company/add", "POST")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/company/api/autocomplete/enrich", "GET")).permitAll()
+
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -232,9 +232,9 @@ public class TaskService implements TaskServiceInterface {
 
     @Override
     //every 10 seconds
-    //@Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 10000)
     //every 10 mintutes
-    @Scheduled(fixedRate = 600000)
+   // @Scheduled(fixedRate = 600000)
     @Transactional
     public void notifyUsersOneDayBeforeTask() {
         LocalDate tomorrow = LocalDate.now().plusDays(1);
