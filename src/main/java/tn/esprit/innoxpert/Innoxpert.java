@@ -1,19 +1,10 @@
 package tn.esprit.innoxpert;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import tn.esprit.innoxpert.Service.PmmlPredictionService;
-import tn.esprit.innoxpert.Util.EmailClass;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import tn.esprit.innoxpert.Service.XGBoostPredictionService;
 
 @SpringBootApplication
 @EnableScheduling
@@ -55,7 +46,7 @@ public class Innoxpert {
 
 
 		try {
-			PmmlPredictionService predictor = new PmmlPredictionService();
+			XGBoostPredictionService predictor = new XGBoostPredictionService();
 			double result = predictor.predict("SAE", "Blockchain", "Vermeg");
 
 			// Afficher le pourcentage

@@ -1,32 +1,29 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.linear_model import LogisticRegression
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
-from sklearn2pmml import PMMLPipeline, sklearn2pmml
+import xgboost as xgb
+import joblib
 
-# 1. Charger le dataset (le fichier doit être dans le même dossier que ce script)
+# 1. Charger les données
 df = pd.read_excel("internship_dataset_5000_uppercase_no_accents.xlsx")
-
-# 2. Sélectionner les colonnes utiles (on enlève 'Class')
 X = df[['Option', 'Internship Subject', 'Company']]
 y = df['Accepted']
 
-# 3. Pipeline : encodage OneHot + modèle Logistic Regression
+# 2. Pipeline : OneHot + XGBoost
 column_transformer = ColumnTransformer(
-    [("cat", OneHotEncoder(), ['Option', 'Internship Subject', 'Company'])]
+    transformers=[('cat', OneHotEncoder(handle_unknown='ignore'), ['Option', 'Internship Subject', 'Company'])]
 )
 
-pipeline = PMMLPipeline([
-    ("preprocessor", column_transformer),
-    ("classifier", LogisticRegression(max_iter=1000))
+pipeline = Pipeline([
+    ('preprocessor', column_transformer),
+    ('classifier', xgb.XGBClassifier(use_label_encoder=False, eval_metric='logloss'))
 ])
 
-# 4. Entraîner le modèle
+# 3. Entraînement
 pipeline.fit(X, y)
 
-# 5. Exporter en .pmml
-sklearn2pmml(pipeline, "hiring_predictor_model.pmml", with_repr=True)
-
-print("✅ Modèle exporté avec succès → hiring_predictor_model.pmml")
+# 4. Sauvegarde du modèle
+joblib.dump(pipeline, "xgboost_model.pkl")
+print("✅ Modèle XGBoost exporté → xgboost_model.pkl")

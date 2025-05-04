@@ -2,17 +2,17 @@ package tn.esprit.innoxpert.Controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.innoxpert.Service.PmmlPredictionService;
+import tn.esprit.innoxpert.Service.XGBoostPredictionService;
 
 @Tag(name = "ModelPrediction Management")
 @RestController
 @RequestMapping("/modelprediction")
 public class ModelPredictionController {
 
-    private final PmmlPredictionService predictor;
+    private final XGBoostPredictionService predictor;
 
     public ModelPredictionController() throws Exception {
-        this.predictor = new PmmlPredictionService();
+        this.predictor = new XGBoostPredictionService();
     }
 
     @PostMapping
