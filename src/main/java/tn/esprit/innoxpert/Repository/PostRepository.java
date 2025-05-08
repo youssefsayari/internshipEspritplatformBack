@@ -15,4 +15,7 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     List<Post> findByCompanyInOrderByCreatedAtDesc(Set<Company> companies);
     List<Post> findByCompanyNotInOrderByCreatedAtDesc(Set<Company> companies);
 
+    List<Post> findByTitleContainingIgnoreCase(String title);
+
+
 }

@@ -15,7 +15,7 @@ public interface PostServiceInterface {
     void removePostById(Long postId);
     Post updatePost(Post p);
     List<Post> getHomeFeed(Long idUser);
-
+    public List<Post> getPostsByTitle(String title);
 
 
 }

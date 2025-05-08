@@ -156,7 +156,9 @@ public class PostService implements PostServiceInterface {
         return homeFeed;
     }
 
-
-
+    @Override
+    public List<Post> getPostsByTitle(String title) {
+        return postRepository.findByTitleContainingIgnoreCase(title);
+    }
 
 }
