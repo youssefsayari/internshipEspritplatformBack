@@ -45,7 +45,7 @@ public class Innoxpert {
 		 */
 
 
-		try {
+		/*try {
 			XGBoostPredictionService predictor = new XGBoostPredictionService();
 			double result = predictor.predict("SAE", "Blockchain", "Vermeg");
 
@@ -68,7 +68,7 @@ public class Innoxpert {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 	}
 

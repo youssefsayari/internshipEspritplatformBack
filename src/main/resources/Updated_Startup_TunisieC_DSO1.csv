@@ -1,0 +1,781 @@
+Secteur,Annee de creation,Taille,NombreEmployes,Age,Est_Tech,Dynamisme
+HealthTech,2019,Non-Startup,420,6,1,70.0
+Fintech,2016,Startup,47,9,1,5.222222222222222
+Mobility,1998,Non-Startup,485,27,0,17.962962962962962
+Business Software and services,2016,Startup,44,9,1,4.888888888888889
+Social Business,1980,Startup,45,45,0,1.0
+Wellness,1987,Non-Startup,15,38,0,0.39473684210526316
+Ad Tech and Creative Tech,2016,Startup,5,9,0,0.5555555555555556
+Security,2022,Non-Startup,397,3,0,132.33333333333334
+Social Business,1991,Startup,6,34,0,0.17647058823529413
+FoodTech & New Food,1988,Non-Startup,152,37,0,4.108108108108108
+Fintech,1992,Non-Startup,201,33,1,6.090909090909091
+Real Estate Tech,2004,Non-Startup,335,21,0,15.952380952380953
+Wellness,1988,Startup,12,37,0,0.32432432432432434
+Mobility,2021,Startup,45,4,0,11.25
+Wellness,2015,Startup,35,10,0,3.5
+Business Software and services,2022,Startup,26,3,1,8.666666666666666
+Business Software and services,2009,Non-Startup,45,16,1,2.8125
+Mobility,1989,Non-Startup,68,36,0,1.8888888888888888
+Security,2023,Non-Startup,216,2,0,108.0
+Fintech,1987,Startup,25,38,1,0.6578947368421053
+Business Software and services,2024,Non-Startup,405,1,1,405.0
+EdTech,1995,Non-Startup,451,30,1,15.033333333333333
+Ad Tech and Creative Tech,1992,Startup,36,33,0,1.0909090909090908
+Real Estate Tech,2013,Startup,5,12,0,0.4166666666666667
+HealthTech,2024,Startup,8,1,1,8.0
+TravelTech,1994,Startup,39,31,0,1.2580645161290323
+Security,2016,Non-Startup,112,9,0,12.444444444444445
+Fintech,1993,Startup,31,32,1,0.96875
+Fintech,2018,Startup,23,7,1,3.2857142857142856
+EdTech,1980,Startup,20,45,1,0.4444444444444444
+Mobility,2010,Startup,13,15,0,0.8666666666666667
+Mobility,2007,Non-Startup,485,18,0,26.944444444444443
+Agritech,1991,Startup,1,34,0,0.029411764705882353
+Agritech,1983,Non-Startup,286,42,0,6.809523809523809
+Agritech,2018,Startup,48,7,0,6.857142857142857
+Mobility,2008,Startup,49,17,0,2.8823529411764706
+Fintech,2019,Startup,46,6,1,7.666666666666667
+Environment,1990,Startup,3,35,0,0.08571428571428572
+Business Software and services,2017,Startup,1,8,1,0.125
+Mobility,2024,Startup,43,1,0,43.0
+Security,2003,Startup,27,22,0,1.2272727272727273
+EdTech,2003,Non-Startup,426,22,1,19.363636363636363
+Advanced Manufacturing & Robotics,2020,Non-Startup,67,5,0,13.4
+EdTech,2013,Non-Startup,280,12,1,23.333333333333332
+Mobility,2009,Non-Startup,484,16,0,30.25
+Real Estate Tech,2001,Startup,14,24,0,0.5833333333333334
+Social Business,1990,Non-Startup,397,35,0,11.342857142857143
+FoodTech & New Food,2004,Startup,48,21,0,2.2857142857142856
+Business Software and services,1996,Startup,21,29,1,0.7241379310344828
+Mobility,2017,Non-Startup,294,8,0,36.75
+Business Software and services,2023,Startup,49,2,1,24.5
+Social Business,2013,Non-Startup,107,12,0,8.916666666666666
+Mobility,1987,Startup,11,38,0,0.2894736842105263
+HealthTech,1993,Startup,28,32,1,0.875
+Fintech,2011,Non-Startup,454,14,1,32.42857142857143
+Security,2012,Non-Startup,157,13,0,12.076923076923077
+Real Estate Tech,2015,Startup,24,10,0,2.4
+FoodTech & New Food,2020,Non-Startup,57,5,0,11.4
+Business Software and services,1992,Non-Startup,92,33,1,2.787878787878788
+HealthTech,1997,Startup,5,28,1,0.17857142857142858
+Business Software and services,2006,Non-Startup,59,19,1,3.1052631578947367
+Wellness,1981,Non-Startup,369,44,0,8.386363636363637
+Social Business,2019,Startup,1,6,0,0.16666666666666666
+EdTech,1998,Non-Startup,456,27,1,16.88888888888889
+Environment,1985,Startup,40,40,0,1.0
+Social Business,2020,Non-Startup,258,5,0,51.6
+Mobility,2006,Non-Startup,140,19,0,7.368421052631579
+HealthTech,2018,Non-Startup,395,7,1,56.42857142857143
+HealthTech,2018,Startup,19,7,1,2.7142857142857144
+Wellness,1994,Startup,39,31,0,1.2580645161290323
+Mobility,2016,Non-Startup,232,9,0,25.77777777777778
+Environment,1995,Non-Startup,85,30,0,2.8333333333333335
+Environment,2009,Startup,23,16,0,1.4375
+Wellness,2010,Startup,43,15,0,2.8666666666666667
+Fintech,2017,Startup,49,8,1,6.125
+Business Software and services,1992,Startup,46,33,1,1.393939393939394
+Real Estate Tech,2024,Startup,30,1,0,30.0
+Fintech,2020,Startup,20,5,1,4.0
+Mobility,2012,Non-Startup,115,13,0,8.846153846153847
+HealthTech,1984,Non-Startup,346,41,1,8.439024390243903
+Agritech,1985,Non-Startup,361,40,0,9.025
+Real Estate Tech,1999,Non-Startup,490,26,0,18.846153846153847
+Fintech,2018,Non-Startup,351,7,1,50.142857142857146
+Wellness,2018,Startup,35,7,0,5.0
+Wellness,1989,Startup,11,36,0,0.3055555555555556
+Fintech,1999,Startup,32,26,1,1.2307692307692308
+FoodTech & New Food,1998,Non-Startup,99,27,0,3.6666666666666665
+Real Estate Tech,2021,Startup,4,4,0,1.0
+Environment,1982,Non-Startup,133,43,0,3.0930232558139537
+Advanced Manufacturing & Robotics,2015,Non-Startup,496,10,0,49.6
+Advanced Manufacturing & Robotics,1993,Non-Startup,283,32,0,8.84375
+Advanced Manufacturing & Robotics,1999,Non-Startup,163,26,0,6.269230769230769
+Agritech,2020,Startup,30,5,0,6.0
+Business Software and services,1993,Startup,31,32,1,0.96875
+Environment,2021,Non-Startup,323,4,0,80.75
+Ad Tech and Creative Tech,1983,Non-Startup,455,42,0,10.833333333333334
+EdTech,1991,Startup,1,34,1,0.029411764705882353
+Wellness,1997,Non-Startup,277,28,0,9.892857142857142
+TravelTech,1985,Startup,50,40,0,1.25
+Agritech,1987,Non-Startup,414,38,0,10.894736842105264
+Ad Tech and Creative Tech,2018,Startup,8,7,0,1.1428571428571428
+FoodTech & New Food,2020,Startup,37,5,0,7.4
+Security,2010,Startup,49,15,0,3.2666666666666666
+TravelTech,2013,Non-Startup,182,12,0,15.166666666666666
+Environment,2016,Startup,19,9,0,2.111111111111111
+Real Estate Tech,2020,Startup,2,5,0,0.4
+Mobility,1997,Startup,22,28,0,0.7857142857142857
+Security,2001,Non-Startup,81,24,0,3.375
+Social Business,1988,Non-Startup,227,37,0,6.135135135135135
+Social Business,1981,Startup,16,44,0,0.36363636363636365
+TravelTech,2022,Startup,45,3,0,15.0
+Fintech,2012,Startup,26,13,1,2.0
+FoodTech & New Food,1999,Non-Startup,179,26,0,6.884615384615385
+Environment,2006,Startup,37,19,0,1.9473684210526316
+FoodTech & New Food,2007,Startup,32,18,0,1.7777777777777777
+HealthTech,2022,Startup,37,3,1,12.333333333333334
+Advanced Manufacturing & Robotics,2015,Startup,47,10,0,4.7
+Mobility,1993,Non-Startup,171,32,0,5.34375
+Environment,2019,Startup,36,6,0,6.0
+Environment,2009,Non-Startup,22,16,0,1.375
+HealthTech,1999,Startup,23,26,1,0.8846153846153846
+Mobility,1992,Non-Startup,394,33,0,11.93939393939394
+Ad Tech and Creative Tech,2009,Startup,32,16,0,2.0
+Security,2024,Startup,2,1,0,2.0
+FoodTech & New Food,2000,Non-Startup,205,25,0,8.2
+Wellness,1992,Startup,8,33,0,0.24242424242424243
+Mobility,2025,Non-Startup,94,0,0,94.0
+Mobility,2022,Startup,33,3,0,11.0
+Environment,2016,Non-Startup,37,9,0,4.111111111111111
+Mobility,1986,Startup,49,39,0,1.2564102564102564
+TravelTech,2004,Startup,1,21,0,0.047619047619047616
+Fintech,1988,Non-Startup,85,37,1,2.2972972972972974
+Fintech,2020,Non-Startup,183,5,1,36.6
+Social Business,1994,Startup,29,31,0,0.9354838709677419
+Agritech,2021,Startup,32,4,0,8.0
+Agritech,2020,Non-Startup,407,5,0,81.4
+FoodTech & New Food,1996,Non-Startup,245,29,0,8.448275862068966
+Environment,2017,Non-Startup,320,8,0,40.0
+Agritech,1995,Non-Startup,69,30,0,2.3
+Ad Tech and Creative Tech,2024,Non-Startup,63,1,0,63.0
+Real Estate Tech,2017,Non-Startup,298,8,0,37.25
+Real Estate Tech,1981,Startup,6,44,0,0.13636363636363635
+Fintech,2003,Non-Startup,144,22,1,6.545454545454546
+TravelTech,2015,Startup,34,10,0,3.4
+TravelTech,1996,Startup,27,29,0,0.9310344827586207
+HealthTech,2023,Non-Startup,425,2,1,212.5
+Wellness,2015,Startup,25,10,0,2.5
+Agritech,2014,Non-Startup,289,11,0,26.272727272727273
+TravelTech,1992,Non-Startup,53,33,0,1.606060606060606
+FoodTech & New Food,1997,Startup,36,28,0,1.2857142857142858
+Environment,2013,Startup,7,12,0,0.5833333333333334
+HealthTech,1984,Startup,41,41,1,1.0
+FoodTech & New Food,2021,Non-Startup,131,4,0,32.75
+Wellness,1984,Startup,41,41,0,1.0
+Fintech,2014,Startup,24,11,1,2.1818181818181817
+FoodTech & New Food,2015,Non-Startup,385,10,0,38.5
+Ad Tech and Creative Tech,1984,Startup,29,41,0,0.7073170731707317
+Wellness,2017,Startup,47,8,0,5.875
+Agritech,1982,Non-Startup,46,43,0,1.069767441860465
+Fintech,1995,Non-Startup,417,30,1,13.9
+Fintech,2008,Non-Startup,142,17,1,8.352941176470589
+Agritech,2021,Non-Startup,481,4,0,120.25
+EdTech,2010,Non-Startup,110,15,1,7.333333333333333
+HealthTech,2022,Non-Startup,217,3,1,72.33333333333333
+Agritech,2013,Startup,28,12,0,2.3333333333333335
+Advanced Manufacturing & Robotics,2004,Startup,38,21,0,1.8095238095238095
+Wellness,2019,Non-Startup,226,6,0,37.666666666666664
+Security,2018,Non-Startup,494,7,0,70.57142857142857
+FoodTech & New Food,2023,Startup,28,2,0,14.0
+FoodTech & New Food,2010,Non-Startup,113,15,0,7.533333333333333
+FoodTech & New Food,2019,Startup,11,6,0,1.8333333333333333
+Mobility,2018,Startup,32,7,0,4.571428571428571
+Ad Tech and Creative Tech,1994,Non-Startup,402,31,0,12.96774193548387
+Security,2000,Startup,32,25,0,1.28
+Social Business,1996,Non-Startup,369,29,0,12.724137931034482
+Social Business,2021,Startup,18,4,0,4.5
+Fintech,2021,Non-Startup,458,4,1,114.5
+Real Estate Tech,2020,Startup,37,5,0,7.4
+Advanced Manufacturing & Robotics,2009,Startup,27,16,0,1.6875
+EdTech,2023,Startup,9,2,1,4.5
+Business Software and services,1997,Startup,23,28,1,0.8214285714285714
+Social Business,1985,Non-Startup,393,40,0,9.825
+Ad Tech and Creative Tech,1984,Non-Startup,381,41,0,9.292682926829269
+Business Software and services,1998,Startup,28,27,1,1.037037037037037
+Business Software and services,2016,Non-Startup,311,9,1,34.55555555555556
+Business Software and services,1988,Startup,34,37,1,0.918918918918919
+TravelTech,2015,Startup,22,10,0,2.2
+TravelTech,1998,Startup,33,27,0,1.2222222222222223
+Fintech,1991,Startup,35,34,1,1.0294117647058822
+Ad Tech and Creative Tech,1988,Non-Startup,261,37,0,7.054054054054054
+Fintech,2022,Non-Startup,214,3,1,71.33333333333333
+Security,2022,Startup,23,3,0,7.666666666666667
+Fintech,2009,Non-Startup,239,16,1,14.9375
+Mobility,2011,Startup,48,14,0,3.4285714285714284
+Mobility,2004,Non-Startup,250,21,0,11.904761904761905
+Ad Tech and Creative Tech,1990,Startup,10,35,0,0.2857142857142857
+Business Software and services,2014,Non-Startup,58,11,1,5.2727272727272725
+TravelTech,2009,Startup,27,16,0,1.6875
+TravelTech,2007,Startup,5,18,0,0.2777777777777778
+Wellness,1980,Startup,33,45,0,0.7333333333333333
+Agritech,2020,Startup,29,5,0,5.8
+Agritech,2019,Non-Startup,131,6,0,21.833333333333332
+TravelTech,2005,Startup,48,20,0,2.4
+Fintech,2022,Startup,3,3,1,1.0
+FoodTech & New Food,1987,Startup,22,38,0,0.5789473684210527
+Agritech,1990,Startup,7,35,0,0.2
+Mobility,2003,Non-Startup,487,22,0,22.136363636363637
+Mobility,1986,Non-Startup,170,39,0,4.358974358974359
+Ad Tech and Creative Tech,1995,Startup,32,30,0,1.0666666666666667
+Ad Tech and Creative Tech,2008,Startup,36,17,0,2.1176470588235294
+Ad Tech and Creative Tech,1982,Non-Startup,443,43,0,10.30232558139535
+HealthTech,2002,Non-Startup,114,23,1,4.956521739130435
+EdTech,2019,Non-Startup,62,6,1,10.333333333333334
+Ad Tech and Creative Tech,2000,Startup,33,25,0,1.32
+HealthTech,1984,Startup,36,41,1,0.8780487804878049
+FoodTech & New Food,1980,Startup,41,45,0,0.9111111111111111
+Business Software and services,2000,Startup,21,25,1,0.84
+TravelTech,2016,Non-Startup,455,9,0,50.55555555555556
+Security,2017,Non-Startup,72,8,0,9.0
+Real Estate Tech,1995,Non-Startup,105,30,0,3.5
+Social Business,2022,Startup,5,3,0,1.6666666666666667
+FoodTech & New Food,2018,Startup,8,7,0,1.1428571428571428
+Wellness,2007,Non-Startup,358,18,0,19.88888888888889
+Social Business,2018,Startup,50,7,0,7.142857142857143
+Wellness,2000,Non-Startup,115,25,0,4.6
+Real Estate Tech,2020,Non-Startup,217,5,0,43.4
+Mobility,2020,Non-Startup,299,5,0,59.8
+Advanced Manufacturing & Robotics,2020,Startup,23,5,0,4.6
+TravelTech,2023,Startup,33,2,0,16.5
+Mobility,1984,Startup,48,41,0,1.170731707317073
+Advanced Manufacturing & Robotics,2004,Non-Startup,368,21,0,17.523809523809526
+Fintech,2008,Non-Startup,170,17,1,10.0
+FoodTech & New Food,2009,Non-Startup,117,16,0,7.3125
+FoodTech & New Food,2016,Startup,24,9,0,2.6666666666666665
+Social Business,2002,Startup,13,23,0,0.5652173913043478
+Environment,2002,Startup,22,23,0,0.9565217391304348
+Environment,2022,Startup,2,3,0,0.6666666666666666
+Fintech,2017,Non-Startup,457,8,1,57.125
+Mobility,2004,Non-Startup,268,21,0,12.761904761904763
+Real Estate Tech,2002,Startup,17,23,0,0.7391304347826086
+EdTech,1993,Startup,16,32,1,0.5
+Wellness,2014,Non-Startup,376,11,0,34.18181818181818
+Social Business,2015,Non-Startup,48,10,0,4.8
+Real Estate Tech,1983,Startup,49,42,0,1.1666666666666667
+FoodTech & New Food,2022,Non-Startup,284,3,0,94.66666666666667
+HealthTech,2020,Non-Startup,380,5,1,76.0
+HealthTech,1996,Non-Startup,327,29,1,11.275862068965518
+HealthTech,2023,Startup,25,2,1,12.5
+EdTech,2016,Startup,7,9,1,0.7777777777777778
+FoodTech & New Food,1993,Startup,27,32,0,0.84375
+Fintech,2019,Startup,44,6,1,7.333333333333333
+Real Estate Tech,2018,Non-Startup,293,7,0,41.857142857142854
+Environment,2018,Startup,26,7,0,3.7142857142857144
+Ad Tech and Creative Tech,2020,Startup,32,5,0,6.4
+EdTech,2018,Startup,33,7,1,4.714285714285714
+EdTech,2018,Non-Startup,84,7,1,12.0
+Mobility,2015,Startup,1,10,0,0.1
+Wellness,2008,Startup,41,17,0,2.411764705882353
+Social Business,2019,Non-Startup,405,6,0,67.5
+EdTech,2023,Non-Startup,347,2,1,173.5
+EdTech,1983,Startup,35,42,1,0.8333333333333334
+HealthTech,2014,Startup,29,11,1,2.6363636363636362
+EdTech,1986,Startup,50,39,1,1.2820512820512822
+Social Business,2006,Non-Startup,127,19,0,6.684210526315789
+Social Business,2013,Non-Startup,182,12,0,15.166666666666666
+Advanced Manufacturing & Robotics,1993,Startup,12,32,0,0.375
+TravelTech,2008,Non-Startup,412,17,0,24.235294117647058
+Environment,1999,Startup,16,26,0,0.6153846153846154
+Environment,2005,Startup,32,20,0,1.6
+Security,1982,Non-Startup,473,43,0,11.0
+Business Software and services,2001,Non-Startup,447,24,1,18.625
+TravelTech,2002,Non-Startup,302,23,0,13.130434782608695
+Social Business,2007,Non-Startup,108,18,0,6.0
+Business Software and services,2010,Startup,41,15,1,2.7333333333333334
+Agritech,2023,Non-Startup,455,2,0,227.5
+Security,2020,Startup,25,5,0,5.0
+Security,1996,Startup,11,29,0,0.3793103448275862
+Ad Tech and Creative Tech,2004,Non-Startup,103,21,0,4.904761904761905
+Wellness,2013,Non-Startup,426,12,0,35.5
+Business Software and services,2017,Startup,2,8,1,0.25
+Business Software and services,1992,Non-Startup,210,33,1,6.363636363636363
+Environment,2019,Startup,28,6,0,4.666666666666667
+Mobility,2016,Startup,22,9,0,2.4444444444444446
+FoodTech & New Food,1997,Non-Startup,378,28,0,13.5
+Agritech,2023,Startup,25,2,0,12.5
+Security,1992,Startup,16,33,0,0.48484848484848486
+HealthTech,1983,Non-Startup,121,42,1,2.880952380952381
+Security,2009,Non-Startup,145,16,0,9.0625
+Agritech,2006,Startup,36,19,0,1.894736842105263
+Security,2019,Non-Startup,286,6,0,47.666666666666664
+Business Software and services,2015,Non-Startup,199,10,1,19.9
+Security,2006,Non-Startup,87,19,0,4.578947368421052
+EdTech,2014,Non-Startup,416,11,1,37.81818181818182
+Ad Tech and Creative Tech,1980,Non-Startup,235,45,0,5.222222222222222
+TravelTech,2011,Startup,35,14,0,2.5
+HealthTech,2019,Startup,45,6,1,7.5
+Wellness,2020,Startup,8,5,0,1.6
+Environment,2006,Non-Startup,298,19,0,15.68421052631579
+Wellness,2023,Non-Startup,161,2,0,80.5
+EdTech,2007,Non-Startup,48,18,1,2.6666666666666665
+Wellness,1996,Non-Startup,471,29,0,16.24137931034483
+HealthTech,2009,Startup,24,16,1,1.5
+Agritech,2017,Non-Startup,98,8,0,12.25
+Social Business,2009,Non-Startup,388,16,0,24.25
+EdTech,2018,Startup,48,7,1,6.857142857142857
+EdTech,2020,Startup,20,5,1,4.0
+Ad Tech and Creative Tech,1996,Startup,3,29,0,0.10344827586206896
+Environment,2012,Startup,44,13,0,3.3846153846153846
+Ad Tech and Creative Tech,2003,Non-Startup,355,22,0,16.136363636363637
+Environment,2008,Non-Startup,323,17,0,19.0
+Mobility,1995,Non-Startup,403,30,0,13.433333333333334
+EdTech,2019,Startup,39,6,1,6.5
+Ad Tech and Creative Tech,2008,Non-Startup,90,17,0,5.294117647058823
+Mobility,2023,Startup,41,2,0,20.5
+Fintech,1998,Startup,48,27,1,1.7777777777777777
+Real Estate Tech,2000,Non-Startup,349,25,0,13.96
+Social Business,2008,Non-Startup,499,17,0,29.352941176470587
+Real Estate Tech,2006,Non-Startup,18,19,0,0.9473684210526315
+Fintech,1985,Non-Startup,462,40,1,11.55
+Environment,1999,Non-Startup,295,26,0,11.346153846153847
+FoodTech & New Food,1997,Non-Startup,104,28,0,3.7142857142857144
+Advanced Manufacturing & Robotics,2002,Non-Startup,45,23,0,1.9565217391304348
+Advanced Manufacturing & Robotics,1980,Non-Startup,366,45,0,8.133333333333333
+Security,1981,Non-Startup,423,44,0,9.613636363636363
+EdTech,1985,Non-Startup,497,40,1,12.425
+Fintech,2005,Startup,25,20,1,1.25
+FoodTech & New Food,1996,Non-Startup,242,29,0,8.344827586206897
+Wellness,2024,Non-Startup,161,1,0,161.0
+Social Business,1993,Non-Startup,409,32,0,12.78125
+HealthTech,1982,Non-Startup,274,43,1,6.372093023255814
+Mobility,2000,Startup,46,25,0,1.84
+HealthTech,1982,Startup,39,43,1,0.9069767441860465
+Fintech,2013,Non-Startup,426,12,1,35.5
+Mobility,1999,Startup,32,26,0,1.2307692307692308
+HealthTech,1991,Non-Startup,322,34,1,9.470588235294118
+Agritech,2001,Non-Startup,269,24,0,11.208333333333334
+Security,2020,Startup,11,5,0,2.2
+TravelTech,2010,Startup,14,15,0,0.9333333333333333
+Advanced Manufacturing & Robotics,2014,Startup,33,11,0,3.0
+TravelTech,2005,Non-Startup,470,20,0,23.5
+TravelTech,2020,Startup,12,5,0,2.4
+Agritech,1992,Non-Startup,487,33,0,14.757575757575758
+Real Estate Tech,2021,Non-Startup,455,4,0,113.75
+FoodTech & New Food,1982,Startup,36,43,0,0.8372093023255814
+TravelTech,2021,Startup,41,4,0,10.25
+Real Estate Tech,1992,Non-Startup,360,33,0,10.909090909090908
+EdTech,2022,Non-Startup,44,3,1,14.666666666666666
+Advanced Manufacturing & Robotics,2019,Non-Startup,199,6,0,33.166666666666664
+Mobility,1981,Non-Startup,198,44,0,4.5
+EdTech,2025,Startup,26,0,1,26.0
+TravelTech,2013,Startup,30,12,0,2.5
+Real Estate Tech,1986,Non-Startup,336,39,0,8.615384615384615
+Ad Tech and Creative Tech,2021,Startup,17,4,0,4.25
+Business Software and services,2021,Non-Startup,189,4,1,47.25
+Security,2021,Startup,27,4,0,6.75
+Security,2023,Startup,17,2,0,8.5
+Environment,1980,Non-Startup,316,45,0,7.022222222222222
+Environment,2010,Startup,33,15,0,2.2
+Business Software and services,1995,Non-Startup,121,30,1,4.033333333333333
+Business Software and services,2023,Non-Startup,156,2,1,78.0
+Environment,2009,Startup,29,16,0,1.8125
+Fintech,2016,Startup,33,9,1,3.6666666666666665
+Business Software and services,1994,Startup,26,31,1,0.8387096774193549
+Real Estate Tech,1992,Non-Startup,122,33,0,3.696969696969697
+Fintech,2017,Startup,36,8,1,4.5
+Ad Tech and Creative Tech,2008,Startup,28,17,0,1.6470588235294117
+Social Business,1985,Startup,35,40,0,0.875
+Advanced Manufacturing & Robotics,2001,Non-Startup,467,24,0,19.458333333333332
+Environment,2025,Startup,33,0,0,33.0
+Mobility,2013,Non-Startup,272,12,0,22.666666666666668
+Advanced Manufacturing & Robotics,1984,Non-Startup,282,41,0,6.878048780487805
+Fintech,1995,Startup,29,30,1,0.9666666666666667
+EdTech,2004,Startup,35,21,1,1.6666666666666667
+Mobility,2014,Startup,20,11,0,1.8181818181818181
+FoodTech & New Food,2012,Startup,44,13,0,3.3846153846153846
+Mobility,2009,Startup,35,16,0,2.1875
+Social Business,1986,Startup,13,39,0,0.3333333333333333
+Advanced Manufacturing & Robotics,2024,Startup,35,1,0,35.0
+HealthTech,2001,Non-Startup,240,24,1,10.0
+Environment,2007,Startup,1,18,0,0.05555555555555555
+HealthTech,2021,Startup,16,4,1,4.0
+Fintech,2021,Non-Startup,196,4,1,49.0
+Ad Tech and Creative Tech,2019,Non-Startup,24,6,0,4.0
+Security,2002,Non-Startup,224,23,0,9.73913043478261
+HealthTech,1994,Non-Startup,256,31,1,8.258064516129032
+Fintech,2019,Non-Startup,318,6,1,53.0
+Real Estate Tech,1980,Startup,36,45,0,0.8
+TravelTech,2008,Non-Startup,163,17,0,9.588235294117647
+Real Estate Tech,1985,Startup,33,40,0,0.825
+TravelTech,2001,Startup,3,24,0,0.125
+Environment,2018,Non-Startup,108,7,0,15.428571428571429
+TravelTech,1991,Non-Startup,433,34,0,12.735294117647058
+Agritech,1998,Non-Startup,311,27,0,11.518518518518519
+Business Software and services,2019,Non-Startup,264,6,1,44.0
+Fintech,2021,Startup,22,4,1,5.5
+TravelTech,2021,Non-Startup,29,4,0,7.25
+Social Business,2023,Non-Startup,110,2,0,55.0
+Real Estate Tech,2017,Startup,9,8,0,1.125
+EdTech,2015,Non-Startup,101,10,1,10.1
+Real Estate Tech,2015,Non-Startup,279,10,0,27.9
+HealthTech,2014,Startup,28,11,1,2.5454545454545454
+Wellness,1986,Non-Startup,304,39,0,7.794871794871795
+Social Business,2003,Non-Startup,37,22,0,1.6818181818181819
+Real Estate Tech,2012,Startup,40,13,0,3.076923076923077
+TravelTech,1998,Startup,26,27,0,0.9629629629629629
+Mobility,2024,Non-Startup,179,1,0,179.0
+Social Business,2016,Startup,28,9,0,3.111111111111111
+Environment,2015,Startup,36,10,0,3.6
+EdTech,1992,Startup,16,33,1,0.48484848484848486
+Agritech,1984,Non-Startup,293,41,0,7.146341463414634
+EdTech,2016,Non-Startup,451,9,1,50.111111111111114
+Real Estate Tech,2019,Startup,21,6,0,3.5
+Mobility,1989,Startup,5,36,0,0.1388888888888889
+Agritech,2016,Startup,42,9,0,4.666666666666667
+Business Software and services,1983,Non-Startup,181,42,1,4.309523809523809
+EdTech,2022,Startup,6,3,1,2.0
+Mobility,2011,Startup,22,14,0,1.5714285714285714
+Fintech,1998,Non-Startup,486,27,1,18.0
+EdTech,2013,Startup,23,12,1,1.9166666666666667
+Ad Tech and Creative Tech,2006,Startup,35,19,0,1.8421052631578947
+HealthTech,2017,Startup,40,8,1,5.0
+Real Estate Tech,2019,Non-Startup,22,6,0,3.6666666666666665
+FoodTech & New Food,2018,Non-Startup,406,7,0,58.0
+Fintech,2016,Non-Startup,378,9,1,42.0
+Advanced Manufacturing & Robotics,1991,Non-Startup,267,34,0,7.852941176470588
+Business Software and services,2012,Non-Startup,43,13,1,3.3076923076923075
+Environment,2017,Startup,23,8,0,2.875
+Mobility,2021,Non-Startup,332,4,0,83.0
+Agritech,1999,Non-Startup,317,26,0,12.192307692307692
+Agritech,2021,Startup,45,4,0,11.25
+Social Business,2022,Non-Startup,358,3,0,119.33333333333333
+Social Business,2021,Non-Startup,483,4,0,120.75
+Social Business,1986,Non-Startup,472,39,0,12.102564102564102
+Ad Tech and Creative Tech,2011,Non-Startup,122,14,0,8.714285714285714
+Wellness,1985,Non-Startup,242,40,0,6.05
+Environment,2022,Non-Startup,152,3,0,50.666666666666664
+Ad Tech and Creative Tech,2017,Startup,3,8,0,0.375
+TravelTech,2023,Non-Startup,138,2,0,69.0
+Mobility,2008,Non-Startup,46,17,0,2.7058823529411766
+HealthTech,2021,Non-Startup,292,4,1,73.0
+EdTech,2021,Non-Startup,213,4,1,53.25
+Agritech,1981,Non-Startup,47,44,0,1.0681818181818181
+Wellness,2025,Startup,4,0,0,4.0
+Fintech,1984,Non-Startup,60,41,1,1.4634146341463414
+Agritech,2022,Startup,44,3,0,14.666666666666666
+EdTech,2011,Non-Startup,446,14,1,31.857142857142858
+Real Estate Tech,1988,Non-Startup,289,37,0,7.8108108108108105
+Security,1980,Non-Startup,201,45,0,4.466666666666667
+TravelTech,2001,Non-Startup,338,24,0,14.083333333333334
+Wellness,2000,Non-Startup,394,25,0,15.76
+Business Software and services,2011,Startup,48,14,1,3.4285714285714284
+Wellness,2015,Non-Startup,471,10,0,47.1
+Advanced Manufacturing & Robotics,2018,Startup,8,7,0,1.1428571428571428
+Wellness,1992,Non-Startup,297,33,0,9.0
+Wellness,2019,Startup,46,6,0,7.666666666666667
+Wellness,2003,Startup,24,22,0,1.0909090909090908
+TravelTech,2019,Startup,32,6,0,5.333333333333333
+Wellness,2022,Non-Startup,177,3,0,59.0
+Agritech,1986,Non-Startup,393,39,0,10.076923076923077
+Wellness,2019,Startup,2,6,0,0.3333333333333333
+Fintech,1989,Non-Startup,357,36,1,9.916666666666666
+Agritech,1982,Startup,23,43,0,0.5348837209302325
+Wellness,1997,Non-Startup,156,28,0,5.571428571428571
+Advanced Manufacturing & Robotics,2015,Startup,37,10,0,3.7
+Real Estate Tech,1982,Non-Startup,108,43,0,2.511627906976744
+Business Software and services,2020,Startup,14,5,1,2.8
+Social Business,1998,Non-Startup,204,27,0,7.555555555555555
+Business Software and services,2020,Non-Startup,198,5,1,39.6
+Wellness,1998,Non-Startup,154,27,0,5.703703703703703
+HealthTech,2024,Non-Startup,197,1,1,197.0
+FoodTech & New Food,2018,Startup,49,7,0,7.0
+Mobility,1990,Startup,45,35,0,1.2857142857142858
+Ad Tech and Creative Tech,1986,Non-Startup,74,39,0,1.8974358974358974
+Wellness,1981,Startup,10,44,0,0.22727272727272727
+HealthTech,1984,Non-Startup,174,41,1,4.2439024390243905
+EdTech,2024,Startup,2,1,1,2.0
+HealthTech,2005,Non-Startup,56,20,1,2.8
+Mobility,1985,Startup,7,40,0,0.175
+Security,2000,Non-Startup,349,25,0,13.96
+EdTech,2021,Startup,9,4,1,2.25
+Social Business,1991,Non-Startup,179,34,0,5.264705882352941
+Environment,2023,Startup,26,2,0,13.0
+Business Software and services,2012,Non-Startup,464,13,1,35.69230769230769
+Mobility,2005,Startup,42,20,0,2.1
+Social Business,1993,Non-Startup,259,32,0,8.09375
+Business Software and services,1985,Startup,26,40,1,0.65
+TravelTech,2024,Startup,42,1,0,42.0
+Security,2012,Startup,37,13,0,2.8461538461538463
+TravelTech,1994,Non-Startup,30,31,0,0.967741935483871
+Mobility,2019,Startup,20,6,0,3.3333333333333335
+Mobility,2023,Non-Startup,485,2,0,242.5
+Fintech,1992,Startup,2,33,1,0.06060606060606061
+Agritech,2013,Non-Startup,190,12,0,15.833333333333334
+EdTech,2019,Startup,28,6,1,4.666666666666667
+Social Business,2023,Startup,31,2,0,15.5
+Fintech,2006,Non-Startup,340,19,1,17.894736842105264
+Environment,2017,Non-Startup,107,8,0,13.375
+Real Estate Tech,1990,Startup,49,35,0,1.4
+Environment,1988,Startup,26,37,0,0.7027027027027027
+Business Software and services,2020,Startup,18,5,1,3.6
+TravelTech,2012,Startup,44,13,0,3.3846153846153846
+Mobility,2017,Startup,30,8,0,3.75
+Security,2010,Startup,1,15,0,0.06666666666666667
+Fintech,1983,Non-Startup,232,42,1,5.523809523809524
+TravelTech,1983,Non-Startup,21,42,0,0.5
+Wellness,2009,Non-Startup,259,16,0,16.1875
+FoodTech & New Food,2022,Startup,44,3,0,14.666666666666666
+Ad Tech and Creative Tech,2019,Startup,1,6,0,0.16666666666666666
+FoodTech & New Food,1989,Startup,40,36,0,1.1111111111111112
+TravelTech,2000,Non-Startup,303,25,0,12.12
+TravelTech,2018,Startup,32,7,0,4.571428571428571
+Ad Tech and Creative Tech,1996,Non-Startup,24,29,0,0.8275862068965517
+Social Business,2009,Non-Startup,269,16,0,16.8125
+Security,1991,Non-Startup,452,34,0,13.294117647058824
+HealthTech,2013,Non-Startup,210,12,1,17.5
+Social Business,2015,Non-Startup,445,10,0,44.5
+Ad Tech and Creative Tech,2020,Non-Startup,474,5,0,94.8
+Wellness,2004,Non-Startup,159,21,0,7.571428571428571
+TravelTech,2007,Non-Startup,469,18,0,26.055555555555557
+Agritech,1988,Non-Startup,162,37,0,4.378378378378378
+Real Estate Tech,1990,Non-Startup,448,35,0,12.8
+FoodTech & New Food,2020,Non-Startup,375,5,0,75.0
+Advanced Manufacturing & Robotics,2016,Startup,21,9,0,2.3333333333333335
+Agritech,1995,Startup,18,30,0,0.6
+Mobility,2005,Startup,17,20,0,0.85
+Ad Tech and Creative Tech,2018,Startup,35,7,0,5.0
+Ad Tech and Creative Tech,2014,Non-Startup,176,11,0,16.0
+Wellness,2019,Non-Startup,260,6,0,43.333333333333336
+Social Business,2001,Non-Startup,494,24,0,20.583333333333332
+Ad Tech and Creative Tech,2024,Startup,29,1,0,29.0
+Real Estate Tech,1999,Startup,16,26,0,0.6153846153846154
+Ad Tech and Creative Tech,1992,Non-Startup,351,33,0,10.636363636363637
+EdTech,1985,Startup,11,40,1,0.275
+Ad Tech and Creative Tech,2023,Startup,22,2,0,11.0
+Real Estate Tech,1999,Non-Startup,206,26,0,7.923076923076923
+EdTech,2012,Non-Startup,226,13,1,17.384615384615383
+Environment,1984,Startup,2,41,0,0.04878048780487805
+Mobility,1993,Non-Startup,458,32,0,14.3125
+Agritech,1987,Startup,48,38,0,1.263157894736842
+Mobility,2003,Startup,24,22,0,1.0909090909090908
+Advanced Manufacturing & Robotics,1985,Non-Startup,156,40,0,3.9
+Advanced Manufacturing & Robotics,1990,Startup,25,35,0,0.7142857142857143
+Advanced Manufacturing & Robotics,2021,Startup,35,4,0,8.75
+TravelTech,2003,Non-Startup,298,22,0,13.545454545454545
+Business Software and services,1987,Non-Startup,440,38,1,11.578947368421053
+FoodTech & New Food,2006,Non-Startup,139,19,0,7.315789473684211
+TravelTech,2019,Startup,22,6,0,3.6666666666666665
+Environment,2013,Startup,37,12,0,3.0833333333333335
+Security,2021,Non-Startup,62,4,0,15.5
+Business Software and services,1993,Non-Startup,50,32,1,1.5625
+HealthTech,1988,Startup,4,37,1,0.10810810810810811
+Fintech,1997,Non-Startup,393,28,1,14.035714285714286
+Business Software and services,2018,Non-Startup,497,7,1,71.0
+FoodTech & New Food,1991,Non-Startup,184,34,0,5.411764705882353
+Security,1988,Startup,21,37,0,0.5675675675675675
+Fintech,2012,Non-Startup,400,13,1,30.76923076923077
+Wellness,1987,Non-Startup,136,38,0,3.5789473684210527
+Advanced Manufacturing & Robotics,1987,Non-Startup,122,38,0,3.210526315789474
+Environment,2010,Startup,13,15,0,0.8666666666666667
+Ad Tech and Creative Tech,2007,Non-Startup,240,18,0,13.333333333333334
+TravelTech,2009,Non-Startup,42,16,0,2.625
+Fintech,2024,Startup,23,1,1,23.0
+FoodTech & New Food,1983,Startup,32,42,0,0.7619047619047619
+Security,2008,Non-Startup,327,17,0,19.235294117647058
+Wellness,2022,Startup,12,3,0,4.0
+Security,2022,Startup,45,3,0,15.0
+Advanced Manufacturing & Robotics,2010,Non-Startup,71,15,0,4.733333333333333
+FoodTech & New Food,1981,Startup,7,44,0,0.1590909090909091
+TravelTech,1983,Startup,44,42,0,1.0476190476190477
+EdTech,1998,Startup,34,27,1,1.2592592592592593
+Fintech,1996,Non-Startup,393,29,1,13.551724137931034
+Advanced Manufacturing & Robotics,2007,Startup,19,18,0,1.0555555555555556
+Agritech,2000,Non-Startup,172,25,0,6.88
+Fintech,1990,Startup,32,35,1,0.9142857142857143
+TravelTech,2008,Startup,28,17,0,1.6470588235294117
+Mobility,2016,Startup,45,9,0,5.0
+Security,1984,Non-Startup,160,41,0,3.902439024390244
+Wellness,2002,Non-Startup,367,23,0,15.956521739130435
+Business Software and services,2019,Startup,19,6,1,3.1666666666666665
+Real Estate Tech,1996,Non-Startup,466,29,0,16.06896551724138
+Mobility,2002,Non-Startup,56,23,0,2.4347826086956523
+Security,2016,Startup,6,9,0,0.6666666666666666
+Mobility,2015,Non-Startup,368,10,0,36.8
+Real Estate Tech,2022,Startup,6,3,0,2.0
+Mobility,1991,Non-Startup,440,34,0,12.941176470588236
+HealthTech,1993,Non-Startup,349,32,1,10.90625
+Agritech,1996,Non-Startup,25,29,0,0.8620689655172413
+FoodTech & New Food,2017,Startup,12,8,0,1.5
+Mobility,2017,Startup,1,8,0,0.125
+HealthTech,2015,Non-Startup,465,10,1,46.5
+Wellness,1998,Non-Startup,18,27,0,0.6666666666666666
+Business Software and services,1995,Startup,43,30,1,1.4333333333333333
+Security,1985,Startup,26,40,0,0.65
+Social Business,2011,Non-Startup,319,14,0,22.785714285714285
+HealthTech,1980,Startup,9,45,1,0.2
+FoodTech & New Food,2016,Non-Startup,402,9,0,44.666666666666664
+FoodTech & New Food,2011,Non-Startup,315,14,0,22.5
+Business Software and services,2018,Non-Startup,208,7,1,29.714285714285715
+Mobility,1981,Startup,23,44,0,0.5227272727272727
+TravelTech,2017,Startup,42,8,0,5.25
+Wellness,1988,Startup,25,37,0,0.6756756756756757
+FoodTech & New Food,2014,Non-Startup,102,11,0,9.272727272727273
+Ad Tech and Creative Tech,2021,Non-Startup,363,4,0,90.75
+Ad Tech and Creative Tech,1987,Startup,15,38,0,0.39473684210526316
+Security,1991,Startup,18,34,0,0.5294117647058824
+Real Estate Tech,2012,Non-Startup,345,13,0,26.53846153846154
+FoodTech & New Food,2001,Non-Startup,81,24,0,3.375
+TravelTech,2022,Non-Startup,238,3,0,79.33333333333333
+Mobility,1982,Non-Startup,490,43,0,11.395348837209303
+HealthTech,2023,Startup,50,2,1,25.0
+Environment,1985,Non-Startup,259,40,0,6.475
+Agritech,2001,Startup,41,24,0,1.7083333333333333
+Wellness,1994,Startup,18,31,0,0.5806451612903226
+Real Estate Tech,2007,Startup,31,18,0,1.7222222222222223
+Business Software and services,1999,Startup,8,26,1,0.3076923076923077
+Real Estate Tech,1983,Non-Startup,340,42,0,8.095238095238095
+FoodTech & New Food,1995,Non-Startup,316,30,0,10.533333333333333
+HealthTech,1998,Non-Startup,295,27,1,10.925925925925926
+Environment,1989,Non-Startup,458,36,0,12.722222222222221
+Advanced Manufacturing & Robotics,2021,Startup,18,4,0,4.5
+EdTech,1992,Non-Startup,271,33,1,8.212121212121213
+EdTech,2011,Non-Startup,256,14,1,18.285714285714285
+Ad Tech and Creative Tech,2001,Non-Startup,280,24,0,11.666666666666666
+EdTech,2004,Non-Startup,364,21,1,17.333333333333332
+Security,1984,Startup,18,41,0,0.43902439024390244
+Wellness,2016,Startup,38,9,0,4.222222222222222
+Environment,2017,Startup,17,8,0,2.125
+TravelTech,2000,Non-Startup,63,25,0,2.52
+Advanced Manufacturing & Robotics,2021,Non-Startup,328,4,0,82.0
+Advanced Manufacturing & Robotics,1991,Startup,50,34,0,1.4705882352941178
+Wellness,1999,Startup,2,26,0,0.07692307692307693
+Wellness,2023,Startup,4,2,0,2.0
+HealthTech,2008,Startup,36,17,1,2.1176470588235294
+Mobility,2006,Startup,28,19,0,1.4736842105263157
+Environment,1992,Startup,17,33,0,0.5151515151515151
+Business Software and services,1982,Non-Startup,453,43,1,10.534883720930232
+Business Software and services,2015,Startup,25,10,1,2.5
+Agritech,1991,Non-Startup,268,34,0,7.882352941176471
+Advanced Manufacturing & Robotics,2022,Startup,39,3,0,13.0
+HealthTech,2017,Non-Startup,11,8,1,1.375
+Mobility,1980,Non-Startup,215,45,0,4.777777777777778
+Environment,1991,Non-Startup,251,34,0,7.382352941176471
+Environment,2015,Non-Startup,63,10,0,6.3
+Mobility,2018,Startup,27,7,0,3.857142857142857
+Social Business,2017,Startup,47,8,0,5.875
+Environment,1981,Non-Startup,205,44,0,4.659090909090909
+Real Estate Tech,2021,Non-Startup,129,4,0,32.25
+Environment,1994,Non-Startup,417,31,0,13.451612903225806
+Mobility,2000,Non-Startup,10,25,0,0.4
+Environment,1991,Startup,20,34,0,0.5882352941176471
+Wellness,2017,Non-Startup,247,8,0,30.875
+Fintech,2013,Non-Startup,499,12,1,41.583333333333336
+Ad Tech and Creative Tech,2022,Non-Startup,225,3,0,75.0
+Fintech,2023,Startup,36,2,1,18.0
+Fintech,1981,Non-Startup,192,44,1,4.363636363636363
+Fintech,1996,Startup,11,29,1,0.3793103448275862
+Business Software and services,2013,Startup,33,12,1,2.75
+Security,1988,Non-Startup,355,37,0,9.594594594594595
+EdTech,1995,Startup,40,30,1,1.3333333333333333
+Social Business,2010,Non-Startup,201,15,0,13.4
+Ad Tech and Creative Tech,2018,Non-Startup,297,7,0,42.42857142857143
+Business Software and services,2000,Non-Startup,255,25,1,10.2
+Social Business,1987,Non-Startup,355,38,0,9.342105263157896
+Advanced Manufacturing & Robotics,2023,Non-Startup,297,2,0,148.5
+Social Business,1992,Non-Startup,307,33,0,9.303030303030303
+Agritech,2008,Startup,19,17,0,1.1176470588235294
+Business Software and services,1988,Non-Startup,108,37,1,2.918918918918919
+Environment,2021,Startup,44,4,0,11.0
+Mobility,2020,Startup,34,5,0,6.8
+HealthTech,2016,Startup,29,9,1,3.2222222222222223
+HealthTech,1997,Non-Startup,469,28,1,16.75
+Agritech,2018,Startup,12,7,0,1.7142857142857142
+Security,1986,Startup,40,39,0,1.0256410256410255
+Fintech,1985,Startup,30,40,1,0.75
+Ad Tech and Creative Tech,1993,Startup,44,32,0,1.375
+Agritech,2017,Non-Startup,211,8,0,26.375
+Agritech,2015,Non-Startup,403,10,0,40.3
+Agritech,1996,Startup,31,29,0,1.0689655172413792
+Agritech,2024,Non-Startup,78,1,0,78.0
+Fintech,2004,Non-Startup,256,21,1,12.19047619047619
+EdTech,2020,Non-Startup,71,5,1,14.2
+Fintech,2004,Startup,28,21,1,1.3333333333333333
+Business Software and services,1990,Startup,49,35,1,1.4
+Advanced Manufacturing & Robotics,2017,Startup,24,8,0,3.0
+Business Software and services,2024,Startup,10,1,1,10.0
+Security,2014,Non-Startup,249,11,0,22.636363636363637
+Environment,2011,Startup,6,14,0,0.42857142857142855
+Business Software and services,2021,Startup,24,4,1,6.0
+Ad Tech and Creative Tech,1984,Startup,5,41,0,0.12195121951219512
+Social Business,2020,Startup,15,5,0,3.0
+Business Software and services,2007,Startup,8,18,1,0.4444444444444444
+EdTech,1982,Startup,13,43,1,0.3023255813953488
+EdTech,1988,Startup,41,37,1,1.1081081081081081
+Wellness,1993,Non-Startup,500,32,0,15.625
+Fintech,2011,Startup,13,14,1,0.9285714285714286
+Business Software and services,2018,Startup,23,7,1,3.2857142857142856
+Advanced Manufacturing & Robotics,2012,Non-Startup,437,13,0,33.61538461538461
+Wellness,2003,Non-Startup,105,22,0,4.7727272727272725
+Advanced Manufacturing & Robotics,2025,Startup,35,0,0,35.0
+Environment,1996,Startup,25,29,0,0.8620689655172413
+Business Software and services,1984,Non-Startup,378,41,1,9.21951219512195
+FoodTech & New Food,2023,Non-Startup,30,2,0,15.0
+Mobility,1995,Startup,47,30,0,1.5666666666666667
+Mobility,2019,Startup,22,6,0,3.6666666666666665
+Fintech,2022,Non-Startup,460,3,1,153.33333333333334
+HealthTech,2016,Non-Startup,11,9,1,1.2222222222222223
+Fintech,2014,Non-Startup,185,11,1,16.818181818181817
+Ad Tech and Creative Tech,2016,Non-Startup,471,9,0,52.333333333333336
+TravelTech,2023,Startup,13,2,0,6.5
+Advanced Manufacturing & Robotics,2003,Non-Startup,410,22,0,18.636363636363637
+Agritech,2019,Startup,2,6,0,0.3333333333333333
+Wellness,2018,Non-Startup,366,7,0,52.285714285714285
+Fintech,1986,Non-Startup,240,39,1,6.153846153846154
+Advanced Manufacturing & Robotics,2023,Startup,48,2,0,24.0
+FoodTech & New Food,2017,Non-Startup,394,8,0,49.25
+TravelTech,2010,Startup,17,15,0,1.1333333333333333
+TravelTech,2014,Non-Startup,167,11,0,15.181818181818182
+HealthTech,2020,Startup,3,5,1,0.6
+Advanced Manufacturing & Robotics,2022,Non-Startup,36,3,0,12.0
+Fintech,1997,Non-Startup,231,28,1,8.25
+Real Estate Tech,2006,Startup,24,19,0,1.263157894736842
+Wellness,2016,Non-Startup,62,9,0,6.888888888888889
+Social Business,1995,Startup,14,30,0,0.4666666666666667
+EdTech,2022,Non-Startup,268,3,1,89.33333333333333
+Real Estate Tech,2023,Non-Startup,358,2,0,179.0
+Social Business,2014,Startup,30,11,0,2.727272727272727
+Security,2010,Non-Startup,223,15,0,14.866666666666667
+HealthTech,2017,Startup,22,8,1,2.75
+Agritech,2011,Non-Startup,108,14,0,7.714285714285714
+Advanced Manufacturing & Robotics,2014,Non-Startup,123,11,0,11.181818181818182
+HealthTech,2016,Startup,2,9,1,0.2222222222222222
+HealthTech,2026,Non-Startup,315,-1,1,-315.0
+EdTech,2025,Startup,50,0,1,50.0
+Real Estate Tech,2008,Startup,43,17,0,2.5294117647058822
+Ad Tech and Creative Tech,1981,Startup,28,44,0,0.6363636363636364
+TravelTech,2009,Startup,25,16,0,1.5625
+Fintech,2018,Startup,9,7,1,1.2857142857142858
+Security,2007,Startup,37,18,0,2.0555555555555554
+Advanced Manufacturing & Robotics,2019,Startup,33,6,0,5.5
+HealthTech,1996,Startup,36,29,1,1.2413793103448276
+Mobility,2005,Non-Startup,462,20,0,23.1
+Real Estate Tech,2016,Non-Startup,217,9,0,24.11111111111111
+Mobility,1985,Non-Startup,277,40,0,6.925
+Agritech,2024,Startup,45,1,0,45.0
+Ad Tech and Creative Tech,1987,Non-Startup,483,38,0,12.710526315789474
+Environment,2020,Startup,5,5,0,1.0
+EdTech,2021,Startup,43,4,1,10.75
+EdTech,2015,Non-Startup,398,10,1,39.8
+Advanced Manufacturing & Robotics,2000,Non-Startup,197,25,0,7.88
+Ad Tech and Creative Tech,2022,Startup,2,3,0,0.6666666666666666
+Social Business,1998,Startup,29,27,0,1.0740740740740742
+Fintech,2009,Startup,8,16,1,0.5
+Wellness,2021,Startup,8,4,0,2.0
+Fintech,2023,Non-Startup,207,2,1,103.5
+EdTech,2017,Startup,26,8,1,3.25
+Social Business,2017,Non-Startup,440,8,0,55.0
+Fintech,1994,Startup,4,31,1,0.12903225806451613
+Real Estate Tech,2000,Startup,18,25,0,0.72
+Ad Tech and Creative Tech,2024,Startup,3,1,0,3.0
+Real Estate Tech,2016,Startup,45,9,0,5.0
+Security,2021,Startup,49,4,0,12.25
+TravelTech,2008,Startup,5,17,0,0.29411764705882354
+Agritech,2017,Startup,36,8,0,4.5
+Security,2019,Startup,3,6,0,0.5
+TravelTech,2015,Non-Startup,496,10,0,49.6
+Real Estate Tech,2022,Non-Startup,354,3,0,118.0
+Advanced Manufacturing & Robotics,2023,Non-Startup,261,2,0,130.5
+TravelTech,2022,Non-Startup,32,3,0,10.666666666666666
+Social Business,2012,Non-Startup,234,13,0,18.0
+Environment,2013,Non-Startup,334,12,0,27.833333333333332
+Mobility,2014,Non-Startup,401,11,0,36.45454545454545
+FoodTech & New Food,2021,Startup,25,4,0,6.25
+Business Software and services,1996,Non-Startup,339,29,1,11.689655172413794
+Advanced Manufacturing & Robotics,2006,Startup,24,19,0,1.263157894736842
+Wellness,1995,Non-Startup,467,30,0,15.566666666666666
+Agritech,2009,Non-Startup,222,16,0,13.875
+Agritech,2022,Non-Startup,417,3,0,139.0
+Advanced Manufacturing & Robotics,2012,Startup,19,13,0,1.4615384615384615
+Security,2020,Non-Startup,167,5,0,33.4
+Business Software and services,2002,Non-Startup,67,23,1,2.9130434782608696

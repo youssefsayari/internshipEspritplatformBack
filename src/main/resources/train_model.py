@@ -1,29 +1,29 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
 import xgboost as xgb
 import joblib
+from sklearn.preprocessing import LabelEncoder
 
 # 1. Charger les données
-df = pd.read_excel("internship_dataset_5000_uppercase_no_accents.xlsx")
-X = df[['Option', 'Internship Subject', 'Company']]
-y = df['Accepted']
+df = pd.read_csv("Updated_Startup_TunisieC_DSO1.csv")
 
-# 2. Pipeline : OneHot + XGBoost
-column_transformer = ColumnTransformer(
-    transformers=[('cat', OneHotEncoder(handle_unknown='ignore'), ['Option', 'Internship Subject', 'Company'])]
-)
+# 2. Préparation
+df['Taille'] = df['Taille'].apply(lambda x: 1 if x == 'Startup' else 0)  # Startup → 1, Non-Startup → 0
 
-pipeline = Pipeline([
-    ('preprocessor', column_transformer),
-    ('classifier', xgb.XGBClassifier(use_label_encoder=False, eval_metric='logloss'))
-])
+# Encoder 'Secteur'
+le_secteur = LabelEncoder()
+df['Secteur'] = le_secteur.fit_transform(df['Secteur'])
 
-# 3. Entraînement
-pipeline.fit(X, y)
+# 3. Features et target
+X = df[['Secteur', 'Annee de creation', 'NombreEmployes', 'Est_Tech', 'Dynamisme']]
+y = df['Taille']
 
-# 4. Sauvegarde du modèle
-joblib.dump(pipeline, "xgboost_model.pkl")
-print("✅ Modèle XGBoost exporté → xgboost_model.pkl")
+# 4. Entraînement du modèle
+model = xgb.XGBClassifier(use_label_encoder=False, eval_metric='logloss')
+model.fit(X, y)
+
+
+# Sauvegarder le modèle et l’encodeur
+joblib.dump(model, "xgboost_model.pkl")
+joblib.dump(le_secteur, "label_encoder_secteur.pkl")
+
+print("✅ Modèle et encodeur sauvegardés avec succès.")
