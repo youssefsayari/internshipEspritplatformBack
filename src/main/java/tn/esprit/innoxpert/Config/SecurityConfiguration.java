@@ -44,7 +44,7 @@ public class SecurityConfiguration {
                         .requestMatchers(new AntPathRequestMatcher("/company/add", "POST")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/company/api/autocomplete/enrich", "GET")).permitAll()
 
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
