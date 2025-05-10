@@ -25,7 +25,12 @@ public class EntrepriseClassificationController {
     ) {
         try {
             String result = classifier.classify(secteur, annee, employes, estTech, dynamisme);
-
+            System.out.println(secteur);
+            System.out.println(annee);
+            System.out.println(employes);
+            System.out.println(estTech);
+            System.out.println(dynamisme);
+            System.out.println(result);
             StringBuilder response = new StringBuilder();
             response.append("🏷️ Classe : ").append(result);
             if ("Startup".equalsIgnoreCase(result)) {

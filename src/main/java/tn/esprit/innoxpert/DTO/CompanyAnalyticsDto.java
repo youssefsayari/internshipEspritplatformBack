@@ -17,6 +17,8 @@ public class CompanyAnalyticsDto {
     private Date labelDate;
     private String founders;
     private String email;
+    private Integer numEmployees; // Nouveau champ ajouté
+
 
 
     // Constructeur par défaut
@@ -58,4 +60,10 @@ public class CompanyAnalyticsDto {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email= email; }
+
+    // Getters et Setters pour le nouveau champ
+    public Integer getNumEmployees() { return numEmployees; }
+    public void setNumEmployees(Integer numEmployees) {
+        this.numEmployees = numEmployees;
+    }
 }

@@ -241,7 +241,7 @@ public class TaskService implements TaskServiceInterface {
 
         List<Task> tasks = taskRepository.findByDeadlineAndNotifiedFalse(tomorrow);
         if (tasks.isEmpty()) {
-            System.out.println("✅ No tasks to notify.");
+           // System.out.println("✅ No tasks to notify.");
             return;
         }
 

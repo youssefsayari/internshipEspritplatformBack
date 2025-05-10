@@ -89,6 +89,9 @@ public class CompanyDataEnricher {
         // Téléphone
         company.setPhone(formatPhoneNumber(pdlCompany.phone));
 
+        // Nombre d'employés (nouveau champ)
+        company.setNumEmployees(estimateEmployeeCount(pdlCompany)); // Nouvelle méthode
+
         // Autres champs
         company.setAbbreviation(generateAbbreviation(pdlCompany.name));
         company.setFoundingYear(parseFoundedDate(pdlCompany.founded));
@@ -98,6 +101,27 @@ public class CompanyDataEnricher {
 
         return company;
     }
+
+    private Integer estimateEmployeeCount(PdlEnrichResponse pdlCompany) {
+        // Debug: afficher les données reçues de l'API
+        System.out.println("Employee count from API: " + pdlCompany.employee_count);
+        System.out.println("Company size from API: " + pdlCompany.size);
+
+        if (pdlCompany.employee_count != null) {
+            return pdlCompany.employee_count;
+        }
+
+        // Estimation plus robuste
+        if (pdlCompany.size != null) {
+            String sizeLower = pdlCompany.size.toLowerCase();
+            if (sizeLower.contains("small")) return 50;
+            if (sizeLower.contains("medium")) return 250;
+            if (sizeLower.contains("large")) return 1000;
+        }
+
+        return 10; // Valeur par défaut garantie non null
+    }
+
     private Date parseFoundedDate(Integer foundedYear) {
         if (foundedYear == null || foundedYear < 1900 || foundedYear > LocalDate.now().getYear()) {
             return null;
@@ -234,6 +258,8 @@ public class CompanyDataEnricher {
         public String email;
         public String phone;
         public String industry;
+        public String size; // Nouveau champ
+        public Integer employee_count; // Nouveau champ
         public Integer founded;
         public List<String> founders;
         public List<String> tags;

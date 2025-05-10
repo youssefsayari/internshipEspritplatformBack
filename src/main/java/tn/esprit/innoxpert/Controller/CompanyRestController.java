@@ -212,6 +212,10 @@ public class CompanyRestController {
 
         try {
             Company company = companyDataEnricher.enrichCompanyData(name, website);
+            // Assurez-vous que numEmployees a une valeur par défaut si null
+            if (company.getNumEmployees() == null) {
+                company.setNumEmployees(10); // Valeur par défaut
+            }
             return ResponseEntity.ok(company);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

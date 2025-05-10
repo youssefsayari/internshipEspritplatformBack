@@ -96,5 +96,9 @@ public class Company {
     @JoinColumn(name = "image_id", referencedColumnName = "id")
     private Image image;
 
+    @NotNull(message = "Le nombre d'employés est obligatoire")
+    @Min(value = 1, message = "L'entreprise doit avoir au moins 1 employé")
+    @Max(value = 1000000, message = "Le nombre d'employés ne peut excéder 1 000 000")
+    Integer numEmployees;
 
 }

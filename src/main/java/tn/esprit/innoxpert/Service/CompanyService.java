@@ -201,6 +201,7 @@ public class CompanyService implements CompanyServiceInterface {
         existingCompany.setLabelDate(updatedData.getLabelDate());
         existingCompany.setWebsite(updatedData.getWebsite());
         existingCompany.setFounders(updatedData.getFounders());
+        existingCompany.setNumEmployees(updatedData.getNumEmployees()); // Nouveau champ
         User user=userService.getUserById(existingCompany.getOwner().getIdUser());
         user.setEmail(updatedData.getEmail());
         user.setFirstName(updatedData.getName());
@@ -328,6 +329,7 @@ public List<CompanyAnalyticsDto> getAllCompaniesWithAnalytics() {
                 dto.setLabelDate(company.getLabelDate());
                 dto.setFounders(company.getFounders());
                 dto.setEmail(company.getEmail());
+                dto.setNumEmployees(company.getNumEmployees()); // Nouveau champ
 
                 return dto;
             })
