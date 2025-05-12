@@ -1,6 +1,7 @@
 package tn.esprit.innoxpert.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -44,6 +45,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "idUser", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // ✅ ADD THIS
     private User user;  // Déjà présent dans votre code
 
 }
