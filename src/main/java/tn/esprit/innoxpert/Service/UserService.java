@@ -8,6 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tn.esprit.innoxpert.Entity.Company;
 import tn.esprit.innoxpert.DTO.UserResponse;
@@ -31,13 +32,15 @@ import java.util.stream.Collectors;
 public class UserService implements UserServiceInterface {
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private CompanyRepository companyRepository;
     @Autowired
     private JwtUtil jwtUtil;
     private final EmailClass emailClass = new EmailClass();
     private final Random random = new Random();
+
 
 
 
@@ -153,6 +156,8 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public User addUser(User b) {
+        b.setPassword(passwordEncoder.encode(b.getPassword()));
+
         return userRepository.save(b);
     }
 
@@ -181,7 +186,7 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public User getUserByIdentifiant(String identifiant) {
-        return userRepository.findByIdentifiant(identifiant).get();
+        return userRepository.findByIdentifiant(identifiant).orElse(null);
 
     }
 
